@@ -1,0 +1,13 @@
+# Generated harvest output. Contains real business names, phone numbers and
+# site audit findings, and is fully reproducible with run_scraper.py.
+data/
+*.csv
+leads_dashboard.md
+!.env.example
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+.DS_Store
