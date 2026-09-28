@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-trade="studio">
+<head>
+<meta charset="utf-8">
+<!-- Indexable, unlike a mock-up. This is the live destination every cold
+     message links to, so the noindex that protects a client pitch page would
+     suppress the one part of the pitch that actually works. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Rehab STL — websites for plumbers, roofers and HVAC in St. Louis County</title>
+<meta name="description" content="I fix and build websites for local trades across the St. Louis metro, Metro East Illinois and west Missouri. From $1,200, done in a few days, no monthly fee.">
+<meta name="color-scheme" content="light">
+<link rel="stylesheet" href="../core/tokens.css">
+<link rel="stylesheet" href="../core/site.css">
+<!-- The theme ships as a real link, not something site.js fetches at runtime.
+     Injected, the page painted with the tokens.css default first -- a dark navy
+     and copper theme, on a page whose whole palette is paper and ink. -->
+<link rel="stylesheet" href="../themes/studio.css" data-theme="studio">
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap header-in">
+    <span class="brand">
+      <span class="brand-mark" aria-hidden="true">WR</span>
+      <span data-fact="name">Web Rehab STL</span>
+    </span>
+    <nav class="nav" aria-label="Primary">
+      <a href="#work" class="hide-sm">What I do</a>
+      <a href="#price" class="hide-sm">Price</a>
+      <a href="#where" class="hide-sm">Where</a>
+      <a class="btn" data-fact="emailLink" href="mailto:geekhaus314@proton.me">Email me</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── hero ─────────────────────────────────────────────────────────── -->
+  <!-- Written for someone holding a phone on a job, not for someone who
+       browses agencies. Short sentences, the price in the first screen, and
+       no jargon anywhere above the fold. -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="chip" data-reveal data-fact="area">St. Louis &amp; St. Charles Counties</span>
+        <h1 class="display" id="hero-heading" data-reveal>
+          Your website should be getting you work.
+        </h1>
+        <p class="lede" data-reveal>
+          If it is slow, out of date, or you would rather nobody saw it, I fix
+          that. If there is no site, I build one. Plumbers, roofers, HVAC.
+        </p>
+        <div class="hero-actions" data-reveal>
+          <a class="btn btn-lg" href="#price">What it costs</a>
+          <a class="btn btn-lg btn-ghost" href="#work">What I do</a>
+        </div>
+        <p class="form-note" data-reveal>
+          From <span data-fact="launchPrice">$1,200</span>. Done in a few days.
+          It is yours, and there is no monthly fee.
+        </p>
+      </div>
+
+      <!-- The part that decides whether he keeps reading. Four sentences, no
+           adjectives, and nothing here he could not check by asking me. -->
+      <div class="card" data-reveal>
+        <p class="eyebrow">How this works</p>
+        <p class="h3" style="margin-top:var(--s-3)">
+          I look at your site first, and I tell you what is actually wrong.
+        </p>
+        <p class="muted" style="margin-top:var(--s-2);font-size:var(--t-sm)">
+          I do not guess and I do not sell you things you do not need. If your
+          site is fine I will say so. If it is not, I will tell you which part
+          is the problem, and what it costs to fix.
+        </p>
+        <!-- The trust line, and the reason a call is likelier to get answered
+             than an email. Half the people this page is for have been burned by
+             a remote agency that would not turn up, and "no DocuSign" is the
+             specific objection that actually stops them signing. Both options
+             are named on purpose: offering only in-person quietly excludes
+             everyone west of the river who cannot get to Florissant in an
+             afternoon, which is most of the list below. -->
+        <p class="muted" style="margin-top:var(--s-3);padding-top:var(--s-3);border-top:1px solid var(--c-line);font-size:var(--t-sm)">
+          If you are local I will come out and look at it properly. Happy to do
+          the paperwork on paper &mdash; nothing to sign on a phone, no app, no
+          account. And happy to work entirely remotely if that is easier.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── what he is actually buying ─────────────────────────────────────
+       The four things a tradesperson wants from a website, in his words.
+       Named for the outcome, not for the technique. -->
+  <section class="section band" id="work" aria-labelledby="work-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>What I do</span>
+        <h2 class="h2" id="work-heading" data-reveal>
+          Four things, and you only need one of them.
+        </h2>
+        <p class="lede" data-reveal>
+          Most people need the first or the second. I will tell you which.
+        </p>
+      </div>
+
+      <div class="svc-rows" style="margin-top:var(--s-5)" data-services></div>
+    </div>
+  </section>
+
+  <!-- ── price ───────────────────────────────────────────────────────────
+       Published price, on its own anchor, because a man deciding whether to
+       reply to a cold text needs one number more than he needs a portfolio. -->
+  <section class="section" id="price" aria-labelledby="price-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>Price</span>
+        <h2 class="h2" id="price-heading" data-reveal>
+          One price, up front, and it does not go up afterwards.
+        </h2>
+        <p class="lede" data-reveal>
+          A new site is <span data-fact="launchPrice">$1,200</span>. Fixing one
+          that already exists is $900&ndash;$1,600, depending on how much of it
+          is worth keeping. Bookings, quotes and payments are quoted separately,
+          because that depends on what you already use.
+        </p>
+      </div>
+
+      <div class="outcomes" style="margin-top:var(--s-5)">
+        <div class="outcome" data-reveal>
+          <b>No monthly fee</b>
+          <span>One price, once. There is no hosting bill, no domain bill and
+            no call in six months asking for another one.</span>
+        </div>
+        <div class="outcome" data-reveal>
+          <b>It is yours</b>
+          <span>Yours on your own domain. If you ever want a different person to
+            take it over, they can. That is the point.</span>
+        </div>
+        <div class="outcome" data-reveal>
+          <b>Days, not months</b>
+          <span>Most are done in a few days. I only start once I have your
+            details, and I will tell you if I am waiting on you.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── estimator ───────────────────────────────────────────────────────
+       Four questions, in his words, ending in a price. The form used to
+       default every answer so a quote was on screen before anyone had read
+       the questions, which is a number nobody asked for. -->
+  <section class="section band" id="estimate" aria-labelledby="estimate-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>What would this cost you</span>
+        <h2 class="h2" id="estimate-heading" data-reveal>
+          Four questions and I will tell you roughly where you land.
+        </h2>
+        <p class="lede" data-reveal>
+          No email, no phone number, nothing saved. It just tells you roughly
+          what this costs.
+        </p>
+      </div>
+
+      <div class="estimator" style="margin-top:var(--s-5)" data-estimator>
+        <form class="est-form" data-est-form novalidate>
+          <p class="est__tally" data-est-tally aria-live="polite"></p>
+          <!-- The questions are injected into here rather than into the form.
+               Assigning to form.innerHTML would replace the tally and the button
+               along with them, and both are children of the form. -->
+          <div data-est-questions></div>
+          <button class="btn est-go" type="button" data-est-go>Show me</button>
+        </form>
+        <div class="est-out" data-est-out tabindex="-1"
+             role="region" aria-labelledby="est-scope"></div>
+      </div>
+
+      <p class="form-note" style="margin-top:var(--s-4)" data-reveal>
+        Roughly, and from four answers. The real number is after I have looked
+        at your site &mdash; and it will not go up. I am not going to guess what
+        your business would earn from a website, because I would be making it
+        up, and you would be right not to believe it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── the work ──────────────────────────────────────────────────────
+       One project. Described, not linked, because the write-up of it lives on
+       a domain that makes the wrong impression and a roofer does not want to
+       read a post-mortem anyway. -->
+  <section class="section" aria-labelledby="done-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>Done so far</span>
+        <h2 class="h2" id="done-heading" data-reveal>One, so far.</h2>
+      </div>
+      <div class="work-rows" style="margin-top:var(--s-4)" data-work></div>
+      <p class="form-note" style="margin-top:var(--s-3)" data-reveal>
+        That is the whole list. I would rather show one I can talk you through
+        than three I cannot.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── where ────────────────────────────────────────────────────────
+       Local, and specific about it. A trade audience checks whether you are
+       actually nearby before they read anything else. -->
+  <section class="section band" id="where" aria-labelledby="where-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>Where</span>
+        <h2 class="h2" id="where-heading" data-reveal>
+          Based in Florissant. I come to you.
+        </h2>
+        <p class="lede" data-reveal>
+          Both sides of the river &mdash; the counties around St. Louis, out
+          past Warrenton, and over into Illinois. If you are local I will come
+          out and sit down and talk it through, in person, before you spend
+          anything. If you are further away we do it the way that suits you
+          &mdash; phone, email, or a video call.
+        </p>
+      </div>
+      <div class="area-groups" style="margin-top:var(--s-4)" data-areas></div>
+    </div>
+  </section>
+
+  <!-- ── contact ──────────────────────────────────────────────────────── -->
+  <section class="section" id="contact" aria-labelledby="contact-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>Get in touch</span>
+        <h2 class="h2" id="contact-heading" data-reveal>
+          Send me the address. I will go and look at it.
+        </h2>
+        <p class="lede" data-reveal>
+          You do not need to know what is wrong with it. That is the part I am
+          for.
+        </p>
+        <div class="hero-actions" data-reveal>
+          <a class="btn btn-lg" data-fact="emailLink" href="mailto:geekhaus314@proton.me">
+            Email <span data-fact="email">geekhaus314@proton.me</span>
+          </a>
+        </div>
+        <p class="form-note" data-reveal>
+          <span data-fact="who">Jake</span> ·
+          <a data-fact="siteLink" href="https://webrehabstl.pages.dev"><span data-fact="site">webrehabstl.pages.dev</span></a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="stack">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">WR</span><span data-fact="name">Web Rehab STL</span></span>
+      <p><span data-fact="who">Jake</span> — <span data-fact="city">Florissant</span>, Missouri</p>
+      <p><a data-fact="emailLink" href="mailto:geekhaus314@proton.me"><span data-fact="email">geekhaus314@proton.me</span></a></p>
+    </div>
+    <div class="stack">
+      <strong>What I do</strong>
+      <a href="#work">Fix a site that does not work</a>
+      <a href="#work">Build a new site</a>
+      <a href="#work">Get found when people search</a>
+      <a href="#work">Bookings, quotes, payments</a>
+    </div>
+    <div class="stack">
+      <strong>About this page</strong>
+      <p class="muted">
+        Everything on it is true or it is not there. No made-up numbers, no
+        testimonials I have not been given, no “clients” who were really just
+        examples. If a figure on here is wrong, tell me and I will fix it.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="site.config.js"></script>
+<script src="../core/site.js"></script>
+<script src="../core/estimator.js"></script>
+</body>
+</html>

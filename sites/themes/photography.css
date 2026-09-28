@@ -1,0 +1,56 @@
+/* Photography preset.
+ *
+ * The opposite end of the range, and the proof that the system adapts rather
+ * than recolours. A photographer's entire product is restraint, so this preset
+ * throws away the accent-as-CTA idea, drops the motion to a crawl, opens the
+ * letter spacing right up, and lets the layout breathe. Same button, same
+ * reveal, same form -- and it would be a credibility disaster on a
+ * photographer's site if it looked like the roofer's.
+ */
+
+:root {
+  --c-bg: #fbfaf8;
+  --c-bg-2: #f4f2ee;
+  --c-surface: #ffffff;
+  --c-surface-2: #ffffff;
+  --c-line: #e2ded6;
+  --c-text: #14110e;
+  --c-muted: #585349;
+
+  /* No shouting accent. Ink on warm paper, with a single muted link colour. */
+  --c-accent: #14110e;
+  --c-accent-ink: #fbfaf8;
+  --c-accent-2: #6f6659;
+
+  /* Light background: the dark-theme semantic defaults are unreadable here. */
+  --c-good: #1d7a58;
+  --c-bad: #ad4f4f;
+
+  --r-sm: 0px;
+  --r-md: 0px;
+  --r-lg: 0px;
+
+  --font-display: Georgia, "Times New Roman", serif;
+  --leading-tight: 1.12;
+  --tracking-tight: -0.005em;
+  --t-3xl: clamp(2.2rem, 1.6rem + 2.4vw, 3.6rem);
+
+  /* Almost still. The work is the photograph; anything moving competes. */
+  /* Barely a wash. On paper white, a strong dark gradient reads as a
+     dirty screen, so this preset trades the glow for the paper. */
+  --hero-wash: 0.05;
+  --motion-intensity: 0.18;
+
+  --shadow-1: 0 1px 2px rgb(20 17 14 / 0.05);
+  --shadow-2: 0 10px 26px -14px rgb(20 17 14 / 0.18);
+  --shadow-3: 0 26px 60px -28px rgb(20 17 14 / 0.24);
+}
+
+.btn {
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: var(--t-xs);
+}
+/* No sheen sweep on this preset -- a sweep across a serif wordmark reads as a
+   template. Overridden here so the core component can stay generic. */
+.btn::after { display: none; }

@@ -1,0 +1,42 @@
+/* HVAC preset.
+ *
+ * Seasonal and comfort-led rather than emergency-led, which is the real
+ * difference from plumbing: an HVAC buyer is planning ahead, browsing on a
+ * Sunday, and comparing three companies before calling any of them. So this
+ * preset is lighter and airier than the plumbing preset -- it is the same
+ * components in a calmer key, with a cool blue instead of copper and slightly
+ * more motion, because there is a browsing phase to win here rather than a
+ * single panicked click.
+ */
+
+:root {
+  --c-bg: #f4f8fb;
+  --c-bg-2: #eaf2f8;
+  --c-surface: #ffffff;
+  --c-surface-2: #f7fbfe;
+  --c-line: #d5e4f0;
+  --c-text: #0d2233;
+  --c-muted: #46596b;
+
+  --c-accent: #07688a;
+  --c-accent-ink: #ffffff;
+  --c-accent-2: #f0a202;
+
+  /* Semantic colours are overridden here because the dark-theme defaults are
+     tuned for a dark background and land at 1.9:1 on this one. Verified at
+     4.5:1+ against the tinted hero wash, not just the flat background. */
+  --c-good: #1d7a58;
+  --c-bad: #ad4f4f;
+
+  --r-sm: 8px;
+  --r-md: 16px;
+  --r-lg: 26px;
+
+  --font-display: var(--font-sans);
+  --leading-tight: 1.06;
+
+  /* Mid. Comfort browsing rewards a little movement, but the buyer is
+     comparing three tabs, so it stays calmer than roofing. */
+  --hero-wash: 0.12;
+  --motion-intensity: 0.6;
+}

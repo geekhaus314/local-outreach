@@ -1,0 +1,67 @@
+/* Studio preset -- Jake's own site, not a client mock-up.
+ *
+ * The read this is tuned for: a plumber or a roofer who has just been told their
+ * website is the problem, is holding a phone, and has decided this person either
+ * knows what he is doing or does not. Nothing here moves on its own, nothing
+ * glows, and there is exactly one number on the page. Light rather than dark,
+ * because the trade presets are all dark and a prospect who has just been shown
+ * a dark mock-up of his own business should not then be sold to by a page that
+ * looks like a different agency.
+ *
+ * The palette is carried over verbatim from the original Next.js prototype
+ * (src/app/globals.css in site-rehab-stl) so the rebuild looks like the thing it
+ * replaces. Only the light preset in that file was ever finished -- nine of its
+ * thirty classes had no rule at all -- so the sections below are new work.
+ */
+
+:root {
+  /* Warm off-white paper, near-black ink. The contrast between the two is the
+     whole visual idea: it reads as print, which is the register a tradesperson
+     trusts more than a gradient. */
+  --c-bg: #f4f3ef;
+  --c-bg-2: #e9e8e3;
+  --c-surface: #ffffff;
+  --c-surface-2: #e9e8e3;
+  --c-line: #d8d7d1;
+  --c-text: #141414;
+  --c-muted: #696862;
+
+  --c-accent: #141414;
+  --c-accent-ink: #ffffff;
+  --c-accent-2: #6b6a63;
+
+  /* Tuned for a light background. The trade presets inherit the dark-theme
+     values from tokens.css, where #34d399 on #06182b is comfortable; on paper
+     that same green is unreadable, so these are darkened until they clear
+     4.5:1 against --c-bg. */
+  --c-good: #0f6f47;
+  --c-bad: #a8231b;
+
+  /* Near-square. The original prototype ran a hard 90-degree grid and it is
+     half of why it read as architecture rather than as a template. */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 6px;
+  --r-pill: 0px;
+
+  --font-display: var(--font-sans);
+  --leading-tight: 0.98;
+
+  /* The hero wash is a copper/cyan radial on a dark page. Left at the tokens.css
+     default it lays a grey smudge across the top of a light page, which reads as
+     a rendering fault. Low enough to be a tint, not a glow. */
+  --hero-wash: 0.05;
+
+  /* Stillness. This preset is not a client build and does not need to sell a
+     mood; it needs to be readable and get out of the way. */
+  --motion-intensity: 0.25;
+
+  /* The 3xl clamp in tokens.css is tuned for a dark panel and runs to 4.1rem.
+     The studio hero puts that size into a two-column grid where the text gets
+     roughly 570px, and at 4.1rem the headline broke to eight lines -- which
+     buries the lede and the buttons below the fold on a phone. Held to 3.1rem
+     so the same sentence takes four lines and the call to action is still
+     above the fold. */
+  --t-3xl: clamp(2.05rem, 1.55rem + 1.9vw, 3.1rem);
+  --t-2xl: clamp(1.7rem, 1.4rem + 1.3vw, 2.4rem);
+}

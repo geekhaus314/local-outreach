@@ -7,6 +7,11 @@ leads_dashboard.md
 __pycache__/
 *.pyc
 .pytest_cache/
+# Build output from sites/build-all.mjs and sites/build-standalone.mjs. Fully
+# reproducible from source with `node sites/build-all.mjs`, and it contains two
+# separate deployables, so committing it would just mean two copies of the same
+# page drifting apart in review.
+dist/
 .venv/
 venv/
 .env

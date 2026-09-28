@@ -1,0 +1,104 @@
+/* Design token contract + motion system.
+   Every visual decision a client site makes lives here as a variable, and a
+   trade preset (sites/themes/*.css) only has to overwrite the variables it
+   cares about. That is the whole trick behind "the vibe matches the client":
+   layout, type scale, colour, radius and motion are all inherited from tokens,
+   so a roofer and a photographer run identical code and look like different
+   companies.
+
+   Motion is a token too, not a global setting. See --motion-intensity below. */
+
+/* ---- colour ---------------------------------------------------------- */
+:root {
+  --c-bg: #06182b;
+  --c-bg-2: #0a2138;
+  --c-surface: #0d2a45;
+  --c-surface-2: #123353;
+  --c-line: #1d4468;
+  --c-text: #eaf2f8;
+  --c-muted: #8fa9bf;
+  --c-accent: #f08a4b;
+  --c-accent-ink: #1a0d04;
+  --c-accent-2: #4fc3f7;
+  --c-good: #34d399;
+  --c-bad: #f87171;
+
+  /* ---- type: one fluid scale, clamped so it never jumps on resize ---- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --t-xs: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
+  --t-sm: clamp(0.86rem, 0.83rem + 0.14vw, 0.94rem);
+  --t-base: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
+  --t-lg: clamp(1.14rem, 1.05rem + 0.4vw, 1.35rem);
+  --t-xl: clamp(1.4rem, 1.2rem + 0.9vw, 2rem);
+  --t-2xl: clamp(1.9rem, 1.5rem + 1.9vw, 3.1rem);
+  --t-3xl: clamp(2.3rem, 1.6rem + 2.9vw, 4.1rem);
+
+  --tracking-tight: -0.022em;
+  --tracking-wide: 0.14em;
+  --leading-tight: 1.04;
+  --leading-body: 1.6;
+
+  /* ---- space, radius, elevation -------------------------------------- */
+  --s-1: 0.35rem;
+  --s-2: 0.7rem;
+  --s-3: 1.1rem;
+  --s-4: 1.7rem;
+  --s-5: 2.6rem;
+  --s-6: 4rem;
+  --s-7: 6.2rem;
+  --s-8: clamp(4rem, 9vw, 9rem);
+
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.2);
+  --shadow-2: 0 12px 30px -12px rgb(0 0 0 / 0.45);
+  --shadow-3: 0 30px 70px -25px rgb(0 0 0 / 0.6);
+  --ring: 0 0 0 3px color-mix(in srgb, var(--c-accent) 45%, transparent);
+
+  /* ---- layout --------------------------------------------------------- */
+  --wrap: 1140px;
+  --wrap-narrow: 760px;
+  --gutter: clamp(1.1rem, 4vw, 2.4rem);
+  --header-h: 68px;
+
+  /* ---- motion ---------------------------------------------------------
+     --motion-intensity is the per-trade dial: 0 is effectively still, 1 is
+     everything at once. site.js reads it and scales every duration, so a
+     restrained preset cannot accidentally look like a showreel.
+     --motion-scale is set from that at runtime, on :root, by JS. */
+  --hero-wash: 0.22;
+
+  --motion-intensity: 0.6;
+  --motion-scale: 1;
+  --dur-fast: calc(140ms * var(--motion-scale));
+  --dur-base: calc(320ms * var(--motion-scale));
+  --dur-slow: calc(680ms * var(--motion-scale));
+  --dur-reveal: calc(820ms * var(--motion-scale));
+  --stagger: calc(80ms * var(--motion-scale));
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Every animation in the system routes through one of these three helpers so
+   that a single --motion-scale change re-times the entire site. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-scale: 0.001;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" data-trade="plumbing">
+<head>
+<meta charset="utf-8">
+<!-- noindex: this is a private pitch mock-up, not a site. It must never end up
+     in a search result for a real business. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>St Charles Plumbing — 24/7 emergency plumbing in St. Charles, MO</title>
+<meta name="description" content="Emergency plumbing in St. Charles and St. Charles County. Call and we are on the way.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="../core/tokens.css">
+<link rel="stylesheet" href="../core/site.css">
+<link rel="stylesheet" href="../core/sample.css">
+<!-- Shipped, not injected. site.js would otherwise fetch this after first paint
+     and the page would flash the tokens.css default before swapping. Invisible
+     while the default happens to be the same theme, which is why it went
+     unnoticed here and was obvious on the studio page. -->
+<link rel="stylesheet" href="../themes/plumbing.css" data-theme="plumbing">
+</head>
+<body>
+
+<!-- ── demo bar ──────────────────────────────────────────────────────────
+     Fixed, first thing on the page, and impossible to miss. This build is a
+     design mock-up: everything below it performs, and none of it works. -->
+<div class="demobar" role="note" aria-label="About this page">
+  <span><b>Design mock-up</b> by Jake Viefhaus — not a live website. Nothing here sends, saves or measures anything.</span>
+  <!-- The trade switcher is injected by site.js when site.config.js sets
+       showTradeSwitcher. It is not in this markup, and that is deliberate: a
+       prospect reading their own mock-up does not need to be shown the same
+       words in roofing colours, and four buttons that change nothing about
+       their business is four reasons to leave. The question the switcher
+       answers -- "would you make it look like my trade?" -- is already answered
+       by the fact that they are looking at it. It is a demo aid, so it stays
+       available for a live walkthrough and is off for the emailed link. -->
+</div>
+
+<header class="header">
+  <div class="wrap header-in">
+    <span class="brand">
+      <span class="brand-mark" aria-hidden="true">SC</span>
+      <span data-fact="name">St Charles Plumbing</span>
+    </span>
+    <nav class="nav">
+      <a href="#services" class="hide-sm">Services</a>
+      <a href="#why" class="hide-sm">Why us</a>
+      <a href="#area" class="hide-sm">Service area</a>
+      <a class="btn" data-fact="phoneLink" href="tel:+16363366944">Call</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── hero ─────────────────────────────────────────────────────────── -->
+  <!-- ── hero ───────────────────────────────────────────────────────────
+       The decision is made in about two seconds on a phone, so the headline is
+       the largest thing on the page and the phone number is the only bright
+       object in the top third. Everything else defers. -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="chip" data-reveal><span class="dot dot-pulse" data-ambient></span> <span data-fact="locality">St. Charles, MO</span></span>
+          <h1 class="display" id="hero-heading" data-reveal>
+            <span data-fact="headline">Burst pipe?</span>
+            <span data-fact="headlineAccent" class="hero__accent">You are on the right phone.</span>
+          </h1>
+          <p class="lede" data-reveal data-fact="subhead">Emergency plumbing across St. Charles and the county. One call, a real price, and someone who is actually on the way.</p>
+          <div class="hero-actions" data-reveal>
+            <a class="btn btn-lg" data-fact="phoneLink" href="tel:+16363366944">Call now</a>
+            <a class="btn btn-lg btn-ghost" href="#request">Request a callback</a>
+          </div>
+          <div class="trust-row sample-inline" data-reveal data-sample="badges" data-sample-label="sample badges"></div>
+        </div>
+
+        <!-- The finished product, shown rather than described. -->
+        <div class="phone" data-reveal aria-label="Preview of the job-request text a customer would receive">
+          <div class="phone-notch"></div>
+          <div class="phone-body">
+            <p class="mono muted">New job request</p>
+            <div class="phone-row"><span class="dot"></span> Water heater — no hot water</div>
+            <div class="phone-row"><span class="dot"></span> <span data-fact="address">3441 Ipswich Lane, St. Charles, MO 63301</span></div>
+            <div class="phone-row"><span class="dot"></span> "Heating only, water's fine"</div>
+            <div class="phone-send">
+              <strong>Texted to the plumber's phone in 4 seconds.</strong><br>
+              <span class="muted">No call missed, no number written down, no
+              "we'll call you back tomorrow".</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── the numbers ───────────────────────────────────────────────────
+       A band of its own rather than a strip under the hero. Two reasons: the
+       sample flag on this block was being injected directly beneath the trust
+       chips and drawing over them, and a full-width band is the first of three
+       different section shapes on the page, which is what stops the scroll
+       reading as one template repeated.
+
+       The three numbers are blank on purpose. The first version of this
+       mock-up filled them with "15 years", "24 hour" and "98% same-day" and
+       none of them were facts about this business. -->
+  <section class="bleed" data-mark="24" aria-label="Business at a glance">
+    <div class="wrap">
+      <div class="stat-row" data-reveal data-sample="stats" data-sample-label="your real numbers go here">
+        <div class="stat"><b data-blank="yearsInBusiness" data-blank-label="__">—</b><span>Years local</span></div>
+        <div class="stat"><b data-blank="dispatchHours" data-blank-label="__">—</b><span>Hour dispatch</span></div>
+        <div class="stat"><b data-blank="sameDayRate" data-blank-label="__%">—</b><span>Same-day</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── photo wall ─────────────────────────────────────────────────────
+       The single most important thing a tradesperson's site can show and the
+       only thing this one is genuinely missing. Empty frames on purpose: stock
+       photography of somebody else's bathroom on a pitch page is the fastest
+       way to lose the prospect, and sample.css exists because an invented
+       asset is worse than an admitted gap. -->
+  <section class="section" id="work" aria-labelledby="work-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">The work</span>
+        <h2 class="h2" id="work-heading">Your jobs, on this page, at full size.</h2>
+        <p class="leded muted" style="font-size:var(--t-sm)">
+          Six photographs of real work is the difference between a site that
+          looks like a company and a site that looks like a template. The frames
+          below are where they go.
+        </p>
+      </div>
+      <div class="wall" style="margin-top:var(--s-5)" data-reveal>
+        <div class="wall__frame wall__frame--tall">
+          <span class="wall__label">Finished bathroom rough-in</span>
+        </div>
+        <div class="wall__frame"><span class="wall__label">Basement re-pipe</span></div>
+        <div class="wall__frame"><span class="wall__label">Water heater swap</span></div>
+        <div class="wall__frame"><span class="wall__label">Emergency leak, 11pm</span></div>
+        <div class="wall__frame"><span class="wall__label">Kitchen drain</span></div>
+      </div>
+      <p class="wall__cap" data-reveal>
+        Sample labels. Every frame here is a placeholder for a photograph of this
+        business's own work &mdash; which is the point: a plumber's customers do
+        not hire them for typography.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── the part that wins the job ───────────────────────────────────────
+       This is the reason for the redesign, shown in the redesign. The left pane
+       is measured, not invented: it is what stcharlesplumbingco.com actually
+       serves. The right pane is the proposal. -->
+  <!-- ── the part that wins the job ───────────────────────────────────────
+       This is the reason for the redesign, shown in the redesign, and it is
+       the only section where the design is not the point -- the measurement
+       is. The left pane is what stcharlesplumbingco.com actually serves. The
+       right pane is the proposal. Nothing on either side is illustrative. -->
+  <section class="section band" id="why" aria-labelledby="why-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">Why this rebuild</span>
+        <h2 class="h2" id="why-heading">Right now, this is what your customers find.</h2>
+        <p class="muted" style="font-size:var(--t-sm)">
+          I loaded <span class="mono">stcharlesplumbingco.com</span> while putting
+          this together. Here is the honest comparison, measured rather than
+          imagined.
+        </p>
+      </div>
+
+      <div class="ba" style="margin-top:var(--s-5)">
+        <div class="ba-pane ba-pane--before" data-reveal>
+          <div class="ba-head">Today &mdash; measured, not opinion</div>
+          <div class="ba-body">
+            <div class="ghost-site">
+              <div class="ghost-bar">stcharlesplumbingco.com</div>
+              <p class="ghost-title" data-fact="observedTitle">Arch Plumbing – My WordPress Blog</p>
+              <div class="ghost-line w85"></div>
+              <div class="ghost-line"></div>
+              <div class="ghost-line w70"></div>
+              <div class="ghost-line w45"></div>
+              <p class="ghost-note" data-fact="observedDetail">
+                331 characters of text. No phone number. No email address. No contact form. No way to book, request, or pay.
+              </p>
+            </div>
+          </div>
+          <p class="ba-verdict bad">A different company's blog, on your domain, on the address people copy off your paperwork.</p>
+        </div>
+
+        <div class="ba-pane ba-pane--after" data-reveal>
+          <div class="ba-head">After &mdash; same address</div>
+          <!-- Ruled rows, not three cards inside a card. Nesting a card grid
+               inside a bordered pane is the single most recognisable
+               generated-layout move there is. -->
+          <div class="ruled ba-ruled">
+            <div class="ruled-row"><span class="ruled-row__n">01</span><h3 class="ruled-row__title">Tap to call, day or night</h3><p class="ruled-row__body">The number is a button on every screen, not a line of text you have to read and retype.</p></div>
+            <div class="ruled-row"><span class="ruled-row__n">02</span><h3 class="ruled-row__title">Enquiry comes in by text</h3><p class="ruled-row__body">The form sends the job straight to your phone — address, problem, urgency — in seconds.</p></div>
+            <div class="ruled-row"><span class="ruled-row__n">03</span><h3 class="ruled-row__title">Shows up for "plumber near me"</h3><p class="ruled-row__body">Real address, real service area, real reviews. The things Google needs to rank you.</p></div>
+          </div>
+          <p class="ba-verdict good">Your name, your domain, your phone number, on every screen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── services ─────────────────────────────────────────────────────── -->
+  <!-- ── services ───────────────────────────────────────────────────────
+       A ruled list, not a grid of cards. A roofer reads this section looking
+       for the one job he needs today, and three columns of boxes makes him
+       compare boxes. A list just reads down. The numbered margin is the only
+       ornament, and it is there because a tradesperson's day runs on sequence. -->
+  <section class="section" id="services" aria-labelledby="services-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">What we do</span>
+        <h2 class="h2" id="services-heading">Most calls are the same few things.</h2>
+        <p class="muted" style="font-size:var(--t-sm)">
+          Six, and they are the six that fill a week. If yours is not on the
+          list, call anyway.
+        </p>
+      </div>
+      <div class="ruled" style="margin-top:var(--s-5)"
+           data-sample="services" data-sample-label="sample services — yours to correct"></div>
+    </div>
+  </section>
+
+  <!-- ── one statement, full bleed ──────────────────────────────────────
+       The page has four section shapes in it by this point: hero grid, stats
+       band, ruled list, two-column split. This is the fifth, and it is the one
+       place a single line is allowed to be enormous. -->
+  <section class="bleed" data-mark="24/7" aria-label="Availability">
+    <div class="wrap">
+      <p class="bleed__text bleed__inner" data-reveal>
+        You do not need to <em>read</em> this site. You need to make a call.
+      </p>
+      <div class="hero-actions" style="margin-top:var(--s-4)" data-reveal>
+        <a class="btn btn-lg" data-fact="phoneLink" href="tel:+16363366944">Call now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── how it works ─────────────────────────────────────────────────── -->
+  <section class="section band" aria-labelledby="steps-heading">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:start">
+        <div class="stack">
+          <span class="eyebrow" data-reveal>How it works</span>
+          <h2 class="h2" id="steps-heading" data-reveal>Three steps, and you know the price before anyone starts</h2>
+          <p class="lede" data-reveal>No window where you're wondering whether someone's coming.</p>
+        </div>
+        <div class="steps" data-stagger>
+          <div class="step" data-reveal>
+            <h3 class="h3">You call or send the form</h3>
+            <p class="muted">Either way it lands in seconds, and you've got the direct line — not a receptionist's.</p>
+          </div>
+          <div class="step" data-reveal>
+            <h3 class="h3">You get a price and a time back</h3>
+            <p class="muted">Before anyone sets off. If it's a bigger job, you'll hear that on the phone too.</p>
+          </div>
+          <div class="step" data-reveal>
+            <h3 class="h3">It's fixed, and it's warranted</h3>
+            <p class="muted">Parts and labour in writing. If it wasn't the problem, you don't pay for the visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── service area ─────────────────────────────────────────────────── -->
+  <section class="section band" id="area" aria-labelledby="area-heading">
+    <div class="wrap">
+      <div class="stack" style="max-width:var(--wrap-narrow)">
+        <span class="eyebrow" data-reveal>Where we work</span>
+        <h2 class="h2" id="area-heading" data-reveal>Based in St. Charles, out to the county line</h2>
+        <p class="lede" data-reveal>Not sure if that's you? Call anyway — if I can't get there tonight I'll tell you who can.</p>
+      </div>
+      <div class="areas" style="margin-top:var(--s-5)"
+           data-sample="areas" data-sample-label="sample service area"></div>
+    </div>
+  </section>
+
+  <!-- ── form ─────────────────────────────────────────────────────────── -->
+  <section class="section" id="request" aria-labelledby="request-heading">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:start">
+        <div class="stack">
+          <span class="eyebrow" data-reveal>Ask for a callback</span>
+          <h2 class="h2" id="request-heading" data-reveal>Rather just have someone ring you?</h2>
+          <p class="lede" data-reveal>In the finished site this lands as a text on the plumber's phone within seconds — which is the whole reason a customer uses a form instead of a phone call at 9pm.</p>
+          <p class="form-note" data-reveal>In this mock-up it goes nowhere. That's deliberate, and the bar at the top says so.</p>
+        </div>
+
+        <form class="card form" data-demo-form novalidate data-reveal>
+          <div class="form-fields stack">
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input class="input" id="f-name" name="name" type="text" required placeholder="e.g. Dan Whitfield" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input class="input" id="f-phone" name="phone" type="tel" required placeholder="(636) 000-0000" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="f-job">What's going on?</label>
+              <textarea class="input" id="f-job" name="job" rows="3" required placeholder="Burst pipe under the sink, water's shut off"></textarea>
+            </div>
+            <button class="btn btn-lg" type="submit">Send it</button>
+            <p class="form-note">Mock-up only — this form performs the confirmation and sends nothing.</p>
+          </div>
+          <div class="form-done" tabindex="-1">
+            <strong>That's the whole interaction.</strong>
+            <p class="muted" style="margin-top:var(--s-2)">On the real site, this is the message arriving on the plumber's phone with the address, the problem and their number — no call missed while he's under a sink.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── closing CTA ──────────────────────────────────────────────────── -->
+  <section class="section band" aria-labelledby="closing-heading">
+    <div class="wrap center stack" style="max-width:var(--wrap-narrow);margin-inline:auto">
+      <h2 class="h2" id="closing-heading" data-reveal>Water's already off. Don't lose another hour.</h2>
+      <div class="hero-actions" style="justify-content:center" data-reveal>
+        <a class="btn btn-lg" data-fact="phoneLink" href="tel:+16363366944">Call now</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="stack">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">SC</span><span data-fact="name">St Charles Plumbing</span></span>
+      <p data-fact="address">3441 Ipswich Lane, St. Charles, MO 63301</p>
+      <p><a data-fact="phoneLink" href="tel:+16363366944">+1 636 336 6944</a></p>
+    </div>
+    <div class="stack">
+      <strong>Services</strong>
+      <span class="muted">Emergency leaks</span>
+      <span class="muted">Water heaters</span>
+      <span class="muted">Drains &amp; blockages</span>
+      <span class="muted">Remodels</span>
+    </div>
+    <div class="stack">
+      <strong>Mock-up notice</strong>
+      <p class="muted">Design preview only. Not a live site, and nothing here submits, stores or tracks anything. Anything marked <em>sample</em> is placeholder copy for layout, not a claim about this business.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="site.config.js"></script>
+<script src="../core/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+/* Plumbing preset.
+ *
+ * The read this is tuned for: someone has already decided they need a plumber,
+ * it is probably urgent, and they are holding a phone in one hand in a
+ * driveway at 9pm. So: dark enough to read at night without glaring, a phone
+ * number that behaves like a button the whole way down, and motion restrained
+ * to the point of being nearly invisible. Confident, not flashy. A flashing
+ * animated site is the fastest way to look like a scam to a trade.
+ *
+ * ---- the palette ------------------------------------------------------
+ *
+ * The first version of this preset was deep navy with a copper accent, and it
+ * was the exact fingerprint of a generated landing page: navy-plus-orange is
+ * what every "AI startup" theme resolves to, and a roofer reads it as software
+ * before reading a word of it. Worse, the combination has nothing to do with
+ * the trade.
+ *
+ * So: warm near-black instead of navy, bone instead of white, and one hi-vis
+ * accent used sparingly. Hi-vis is the only genuinely trade-authentic colour in
+ * the palette -- it is the tape on a jacket, the cone on a driveway, the print
+ * on the side of a van. Used once per screen it reads as a working trade; used
+ * everywhere it would read as a discount warehouse, which is why --c-accent
+ * carries a low usage rule that the layout depends on.
+ *
+ * Warm black rather than true black matters more than it sounds: pure #000 on
+ * a phone at night is a light source pointed at your face. This is dark, but
+ * it is not emissive, and the bone text on it is easier to read at 2am.
+ */
+
+:root {
+  /* Warm near-black. Not navy, not #000. */
+  --c-bg: #0e0d0b;
+  --c-bg-2: #14120f;
+  --c-surface: #1a1815;
+  --c-surface-2: #232019;
+  --c-line: #3a342b;
+
+  /* Bone rather than white. Paper, not screen. */
+  --c-text: #f5f0e6;
+  --c-muted: #a39a88;
+
+  /* Hi-vis. One per screen, never more. */
+  --c-accent: #e8ff4d;
+  --c-accent-ink: #0e0d0b;
+  --c-accent-2: #ff6b35; /* concrete rust, for the rare second accent */
+
+  --c-good: #4ade80;
+  --c-bad: #ff7a6b;
+
+  /* Square. Nothing on a service van is rounded, and soft corners read as a
+     consumer app the moment the radius gets generous. */
+  --r-sm: 2px;
+  --r-md: 3px;
+  --r-lg: 4px;
+  --r-pill: 2px;
+
+  /* Tight and heavy. A plumbing van is not a lifestyle brand. */
+  --font-display: var(--font-sans);
+  --leading-tight: 0.94;
+  --tracking-tight: -0.03em;
+
+  /* The hero runs much larger here than the token default. A tradesperson
+     decides in about two seconds, and the two-second decision is made on size.
+     Held at 5.2rem so the headline still breaks to three lines in a two-column
+     hero rather than filling the measure. */
+  --t-3xl: clamp(2.6rem, 1.3rem + 5.6vw, 5.2rem);
+  --t-2xl: clamp(1.85rem, 1.4rem + 2vw, 3rem);
+
+  --hero-wash: 0.14;
+
+  /* Still mostly. This preset gets its personality from colour, contrast and
+     scale, not from movement. */
+  --motion-intensity: 0.45;
+}

@@ -1,0 +1,38 @@
+/* Roofing preset.
+ *
+ * Same components, same script, different business. A roofer's buyer is
+ * standing in a kitchen staring at a water stain, and the sale is $10k+, so
+ * this preset buys its confidence with weight and scale: near-black, a hot
+ * signal amber, a much larger radius language, and considerably more motion
+ * budget than the plumbing preset gets.
+ *
+ * The point of shipping both: same code, visibly different companies.
+ */
+
+:root {
+  --c-bg: #0b0b0d;
+  --c-bg-2: #131316;
+  --c-surface: #17171b;
+  --c-surface-2: #1f1f25;
+  --c-line: #2e2e37;
+  --c-text: #f7f7f8;
+  --c-muted: #9d9daa;
+
+  --c-accent: #ffb020;
+  --c-accent-ink: #17110a;
+  --c-accent-2: #ff6b35;
+
+  /* Bigger radii read as premium. A roofer can afford to look expensive; a
+     plumber selling a $180 emergency call cannot. */
+  --r-sm: 10px;
+  --r-md: 18px;
+  --r-lg: 30px;
+
+  --font-display: var(--font-sans);
+  --leading-tight: 0.98;
+  --t-3xl: clamp(2.5rem, 1.6rem + 3.4vw, 5rem);
+
+  /* High. These buyers scroll a gallery of their own damage before they trust
+     anyone, and this is the one trade where the motion carries the argument. */
+  --motion-intensity: 0.85;
+}

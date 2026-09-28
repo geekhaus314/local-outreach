@@ -1,0 +1,75 @@
+/* Sample content: the part of the system that keeps a mock-up honest.
+
+   A pitch mock-up has an obvious temptation. You need a page to look real, so
+   you put "15 years in business" and "98% same-day" and a list of services, and
+   the recipient reads them as facts about *his* business. Some of them might as
+   well be true. He cannot tell which are which, and he will not ask, because
+   asking means admitting he does not know his own service area.
+
+   That is the same failure this repo already documents for the outreach copy --
+   a fabricated claim is not a sales tactic, it is a liability -- except a
+   fabricated *statistic on a website mock-up* is worse, because the recipient
+   is looking at the very artefact that is supposed to be trustworthy.
+
+   So invented content is a first-class, declared thing. It lives under
+   `sample:` in the config, it is rendered with a visible marker, and
+   `check-mockup.mjs` fails the build if a page contains placeholder prose that
+   nobody has declared. The two categories are:
+
+     facts    measured or published -- safe to assert, rendered plain
+     sample   invented for layout  -- rendered marked, and marked visibly
+
+   The point is not to be timid. It is that a prospect who spots one invented
+   number stops trusting the three real ones, and the real ones are the only
+   reason the mock-up is worth showing.
+*/
+
+:root {
+  --c-sample-bg: color-mix(in srgb, var(--c-bad) 16%, transparent);
+  --c-sample-line: color-mix(in srgb, var(--c-bad) 45%, transparent);
+}
+
+.sample-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--t-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-bad);
+  background: var(--c-sample-bg);
+  border: 1px dashed var(--c-sample-line);
+  border-radius: var(--r-pill);
+  padding: 0.25em 0.7em;
+  white-space: nowrap;
+}
+
+/* The marker is injected as real DOM by site.js and placed in normal flow --
+   as a sibling above a block group, or as the last item of a wrapping row.
+   It was a ::after pseudo-element, which meant it was positioned out of flow,
+   landed on top of the content it was labelling, and was invisible to screen
+   readers. Flow position is the only version of this that cannot collide. */
+
+/* Obvious blanks. Use for a number or word whose real value you do not have --
+   "XX years" rather than a confident guess. Visually unfinished on purpose:
+   an unfinished slot invites the client to fill it, which is a better outcome
+   than quietly making something up and shipping it. */
+.blank {
+  display: inline-block;
+  min-width: 3.2em;
+  border-bottom: 2px dashed var(--c-sample-line);
+  color: var(--c-bad);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* Placeholder body copy for paragraphs that exist only to show the layout. */
+.ghosted {
+  color: var(--c-muted);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 6px,
+    color-mix(in srgb, var(--c-muted) 14%, transparent) 6px 8px
+  );
+  border-radius: 3px;
+}
