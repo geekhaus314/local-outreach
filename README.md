@@ -24,8 +24,9 @@ python3 run_scraper.py --provider osm
 cp .env.example .env    # then paste your key
 python3 run_scraper.py
 
-# Turn leads into pitch dossiers
-python3 parse_leads.py    # -> leads_dashboard.md
+# Turn leads into an outreach queue
+python3 parse_leads.py            # re-checks every site, then writes the queue
+python3 parse_leads.py --no-check  # use the stored CSV facts, no network
 ```
 
 ---
@@ -34,7 +35,7 @@ python3 parse_leads.py    # -> leads_dashboard.md
 
 ```
 providers  ->  dedupe  ->  audit  ->  score  ->  leads.csv  ->  parse_leads.py
-(harvest)     (merge)    (fetch    (rank)      (CSV)          (dossiers)
+(harvest)     (merge)    (fetch    (rank)      (CSV)          (queue)
                           + measure)
 ```
 
@@ -46,7 +47,12 @@ providers  ->  dedupe  ->  audit  ->  score  ->  leads.csv  ->  parse_leads.py
    `scraper/audit.py` runs ~20 checks and returns a 0-100 health score.
 4. **Score** - `scraper/scoring.py` combines *need* (how broken things are) with
    *value* (can they afford this) into a 0-100 opportunity score.
-5. **Report** - `parse_leads.py` renders dossiers with pitch drafts.
+5. **Queue** - `parse_leads.py` re-checks each site and sorts the leads into
+   `send` / `verify` / `expand` / `hold` / `drop`, with copy for the ones worth
+   contacting. A lead is only `send` when it has a reachable channel, one
+   verified fact, and a message that survives being checked. It re-fetches sites
+   by default, because a redirect that pointed somewhere else last week points
+   somewhere else again this week.
 
 ---
 
@@ -213,8 +219,18 @@ details):
 | `Pitch Facts` | Pre-verified evidence, `|`-separated |
 | `Low Confidence` | `yes` for OSM-only leads -- verify first |
 
-`leads_dashboard.md` -- per-lead dossiers with the audit detail, target role,
-psychological read, and a pitch draft built only from harvested facts.
+`leads_dashboard.md` -- the outreach queue. Every lead is in one of five states,
+carrying the measured fact the message hangs on, the channel, the copy, what to
+say if they reply, and an explicit list of what not to say. A costed time budget
+sits at the top, and a drop list exists so nobody re-derives the same conclusion
+next week.
+
+The message is generated from harvested data only. Three earlier drafts were
+unsendable — one told an OpenStreetMap lead "no website is attached to your
+Google Business Profile", which has no such thing; two told a prospect their site
+had no analytics and a short meta description, both of which were false; and one
+was written for a business with no phone and no email. Hence the `verify` and
+`hold` states: a lead that cannot be checked is not ready to text.
 
 ---
 
@@ -250,6 +266,84 @@ evidence, that is the legitimate way to get it.
 - Local business contact details are personal-ish data in some jurisdictions.
   Keep `leads.csv` local; it is gitignored for a reason.
 
+---
+
+## The mock-ups (`sites/`)
+
+A lead is only worth something once the prospect can see what you mean. `sites/`
+is the design kit for showing them: one token system, five presets, and a page
+per business built from a config rather than hand-edited.
+
+```
+sites/
+  core/
+    tokens.css        design tokens: colour, fluid type, space, motion
+    site.css          layout + components, every value a token
+    sample.css        the invented-content guard (see below)
+    site.js           runtime: config, theme, motion, reveal, mock-up seal
+    estimator.js      the project estimator (studio pages only)
+  themes/
+    plumbing.css  roofing.css  hvac.css  photography.css  studio.css
+  st-charles-plumbing/   a client mock-up
+  site-rehab-stl/        Jake's own public site
+  check-mockup.mjs       the guard
+```
+
+Check every page with:
+
+```
+node sites/check-mockup.mjs
+```
+
+### Mock-up notice
+
+**These are design mock-ups, not live websites.** Everything below the demo bar
+performs, and none of it works. Nothing on a mock-up sends, saves, stores or
+measures anything, and the contact form is a performance of a form rather than a
+form — there is no endpoint, no `fetch` and no storage anywhere in `sites/`.
+
+Anything marked `sample` is placeholder copy chosen to show the layout. It is not
+a claim about the business in question. Before showing one to anyone, read
+`core/sample.css`: the reason the distinction is enforced rather than trusted is
+that a prospect cannot tell which numbers are real and which were filler, and
+will not ask, because asking means admitting he does not know his own service
+area.
+
+`st-charles-plumbing` uses real public details for a real business. The
+observation in its hero — that the domain serves a different company's blog — is
+measured, not staged. Everything in its `sample:` block is invented.
+
+### Two kinds of page
+
+`check-mockup.mjs` holds the two kinds to opposite rules, and a page declares
+which it is with `kind:` in its config.
+
+**`kind: 'mockup'`** — a pitch artefact for someone else's business. Carries
+`noindex` so it can never surface in a search for a real business, a fixed demo
+bar, a `facts`/`sample` split, and no external origins.
+
+**`kind: 'studio'`** — a real, public site. `site-rehab-stl` is the destination
+every cold message links to, so the mock-up rules are actively wrong for it: a
+`noindex` would suppress the only live part of the pitch, and a demo bar saying
+"nothing here works" would be a lie. It is indexable, free to link outward, has
+no `sample:` block at all, and the checker fails the build if an invented fact
+ever appears on it unmarked.
+
+### The estimator
+
+`core/estimator.js` answers the section the original Next.js prototype left as a
+heading and nothing else. Six questions produce a scope, a price band and a
+duration.
+
+It is allowed to quote a price, because a price can be defended. It is not
+allowed to quote the visitor's revenue, traffic or conversions, because those
+cannot be measured from the outside and every version of them is invented — the
+same refusal `parse_leads.py` makes about estimating lost calls. `check-mockup.mjs`
+pins that: it strips the comments and string literals out of the estimator and
+fails the build if a revenue-shaped identifier ever holds a value.
+
+---
+
 ## Layout
 
 ```
@@ -257,6 +351,7 @@ scraper/
   config.py              markets, trades, blocklists, env config
   http_client.py         retries, caching, SSRF guards, page fetch
   audit.py               site auditor -> health + findings
+  surfaces.py            robots/sitemap/ads.txt/... improvements, zero penalty
   scoring.py             need/value/opportunity, classification
   dedupe.py              cross-source, cross-market merging
   pipeline.py            orchestration + CSV/JSON output
@@ -264,6 +359,8 @@ scraper/
     base.py              RawLead model
     google_places.py     primary source
     overpass.py          free fallback
+sites/                   the mock-up kit -> see above
 run_scraper.py           CLI
 parse_leads.py           leads.csv -> leads_dashboard.md
+tests/test_scraper.py    81 tests, no network
 ```
