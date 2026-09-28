@@ -63,6 +63,11 @@ class ScoredLead:
     low_confidence: bool = False
     maps_url: str = ""
     last_audited: str = ""
+    # Internal-only. A read on who this business is and how to open with them,
+    # derived in scraper/persona.py. Never rendered into prospect-facing copy --
+    # see parse_leads.py, which prints it under an explicit "not the prospect"
+    # heading and keeps it out of message() by construction.
+    persona: str = ""
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -78,6 +83,7 @@ class ScoredLead:
             self.audit_summary, " | ".join(self.pitch_facts),
             ",".join(self.sources), self.source_ids,
             "yes" if self.low_confidence else "no", self.maps_url,
+            self.persona,
         ]
 
 
@@ -86,6 +92,7 @@ CSV_HEADER = [
     "Decision Maker", "Classification", "Opportunity Score", "Need Score",
     "Value Score", "Site Health", "Rating", "Review Count", "Audit Summary",
     "Pitch Facts", "Sources", "Source IDs", "Low Confidence", "Maps URL",
+    "Persona Read",
 ]
 
 # Marketplaces/directories: a listing exists, a website does not.
@@ -133,6 +140,12 @@ def classify(raw: RawLead, audit: AuditResult | None) -> str:
     # this is the strongest possible version of "you have no site": they are
     # actively paying for a domain they do not use.
     if audit.redirected_domain:
+        return DEAD_SITE
+    # Same problem, harder to see: the domain still answers, still looks like a
+    # real site, and belongs to a different company. Classifying it as a healthy
+    # site was how a plumber with a hijacked web address ended up on the skip
+    # list.
+    if audit.serves_other_business:
         return DEAD_SITE
     if audit.needs_rehab:
         return NEEDS_REHAB
@@ -211,7 +224,12 @@ def build_pitch_facts(raw: RawLead, audit: AuditResult | None, cls: str) -> list
         host = (re.sub(r"^https?://", "", raw.website).split("/")[0]).lower()
         facts.append(f"Their 'website' is a {host} listing, not a site they own.")
     elif cls == DEAD_SITE:
-        if audit and audit.redirected_domain:
+        if audit and audit.serves_other_business:
+            facts.append(
+                f"{audit.domain} loads a page for a different business, titled "
+                f"\"{audit.serves_other_business}\"."
+            )
+        elif audit and audit.redirected_domain:
             facts.append(
                 f"{audit.domain} redirects to {audit.redirected_domain}, which is "
                 "not their business."

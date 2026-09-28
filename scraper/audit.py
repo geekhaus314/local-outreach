@@ -16,6 +16,7 @@ import re
 import socket
 from dataclasses import dataclass, field
 from datetime import datetime
+from html import unescape
 from urllib.parse import urlparse
 
 from .config import (
@@ -26,6 +27,13 @@ from .config import (
     WEAK_PARKED_MARKERS,
 )
 from .http_client import fetch_page, normalize_url, registrable_domain
+from .surfaces import (
+    META_CHECKS,
+    TEXT_SURFACES,
+    check_metadata,
+    check_text_files,
+    robots_blocks_everything,
+)
 
 try:  # optional, we have a regex fallback for the few places it matters
     from bs4 import BeautifulSoup
@@ -35,7 +43,66 @@ except ImportError:  # pragma: no cover
 TAG_RE = re.compile(r"<(script|style|noscript)[^>]*>.*?</\1>", re.I | re.S)
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
 META_RE = re.compile(r"<meta\b[^>]*>", re.I)
-ATTR_RE = re.compile(r'([\w:-]+)\s*=\s*["\']?([^"\'>\s]*)', re.I)
+# Attribute values are quoted and routinely contain spaces -- a meta description
+# is one long sentence. The previous pattern stopped at the first whitespace, so
+# content="Roof repair, replacement and storm damage" parsed as "Roof", every
+# description looked 4 characters long, and the auditor told a business with a
+# complete 149-character description that it was "too short to persuade anyone to
+# click". Quoted and bare values are matched separately and unwrapped below.
+ATTR_RE = re.compile(
+    r'([\w:-]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\'>]*))', re.I
+)
+
+# Statuses that mean "an automated client was refused", not "this site is broken".
+# WordPress hosts and WAFs in front of small-business sites answer 403/406/429
+# with a stub page. Every content check would then read the stub and conclude the
+# business has no contact form, no meta description and no analytics -- four
+# false claims in a pitch the prospect can disprove in five seconds.
+BLOCKED_STATUSES = frozenset({401, 403, 406, 418, 429, 451, 503})
+
+# Suffixed to catch sites whose *title* is a different company's name, e.g. a
+# plumber's domain that has been parked on someone else's blog.
+_NAME_NOISE = frozenset({
+    "inc", "llc", "co", "company", "corp", "incorporated", "the", "and",
+    "services", "service", "group", "plus", "usa", "us",
+})
+
+# Words that describe the trade rather than the business. They appear in half the
+# sites in any given market, so a shared "plumbing" proves nothing about whether
+# a page belongs to a particular plumber -- and treating it as proof is what let
+# a rival plumber's blog pass as "St Charles Plumbing Company".
+_GENERIC_TRADE_WORDS = frozenset({
+    "plumbing", "plumber", "roofing", "roofer", "hvac", "heating", "cooling",
+    "air", "conditioning", "painting", "painter", "electrical", "electric",
+    "landscaping", "concrete", "repairs", "repair", "contractors",
+    "contracting", "exteriors", "exterior", "home", "remodeling", "roof",
+    "siding", "gutters", "fence", "flooring", "windows", "solar", "cleaning",
+    "photography", "photographer", "portrait", "studio", "auto", "automotive",
+    "dental", "dentist", "medical", "massage", "salon", "restaurant",
+    "construction", "builders", "building", "systems", "solutions", "works",
+})
+
+
+def _attr_value(m: re.Match) -> str:
+    for grp in (2, 3, 4):
+        if m.group(grp) is not None:
+            return m.group(grp)
+    return ""
+
+
+def _name_tokens(name: str) -> set[str]:
+    """Meaningful lowercase tokens from a business name.
+
+    Deliberately drops the legal suffixes, because the check is "does this page
+    look like this business" and "SMP Plumbing Company" and "SMP Plumbing" have to
+    compare the same. Short tokens are dropped too: a three-letter word matches
+    by accident constantly.
+    """
+    cleaned = re.sub(r"[^\w\s]", " ", name.lower())
+    return {
+        t for t in cleaned.split()
+        if len(t) >= 4 and t not in _NAME_NOISE
+    }
 YEAR_RE = re.compile(r"(?:©|&copy;|copyright)\s*(?:copyright)?\s*(\d{4})", re.I)
 TAG_STRIP_RE = re.compile(r"<[^>]+>")
 WS_RE = re.compile(r"\s+")
@@ -58,7 +125,7 @@ CIAS = ("sentry", "trustpilot", "bbb.org", "google.com/maps", "gmpg.org")
 def _meta_tags(html: str) -> list[dict[str, str]]:
     tags: list[dict[str, str]] = []
     for raw in META_RE.findall(html):
-        attrs = {k.lower(): v for k, v in ATTR_RE.findall(raw)}
+        attrs = {m.group(1).lower(): _attr_value(m) for m in ATTR_RE.finditer(raw)}
         if attrs:
             tags.append(attrs)
     return tags
@@ -113,6 +180,12 @@ class AuditResult:
     needs_rehab: bool = False
     load_ms: int | None = None
     title: str = ""
+    # True when the host refused an automated request. Content findings are
+    # meaningless in that case, so none are emitted.
+    blocked: bool = False
+    # True when the page does not appear to belong to the business we asked
+    # about -- a plumber's domain still serving a different plumber's blog.
+    serves_other_business: str = ""
     findings: list[Finding] = field(default_factory=list)
     evidence: dict = field(default_factory=dict)
     error: str | None = None
@@ -158,8 +231,13 @@ def is_social_or_marketplace(url: str) -> bool:
     return any(host == h or host.endswith("." + h) for h in SOCIAL_HOSTS)
 
 
-def audit_url(url: str) -> AuditResult:
-    """Run the full audit against one URL. Never raises."""
+def audit_url(url: str, business_name: str = "") -> AuditResult:
+    """Run the full audit against one URL. Never raises.
+
+    ``business_name`` is optional and only used by the belongs-to-you check. It
+    has to be passed in because the auditor otherwise cannot tell a healthy site
+    from a healthy site belonging to someone else.
+    """
     url = normalize_url(url)
     res = AuditResult(url=url, domain=registrable_domain(url))
 
@@ -222,11 +300,38 @@ def audit_url(url: str) -> AuditResult:
     # ---- title (needed by several checks below) ------------------------- #
     title_match = TITLE_RE.search(html)
     title = WS_RE.sub(" ", title_match.group(1)).strip() if title_match else ""
+    # Entities are decoded here rather than at each use. A title of
+    # "Arch Plumbing &#8211; My WordPress Blog" is correct for a page and wrong
+    # in a text message to a customer, and the raw entity was reaching the
+    # outreach copy verbatim.
+    # Decode once here so every downstream consumer -- evidence quotes, the
+    # reporter, a text message to a prospect -- gets clean text.
+    title = unescape(title)
     res.title = title[:200]
 
+    # ---- did we actually get the site, or a block page? ----------------- #
+    # Bail out before any content check. A 403 stub is ~500 bytes of "Forbidden"
+    # with no links and no metadata, and reading it as the business's homepage
+    # manufactures four false claims at once.
     vis = _visible_text(html)
-    vis_low = vis.lower()
     text_len = len(vis.strip())
+    res.blocked = (
+        page.status in BLOCKED_STATUSES
+        or (page.status is not None and page.status >= 400 and text_len < 800)
+    )
+    if res.blocked:
+        res.health = 50          # unknown, not bad
+        res.needs_rehab = False  # deliberately not classified on a stub
+        res.evidence["text_length"] = text_len
+        res.findings.append(
+            Finding("BLOCKED", "Site refuses automated requests", 0,
+                    f"HTTP {page.status} to a scripted request "
+                    f"({text_len} chars of body)",
+                    "")
+        )
+        return res
+
+    vis_low = vis.lower()
 
     # ---- parked / placeholder detection -------------------------------- #
     # Strong markers are unambiguous wherever they appear. Weak markers
@@ -253,6 +358,21 @@ def audit_url(url: str) -> AuditResult:
         )
 
     # ---- domain redirected to a different business ---------------------- #
+    # The whole chain, not just the first foreign domain. A domain that walks
+    # through eleven unrelated businesses and lands on a spam page is a very
+    # different conversation from one that 301s to a single stale site, and
+    # naming a single hop from the middle of the chain is a claim that stops
+    # being true within hours -- the chain grew a new link during this work.
+    chain = []
+    # getattr rather than attribute access: this function is documented as never
+    # raising, and a test double or an older PageResult should not be able to
+    # take down an audit over a diagnostic field.
+    for hop in (getattr(page, "redirect_chain", None) or []):
+        host = registrable_domain(hop) or hop
+        if host and host not in chain:
+            chain.append(host)
+    res.evidence["redirect_chain"] = chain
+
     orig_domain = registrable_domain(url)
     final_domain = registrable_domain(res.final_url or url)
     if final_domain and orig_domain and final_domain != orig_domain:
@@ -263,6 +383,7 @@ def audit_url(url: str) -> AuditResult:
                     f"The web address listed for your business doesn't go to your "
                     f"business -- {orig_domain} just redirects to {final_domain}.")
         )
+
 
     if res.status and res.status >= 500:
         res.findings.append(
@@ -416,9 +537,58 @@ def audit_url(url: str) -> AuditResult:
                     "slot directly.")
         )
 
+
+
+    # ---- the page is somebody else's business --------------------------- #
+    # The redirect check above only catches a different *domain*. A domain that
+    # still serves first-party-looking content for another company slips past
+    # it entirely: a plumber's address still hosting a rival plumber's WordPress
+    # blog, with the plumber's own name nowhere on it. Nothing in the page
+    # announces this -- the site looks alive and scores like a healthy one, so
+    # the audit previously passed it as "decent, skip".
+    #
+    # Three conditions have to hold, because the cost of a false positive here is
+    # the worst in the whole pipeline: telling a real business that its domain
+    # belongs to someone else is an accusation, not an observation.
+    #   1. no distinctive part of its own name appears anywhere on the page
+    #   2. the page does not look like a working site for that trade -- no way to
+    #      contact anyone, or barely any content
+    #   3. it did not simply redirect somewhere else, which is its own finding
+    # Businesses named only after their trade ("Plumbing Company") have no
+    # distinctive token to test and are left alone rather than guessed at.
+    distinctive = _name_tokens(business_name) - _GENERIC_TRADE_WORDS
+    alts = " ".join(re.findall(r'alt\s*=\s*["\']([^"\']*)', html, re.I))
+    page_words = set(_name_tokens(f"{title} {vis} {alts}"))
+    looks_abandoned = (
+        not (has_phone or has_mail or has_form) or text_len < 1500
+    )
+    if (
+        distinctive
+        and not res.is_parked
+        and not res.redirected_domain
+        and looks_abandoned
+        and not (distinctive & page_words)
+    ):
+        res.serves_other_business = title[:80] or "an unrelated page"
+        res.findings.append(
+            Finding("SITE_IS_OTHER_BUSINESS",
+                    "Domain serves a different business", 80,
+                    f"page is titled {res.serves_other_business!r}, "
+                    f"expected {business_name!r}; no contact paths, "
+                    f"{text_len} chars of text",
+                    f"Your web address doesn't show your business any more -- "
+                    f"it loads a page for somebody else "
+                    f"(titled \"{res.serves_other_business}\").")
+        )
+
     # ---- thin content --------------------------------------------------- #
     # text_len was computed above, before the parked check, so it is reused.
     res.evidence["text_length"] = text_len
+    # A bounded sample of the page's own words. The reporter reads it to tell a
+    # local operator from a lead broker -- "serving five states" and a toll-free
+    # number together mean there is no small local business on the other end of
+    # that phone number, which is not something the markup alone will say.
+    res.evidence["body_text"] = vis[:4000]
     if text_len < 200 and not res.is_parked:
         res.findings.append(
             Finding("THIN_CONTENT", "Almost no content", 30,
@@ -456,13 +626,11 @@ def audit_url(url: str) -> AuditResult:
                     "anything a customer types into it travels in the clear.")
         )
 
-    if not res.evidence.get("modern_stack"):
-        res.findings.append(
-            Finding("NO_ANALYTICS_OR_MODERN", "No analytics / modern tooling", 10,
-                    "No known analytics or modern framework detected",
-                    "There's no analytics on your site, so you can't see how many "
-                    "people visit or where they click.")
-        )
+    # Analytics gets its own check, and nothing else is allowed to make the
+    # claim. The previous version hung a "no analytics" quote off the *modern
+    # framework* check, so any site on an older page builder was told "there's no
+    # analytics on your site" while quietly running Tag Manager. Both halves were
+    # asserted as one fact and one of them was always wrong.
     has_analytics = any(m in low for m in ANALYTICS_MARKERS)
     res.evidence["has_analytics"] = has_analytics
     if not has_analytics:
@@ -472,9 +640,20 @@ def audit_url(url: str) -> AuditResult:
                     "Your site has no analytics installed, so you have no idea how "
                     "many people are actually looking at it.")
         )
+    if not res.evidence.get("modern_stack") and not legacy and not has_analytics:
+        res.findings.append(
+            Finding("BARE_BONES", "No analytics and no modern tooling", 10,
+                    "No analytics, no known framework, no legacy markers either",
+                    "There's no analytics on your site, so you can't see how many "
+                    "people visit or where they click.")
+        )
 
     # ---- stale copyright ------------------------------------------------ #
-    years = [int(y) for y in YEAR_RE.findall(html) if 1990 < int(y) <= 2100]
+    # Only years that have actually happened count. A stock theme can ship a
+    # hardcoded "2038" in its footer markup, and treating that as the newest
+    # date on the site hid the real one.
+    this_year = datetime.now().year
+    years = [int(y) for y in YEAR_RE.findall(html) if 1990 < int(y) <= this_year]
     if years:
         newest = max(years)
         age = datetime.now().year - newest
@@ -504,8 +683,52 @@ def audit_url(url: str) -> AuditResult:
 
     # ---- score ---------------------------------------------------------- #
     total_penalty = sum(f.penalty for f in res.findings)
-    res.health = max(0, 100 - total_penalty)
+    # flagged in the per-lead report.
     res.needs_rehab = total_penalty >= 30 or res.is_parked
+    res.health = max(0, 100 - total_penalty)
+
+    # ---- what a working site is still leaving on the table ---------------- #
+    # Runs last, and only for sites that are actually alive. Every finding here
+    # is penalty 0 on purpose: these are improvements, not defects, and charging
+    # for them would drag healthy sites over the NEEDS_REHAB line above. They
+    # exist so that a business with a good site still has something true to be
+    # pitched -- see scraper/surfaces.py.
+    if res.reachable and not res.is_parked and not res.serves_other_business:
+        for key, present in check_metadata(html).items():
+            res.evidence[f"meta_{key}"] = present
+            if not present:
+                spec = META_CHECKS[key]
+                res.findings.append(
+                    Finding(f"META_{key.upper()}", spec["label"], 0,
+                            "not present in the page head", spec["quote"])
+                )
+
+        if not res.redirected_domain:
+            for path, surface in check_text_files(res.final_url or url).items():
+                spec = TEXT_SURFACES[path]
+                key = f"has_{path.replace('.', '_').replace('/', '_')}"
+                res.evidence[key] = surface.present
+                res.evidence[f"{key}_confirmed"] = surface.absent
+                if surface.present:
+                    if path == "robots.txt" and robots_blocks_everything(surface.body):
+                        res.findings.append(
+                            Finding("ROBOTS_BLOCKS_ALL", "robots.txt blocks all crawlers", 40,
+                                    "robots.txt contains 'Disallow: /'",
+                                    "Your robots.txt tells search engines not to "
+                                    "index anything on your site, which means you've "
+                                    "dropped out of search results entirely.")
+                        )
+                    continue
+                if not surface.absent:
+                    # We never found out. Saying "you have no ads.txt" because
+                    # the request timed out is exactly the kind of claim that
+                    # discredits the whole report, so nothing is claimed.
+                    continue
+                res.findings.append(
+                    Finding(f"NO_{path.replace('.', '_').upper()}", spec["label"], 0,
+                            f"HTTP {surface.status} for /{path}", spec["quote"])
+                )
+
     return res
 
 

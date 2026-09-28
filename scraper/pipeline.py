@@ -22,6 +22,7 @@ from .config import (
     DATA_DIR,
 )
 from .dedupe import dedupe
+from .persona import read_persona
 from .providers import google_places, overpass
 from .providers.base import RawLead
 from .scoring import (
@@ -77,7 +78,6 @@ def collect(
 
     return raw
 
-
 def audit_all(leads: list[RawLead]) -> dict[str, AuditResult]:
     """Audit every distinct website once, concurrently."""
     targets = sorted({l.website for l in leads if l.website})
@@ -85,9 +85,18 @@ def audit_all(leads: list[RawLead]) -> dict[str, AuditResult]:
     targets = [t for t in targets if t]
     if not targets:
         return {}
+
     if not CONFIG.audit_enabled:
         log(f"Audit disabled by config; {len(targets)} sites skipped")
         return {}
+
+    # The auditor needs the business name to tell "this site is broken" from
+    # "this site is fine and simply belongs to someone else". When one domain is
+    # claimed by several records, the first name is as good as any for that check.
+    name_by_url: dict[str, str] = {}
+    for lead in leads:
+        if lead.website and lead.website not in name_by_url:
+            name_by_url[lead.website] = lead.name
 
     log(f"Auditing {len(targets)} distinct websites "
         f"({CONFIG.audit_concurrency} workers, {CONFIG.audit_timeout}s timeout)...")
@@ -95,7 +104,10 @@ def audit_all(leads: list[RawLead]) -> dict[str, AuditResult]:
     results: dict[str, AuditResult] = {}
     done = 0
     with ThreadPoolExecutor(max_workers=CONFIG.audit_concurrency) as pool:
-        futures = {pool.submit(audit_url, url): url for url in targets}
+        futures = {
+            pool.submit(audit_url, url, name_by_url.get(url, "")): url
+            for url in targets
+        }
         for fut in as_completed(futures):
             url = futures[fut]
             try:
@@ -121,6 +133,14 @@ def build(raw: list[RawLead], audits: dict[str, AuditResult]) -> list[ScoredLead
             s.audit_summary = "no website to audit"
         elif s.site_health is None:
             s.audit_summary = "audit skipped"
+
+    # Derive the persona here, while the audit is still in hand, rather than in
+    # parse_leads.py. The read needs the page's own words to be any good, and by
+    # the time the renderer runs it has only the CSV -- which does not carry body
+    # text. Deriving at harvest is the difference between reading their voice and
+    # reading nothing.
+    for s in scored:
+        s.persona = read_persona(s, audits.get(s.website)).to_csv()
 
     scored.sort(key=lambda s: (BUCKET_ORDER.get(s.classification, 9), -s.opportunity))
     return scored
