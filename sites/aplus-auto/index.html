@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-trade="automotive">
+<head>
+<meta charset="utf-8">
+<!-- noindex: this is a private pitch mock-up, not a site. It must never end up
+     in a search result for a real business. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A+ Auto Repair — independent auto repair in St. Ann, MO</title>
+<meta name="description" content="Independent auto repair at 3659 N Lindbergh Blvd, St. Ann, MO. Diagnostics, brakes, suspension and scheduled maintenance. Call (314) 291-2886.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="../core/tokens.css">
+<link rel="stylesheet" href="../core/site.css">
+<link rel="stylesheet" href="../core/sample.css">
+<!-- Shipped, not injected. site.js would otherwise fetch this after first paint
+     and the page would flash the tokens.css default before swapping. -->
+<link rel="stylesheet" href="../themes/automotive.css" data-theme="automotive">
+<!-- The four components that only this page needs. Not in core/, because a
+     repair order and a DNS receipt are not things a plumber's site inherits. -->
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <!-- ── demo bar ──────────────────────────────────────────────────────────
+     Fixed, first thing on the page, and impossible to miss. This build is a
+     design mock-up: everything below it performs, and none of it works.
+
+     Kept deliberately understated. The first version of this bar led with what
+     the shop had got wrong, which turned a proposal into a reprimand. The page
+     is now the thing being sold, so the bar only has to be honest about what it
+     is and stay out of the way. -->
+<div class="demobar" role="note" aria-label="About this page">
+  <span><b>Design mock-up</b> by Jake Viefhaus — a preview of the finished site. Nothing here sends, saves or measures anything.</span>
+  <!-- The trade switcher is injected by site.js when site.config.js sets
+       showTradeSwitcher. It is not in this markup, and that is deliberate. -->
+</div>
+
+<header class="header">
+  <div class="wrap header-in">
+    <!-- Wordmark only, no placeholder tile. The first pass put an "A+" badge
+         beside the name, which read as "A+ A+ Auto Repair" — the mark repeated
+         the wordmark instead of standing in for a logo. The business name is
+         styled exactly as it is listed on the profile, and the tile comes back
+         when there is a real mark to put in it. -->
+    <span class="brand brand--wordmark">
+      <span class="brand-name" data-fact="name">A+ Auto Repair</span>
+    </span>
+    <nav class="nav">
+      <a href="#services" class="hide-sm">Services</a>
+      <a href="#work" class="hide-sm">The work</a>
+      <a href="#hours" class="hide-sm">Hours</a>
+      <a class="btn" data-fact="phoneLink" href="tel:+13142912886">Call</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── hero ───────────────────────────────────────────────────────────
+       Two seconds on a phone: the headline is the largest thing on the page,
+       the number is the brightest, and the right-hand column is not a picture
+       of a car — it is the artefact the finished site would send. A shop owner
+       recognises a repair order before he reads a word of it. -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="chip" data-reveal><span class="dot dot-pulse" data-ambient></span> <span data-fact="locality">St. Ann, MO</span></span>
+          <h1 class="display" id="hero-heading" data-reveal>
+            <span data-fact="headline">That light on the dash?</span>
+            <span data-fact="headlineAccent" class="hero__accent">We’ll tell you what it is.</span>
+          </h1>
+          <p class="lede" data-reveal data-fact="subhead">Independent repair on N Lindbergh. Diagnose first, price before anything comes apart, and a person who answers the phone.</p>
+          <div class="hero-actions" data-reveal>
+            <a class="btn btn-lg" data-fact="phoneLink" href="tel:+13142912886">Call now</a>
+            <a class="btn btn-lg btn-ghost" href="#request">Request a bay</a>
+          </div>
+          <div class="trust-row sample-inline" data-reveal data-sample="badges" data-sample-label="sample promises — yours to correct"></div>
+        </div>
+
+        <!-- The finished product, shown rather than described. The sample flag
+             has to hang off the card itself rather than its column wrapper:
+             site.js injects it as a *sibling*, so a label on .hero-art would
+             become a third grid item and push the card onto its own row. -->
+        <div class="hero-art" data-reveal>
+          <div class="ro" data-sample="repair-order" data-sample-label="sample repair order" aria-label="Example of the repair order a customer would receive">
+            <div class="ro__head">
+              <span class="ro__title">Repair order</span>
+              <span class="ro__num">#4821</span>
+            </div>
+            <div class="ro__grid">
+              <div><b>Vehicle</b><span>2013 Ford Escape SE</span></div>
+              <div><b>Engine</b><span>2.0L Ecoboost</span></div>
+              <div><b>Mileage</b><span>118,402</span></div>
+              <div><b>Bays</b><span>2 of 3 open</span></div>
+            </div>
+            <ul class="ro__lines">
+              <li><span>Front brake pads &amp; rotors</span><span class="ro__qty">1 set</span></li>
+              <li><span>Brake fluid flush</span><span class="ro__qty">1</span></li>
+              <li><span>Diagnosis — pedal fade under load</span><span class="ro__qty">0.6 h</span></li>
+            </ul>
+            <div class="ro__total">
+              <span>Total approved</span>
+              <b>$612.40</b>
+            </div>
+            <div class="ro__foot">
+              <span class="ro__stamp">Approved by phone</span>
+              <p class="ro__note">Sent with photos of the old parts, before anything came apart.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── services ───────────────────────────────────────────────────────
+       A ruled list, not a grid of cards. Somebody with a noise under the car
+       is scanning for the one job that matches their noise, and three columns
+       of boxes makes him compare boxes. A list just reads down. -->
+  <section class="section" id="services" aria-labelledby="services-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">What goes in the bay</span>
+        <h2 class="h2" id="services-heading">Eight jobs fill most weeks.</h2>
+        <p class="muted" style="font-size:var(--t-sm)">
+          Written the way customers ask for them, not the way a parts catalogue
+          lists them. If yours is not here, call anyway.
+        </p>
+      </div>
+      <div class="ruled svc-ruled" style="margin-top:var(--s-5)"
+           data-sample="services" data-sample-label="sample services — yours to correct"></div>
+    </div>
+  </section>
+
+  <!-- ── photo wall ─────────────────────────────────────────────────────
+       The single most useful thing a shop's site can show, and the section
+       that proves this is a real build rather than a template. These are not
+       stock: five photographs pulled from this business's own Google Business
+       Profile, so the shop is already in them. -->
+  <section class="section" id="work" aria-labelledby="work-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">The work</span>
+        <h2 class="h2" id="work-heading">Your lifts, your bays, your jobs.</h2>
+        <p class="muted" style="font-size:var(--t-sm)">
+          These are your own photographs, taken at your own shop. The finished
+          site leads with them, because a person deciding whether to trust a
+          stranger with their car is looking at pictures of the actual work.
+        </p>
+      </div>
+      <div class="wall" style="margin-top:var(--s-5)" data-reveal>
+        <div class="wall__frame wall__frame--tall wall__frame--photo">
+          <img src="img/shop-night.jpg" width="1100" height="1467"
+               alt="The A+ Auto Repair storefront on North Lindbergh after dark" loading="lazy" decoding="async">
+          <span class="wall__label">Storefront, after dark</span>
+        </div>
+        <div class="wall__frame wall__frame--photo">
+          <img src="img/bays.jpg" width="1400" height="1070"
+               alt="Three vehicles raised on lifts inside the service bays" loading="lazy" decoding="async">
+          <span class="wall__label">Three on the lifts</span>
+        </div>
+        <div class="wall__frame wall__frame--photo">
+          <img src="img/hood-open.jpg" width="1400" height="1050"
+               alt="A technician working under an open hood" loading="lazy" decoding="async">
+          <span class="wall__label">Hood open, hands on it</span>
+        </div>
+        <div class="wall__frame wall__frame--photo">
+          <img src="img/creeper.jpg" width="1400" height="1050"
+               alt="A technician on a creeper working beneath a raised vehicle" loading="lazy" decoding="async">
+          <span class="wall__label">Under the car, on the creeper</span>
+        </div>
+        <div class="wall__frame wall__frame--photo">
+          <img src="img/classic.jpg" width="1400" height="788"
+               alt="A blue classic and a red convertible parked in the service bay" loading="lazy" decoding="async">
+          <span class="wall__label">In the bay</span>
+        </div>
+      </div>
+      <p class="wall__cap" data-reveal>
+        Pulled from your own Google Business Profile. Nothing here is stock —
+        every frame is your shop, your bays and your customers&rsquo; vehicles.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── one statement, full bleed ──────────────────────────────────────
+       Fifth section shape on the page. One line, enormous, and it is a promise
+       about the finished site rather than a fact about the current one. -->
+  <section class="bleed" data-mark="A+" aria-label="What the site is for">
+    <div class="wrap">
+      <p class="bleed__text bleed__inner" data-reveal>
+        Your name, your number, <em>one tap from a decision.</em>
+      </p>
+      <div class="hero-actions" style="margin-top:var(--s-4)" data-reveal>
+        <a class="btn btn-lg" data-fact="phoneLink" href="tel:+13142912886">Call now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── how it works ─────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="steps-heading">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:start">
+        <div class="stack">
+          <span class="eyebrow" data-reveal>How it works</span>
+          <h2 class="h2" id="steps-heading" data-reveal>You approve the price before anything comes apart</h2>
+          <p class="lede" data-reveal>The part of this trade people have been burned by is the invoice at the end. So the site is built around removing it.</p>
+        </div>
+        <div class="steps" data-stagger>
+          <div class="step" data-reveal>
+            <h3 class="h3">You call, or send the bay request</h3>
+            <p class="muted">Either way it lands in seconds with the vehicle, the mileage and what it is doing — not a name and a number to chase.</p>
+          </div>
+          <div class="step" data-reveal>
+            <h3 class="h3">It is diagnosed, then quoted</h3>
+            <p class="muted">Price and what is actually wrong, on the phone, before a single bolt comes off. If it is not worth doing, you hear that too.</p>
+          </div>
+          <div class="step" data-reveal>
+            <h3 class="h3">Approved, fixed, old parts back</h3>
+            <p class="muted">Photos while it is on the lift, and the parts that came off it are yours when you pick it up.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── hours and area ──────────────────────────────────────────────── -->
+  <section class="section band" id="hours" aria-labelledby="hours-heading">
+    <div class="wrap">
+      <div class="split">
+        <div class="stack">
+          <span class="eyebrow" data-reveal>When and where</span>
+          <h2 class="h2" id="hours-heading" data-reveal>3659 N Lindbergh, and the towns either side of it</h2>
+          <p class="lede" data-reveal>
+            Based in St. Ann, a few minutes off the Florissant and Bridgeton
+            turn-offs. Not sure if that is you? Call anyway — if it cannot go in
+            today, you will hear that rather than a callback tomorrow.
+          </p>
+          <div class="contact" data-reveal>
+            <div class="contact__row"><b>Shop</b><span data-fact="address">3659 N Lindbergh Blvd, St. Ann, MO 63074</span></div>
+            <div class="contact__row"><b>Phone</b><span class="mono" data-fact="phone">+1 314 291-2886</span></div>
+            <div class="contact__row"><b>Hours</b><span data-fact="hours">Mon–Fri, 8:00 AM – 5:00 PM</span></div>
+          </div>
+        </div>
+
+        <div class="stack" data-reveal>
+          <div class="hours">
+            <div class="hours__head"><span>Shop hours</span><span data-fact="locality">St. Ann, MO</span></div>
+            <ul class="hours__list">
+              <li><span>Monday – Friday</span><b>8:00 AM – 5:00 PM</b></li>
+              <li><span>Saturday</span><b class="is-closed">Closed</b></li>
+              <li><span>Sunday</span><b class="is-closed">Closed</b></li>
+            </ul>
+            <p class="hours__foot">
+              Keys dropped outside these hours? Say so on the request form and
+              it goes on the board as the first job of the morning.
+            </p>
+          </div>
+          <div data-sample="areas" data-sample-label="sample service area"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── reviews ─────────────────────────────────────────────────────────
+       The section a repair shop earns more trust from than any other, and the
+       one thing a site can do that a directory listing cannot.
+
+       Empty by default and honest about it. /api/reviews returns real reviews
+       or nothing at all, and reviews.js renders an explicit idle state rather
+       than placeholder quotes. There is no sample copy in this markup, so
+       there is nothing for a screenshot to mistake for a customer. -->
+  <section class="section band" id="reviews" aria-labelledby="reviews-heading">
+    <div class="wrap">
+      <div class="sec-head sec-rule" data-reveal>
+        <span class="eyebrow">In their words</span>
+        <h2 class="h2" id="reviews-heading">What your customers actually said</h2>
+        <p class="muted" style="font-size:var(--t-sm)">
+          Pulled live from your Google listing and shown on your own address.
+          Same words, same names, same dates &mdash; just somewhere that is
+          yours.
+        </p>
+      </div>
+
+      <div class="revwall revwall--live" data-reveal data-reviews
+           data-reviews-state="loading">
+        <div class="rv__summary" data-reviews-summary hidden></div>
+        <div class="rv__list" data-reviews-list></div>
+        <a class="rv__attr" data-reviews-link href="#" rel="nofollow noopener"
+           target="_blank" hidden>Read them on Google</a>
+        <p class="wall__cap" data-reviews-caption>
+          This space pulls your real reviews from your Google listing. It is not
+          connected in this preview, so it stays empty rather than showing
+          anything invented.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── form ─────────────────────────────────────────────────────────── -->
+  <section class="section" id="request" aria-labelledby="request-heading">
+    <div class="wrap">
+      <div class="grid grid-2" style="align-items:start">
+        <div class="stack">
+          <span class="eyebrow" data-reveal>Request a bay</span>
+          <h2 class="h2" id="request-heading" data-reveal>Tell us what it is doing</h2>
+          <p class="lede" data-reveal>
+            In the finished site this arrives with the vehicle, the mileage and
+            your number already filled in — which is the whole reason somebody
+            uses a form instead of a phone call while they are at work.
+          </p>
+          <p class="form-note" data-reveal>In this mock-up it goes nowhere. That is deliberate, and the bar at the top says so.</p>
+        </div>
+
+        <form class="card form" data-demo-form novalidate data-reveal>
+          <div class="form-fields stack">
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input class="input" id="f-name" name="name" type="text" required placeholder="e.g. Dana Whitfield" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input class="input" id="f-phone" name="phone" type="tel" required placeholder="(314) 000-0000" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="f-veh">Vehicle</label>
+              <input class="input" id="f-veh" name="vehicle" type="text" required placeholder="2013 Ford Escape, 118k miles">
+            </div>
+            <div class="field">
+              <label for="f-job">What is it doing?</label>
+              <textarea class="input" id="f-job" name="job" rows="3" required placeholder="Grinding from the front right when braking, started last week"></textarea>
+            </div>
+            <button class="btn btn-lg" type="submit">Request a bay</button>
+            <p class="form-note">Mock-up only — this form performs the confirmation and sends nothing.</p>
+          </div>
+          <div class="form-done" tabindex="-1">
+            <strong>That is the whole interaction.</strong>
+            <p class="muted" style="margin-top:var(--s-2)">On the real site this is on the shop's phone within seconds, with the vehicle and the complaint already written down — and the customer gets a confirmation instead of wondering whether anybody got it.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── closing CTA ──────────────────────────────────────────────────── -->
+  <section class="section band" aria-labelledby="closing-heading">
+    <div class="wrap center stack" style="max-width:var(--wrap-narrow);margin-inline:auto">
+      <h2 class="h2" id="closing-heading" data-reveal>Want this on your own address?</h2>
+      <p class="lede" data-reveal>Fifteen minutes to walk through it properly, and a straight answer on what it would cost to make it real.</p>
+      <div class="hero-actions" style="justify-content:center" data-reveal>
+        <a class="btn btn-lg" data-fact="phoneLink" href="tel:+13142912886">Call now</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="stack">
+      <span class="brand brand--wordmark">
+        <span class="brand-name" data-fact="name">A+ Auto Repair</span>
+      </span>
+      <p data-fact="address">3659 N Lindbergh Blvd, St. Ann, MO 63074</p>
+      <p><a data-fact="phoneLink" href="tel:+13142912886">+1 314 291-2886</a></p>
+      <p data-fact="hours">Mon–Fri, 8:00 AM – 5:00 PM</p>
+    </div>
+    <div class="stack">
+      <strong>Services</strong>
+      <p class="muted">Diagnostics &amp; check-engine</p>
+      <p class="muted">Brakes</p>
+      <p class="muted">Suspension &amp; steering</p>
+      <p class="muted">Scheduled maintenance</p>
+    </div>
+    <div class="stack">
+      <strong>About this page</strong>
+      <p class="muted">A design preview by Jake Viefhaus, not a live website. The form performs a confirmation and sends nothing, and nothing is tracked. Anything marked <em>sample</em> is placeholder copy for layout rather than a claim about this business.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="site.config.js"></script>
+<script src="../core/site.js"></script>
+<!-- Real reviews or nothing. Loaded last so the frames are already painted and
+     the empty state never flashes as "loading" for longer than it has to. -->
+<script src="reviews.js" defer></script>
+</body>
+</html>

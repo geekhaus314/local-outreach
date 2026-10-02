@@ -1,0 +1,696 @@
+/* A+ Auto Repair — page-specific components.
+ *
+ * Vanilla CSS, written by hand, no framework and no utility classes: every
+ * value is either a token from ../core/tokens.css or a value that exists for
+ * one reason and says so in the comment next to it. Nothing here is shared with
+ * another page, which is the point — a component that only one pitch needs
+ * should not sit in core/ waiting to be inherited by a plumber.
+ *
+ * Four components do the actual persuading, and they are all specific to this
+ * business rather than to "a website for a shop":
+ *
+ *   .ro       the repair order in the hero. The finished product, shown rather
+ *             than described: this is what the customer receives instead of a
+ *             phone call they missed.
+ *   .errpage  a faithful replica of a browser failing to resolve their domain.
+ *             Recognisable in under a second, which is faster than any sentence
+ *             of copy I could write next to it.
+ *   .dns      the lookup itself, as a receipt. The .errpage is what a customer
+ *             sees; this is the evidence behind it, and it is checkable.
+ *   .rev      empty frames where their own reviews go. Deliberately unfilled —
+ *             see the note at the component.
+ */
+
+/* ========================================================================== *
+   hero art
+   ========================================================================== */
+
+.hero-art {
+  width: min(430px, 100%);
+  margin-inline: auto;
+}
+
+/* ========================================================================== *
+   .ro — the repair order
+   ========================================================================== *
+   Modelled on the carbon-copy repair order that sits on a shop counter: a
+   dark header band, a perforated rule under it, label/value metadata, line
+   items with a dotted leader, and a total. Small tilt so it reads as a
+   physical sheet rather than a div, and it straightens on hover the same way
+   .phone does.
+ */
+.ro {
+  background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-surface) 100%);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-3);
+  transform: perspective(1400px) rotateY(5deg) rotateX(1.5deg);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.ro:hover { transform: perspective(1400px) rotateY(0) rotateX(0); }
+
+.ro__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 0.75rem var(--s-3);
+  background: color-mix(in srgb, var(--c-bg) 55%, var(--c-surface-2));
+  border-bottom: 1px dashed var(--c-line);
+}
+.ro__title {
+  font-size: var(--t-xs);
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.ro__num {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ro__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2) var(--s-3);
+  padding: var(--s-3);
+  border-bottom: 1px solid var(--c-line);
+}
+.ro__grid b {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  font-weight: 650;
+}
+.ro__grid span {
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.ro__lines {
+  list-style: none;
+  margin: 0;
+  padding: var(--s-2) var(--s-3);
+  display: grid;
+  gap: 0.1rem;
+}
+.ro__lines li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-block: 0.5rem;
+  border-bottom: 1px dotted var(--c-line);
+  font-size: var(--t-sm);
+}
+.ro__lines li:last-child { border-bottom: 0; }
+.ro__qty {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  white-space: nowrap;
+}
+
+.ro__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-top: 1px solid var(--c-line);
+  background: color-mix(in srgb, var(--c-bg) 40%, transparent);
+}
+.ro__total span {
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.ro__total b {
+  font-family: var(--font-mono);
+  font-size: var(--t-lg);
+  color: var(--c-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.ro__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-top: 1px dashed var(--c-line);
+}
+/* The stamp is the one piece of ornament in the component, and it is carrying
+   information: the approval happened on the phone, before the work, which is
+   the behaviour the rest of the page is arguing for. */
+.ro__stamp {
+  flex: none;
+  border: 2px solid var(--c-accent);
+  color: var(--c-accent);
+  border-radius: var(--r-sm);
+  padding: 0.3em 0.7em;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+  opacity: 0.9;
+}
+.ro__note {
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .ro { transform: none; }
+}
+
+/* ========================================================================== *
+   .errpage — their domain, in a browser, failing
+   ========================================================================== *
+   This is a replica of somebody else's interface, not a piece of this design
+   system, so it deliberately ignores the palette: it has to be *recognisable*
+   as a browser error before it is read as part of the pitch. Values that would
+   normally be tokens are literals here for that reason, and that reason only.
+ */
+.errpage {
+  background: #ffffff;
+  color: #202124;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-2);
+  font-family: var(--font-sans);
+}
+
+.errpage__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f1f3f4;
+  border-bottom: 1px solid #e3e3e3;
+  padding: 0.5rem 0.7rem;
+}
+.errpage__dots { display: flex; gap: 5px; flex: none; }
+.errpage__dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dadce0;
+  display: block;
+}
+.errpage__url {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+  /* Chrome's address bar is a full pill. Not a token: this element exists to
+     look like Chrome, and 3px would give the replica away instantly. */
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  font-size: 0.72rem;
+  color: #5f6368;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.errpage__body { padding: clamp(1.3rem, 4vw, 2.4rem); }
+.errpage__icon {
+  width: 54px;
+  height: 54px;
+  border: 4px solid #5f6368;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--s-3);
+}
+.errpage__icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  bottom: -8px;
+  width: 4px;
+  margin-left: -2px;
+  background: #5f6368;
+  transform: rotate(45deg);
+}
+.errpage__code {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.05em;
+  color: #5f6368;
+}
+.errpage__title {
+  font-size: var(--t-xl);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-top: 0.3em;
+}
+.errpage p {
+  font-size: var(--t-sm);
+  color: #3c4043;
+  margin-top: 0.7em;
+  line-height: 1.5;
+}
+.errpage p b { font-weight: 600; }
+.errpage__reload {
+  display: inline-block;
+  margin-top: var(--s-3);
+  /* Chrome blue. Again: replica, not brand. */
+  background: #1a73e8;
+  color: #ffffff;
+  padding: 0.5em 1.2em;
+  border-radius: 3px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+}
+.errpage__hint {
+  margin-top: var(--s-2);
+  font-size: var(--t-xs) !important;
+  color: #5f6368 !important;
+}
+
+/* ========================================================================== *
+   .dns — the lookup, as a receipt
+   ========================================================================== *
+   Everything in this table was measured on the day the mock-up was built and
+   is reproducible with one command each. It sits under the two panes because
+   the pane says what a visitor sees and this says why, and a shop owner who
+   does not believe the pane can be handed the commands.
+ */
+.dns {
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.dns__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem var(--s-3);
+  justify-content: space-between;
+  padding: 0.7rem var(--s-3);
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-line);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.05em;
+  color: var(--c-muted);
+}
+.dns__rows { margin: 0; display: grid; }
+.dns__row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: var(--s-3);
+  padding: 0.6rem var(--s-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-line) 55%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  align-items: baseline;
+}
+.dns__row:last-child { border-bottom: 0; }
+.dns__row dt {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.dns__row dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+/* The two rows that are the whole argument. */
+.dns__row dd.is-missing { color: var(--c-bad); }
+.dns__row dd.is-alive { color: var(--c-good); }
+
+.dns__cap {
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  margin-top: var(--s-3);
+  padding-left: var(--s-3);
+  border-left: 2px solid var(--c-accent);
+}
+
+@media (max-width: 560px) {
+  .dns__row { grid-template-columns: 1fr; gap: 0.15rem; }
+}
+
+/* ========================================================================== *
+   .channels — where their name lives today
+   ========================================================================== *
+   The set is injected from config with `display: contents` so its children are
+   flex items of the row rather than a nested group that would not wrap with
+   the dead one. The dead entry is written in the markup because it is not a
+   channel they have — it is the absence of one.
+ */
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+}
+.channels__set { display: contents; }
+.chan {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.55em 0.95em;
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  border-radius: var(--r-md);
+  font-size: var(--t-sm);
+  color: var(--c-text);
+}
+.chan::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: var(--c-accent-2);
+}
+.chan--dead {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--c-bad) 45%, var(--c-line));
+  color: var(--c-muted);
+}
+.chan--dead b { color: var(--c-bad); font-weight: 650; }
+.chan--dead::before {
+  content: "✕";
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--c-bad);
+  font-size: 0.8em;
+  font-weight: 800;
+}
+
+/* ========================================================================== *
+   .rev / .revwall — empty review frames
+   ========================================================================== *
+   These are empty on purpose and the component is built to look empty rather
+   than unfinished. Stock quotes or five gold stars would be invented praise on
+   the very artifact meant to be believed, so the frames say what goes in them
+   and nothing else — the same rule as the photo wall in core/site.css, applied
+   to a second asset this business actually has.
+ */
+.split {
+  display: grid;
+  gap: var(--s-5);
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: start;
+}
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+
+.revwall { display: grid; gap: var(--s-2); grid-template-columns: 1fr 1fr; }
+.rev {
+  border: 1px dashed var(--c-line);
+  border-radius: var(--r-md);
+  background:
+    repeating-linear-gradient(-45deg,
+      transparent 0 7px,
+      color-mix(in srgb, var(--c-text) 4%, transparent) 7px 9px);
+  padding: var(--s-3);
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+  min-height: 8.5rem;
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+.rev:hover { border-color: var(--c-accent); }
+.rev--wide { grid-column: 1 / -1; min-height: 0; }
+.rev__slot {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  font-weight: 700;
+}
+.rev__lines { display: grid; gap: 0.4rem; }
+.rev__lines i {
+  display: block;
+  height: 7px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--c-text) 9%, transparent);
+}
+.rev__lines i:nth-child(2) { width: 86%; }
+.rev__lines i:nth-child(3) { width: 58%; }
+.rev__src {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+}
+
+/* ========================================================================== *
+   .hours — published opening hours
+   ========================================================================== */
+.hours {
+  border: 1px solid var(--c-line);
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.hours__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 0.75rem var(--s-3);
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-line);
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.hours__list { list-style: none; margin: 0; padding: 0; }
+.hours__list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 0.7rem var(--s-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-line) 55%, transparent);
+  font-size: var(--t-sm);
+}
+.hours__list li:last-child { border-bottom: 0; }
+.hours__list b {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.hours__list b.is-closed { color: var(--c-muted); font-weight: 500; }
+.hours__foot {
+  padding: var(--s-3);
+  border-top: 1px dashed var(--c-line);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+}
+
+/* ========================================================================== *
+   small pieces
+   ========================================================================== */
+
+/* The address block in the contact section: label above, value below, mono for
+   the parts a customer would read out over the phone. */
+.contact { display: grid; gap: var(--s-3); }
+.contact__row { display: grid; gap: 0.2rem; }
+.contact__row b {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  font-weight: 700;
+}
+.contact__row span { font-size: var(--t-base); }
+.contact__row .mono { color: var(--c-text); }
+
+/* ========================================================================== *
+   services list
+   ========================================================================== */
+
+/* The shared ruled row sizes its title track at 15ch, which is right for
+   two-word trade names and wrong for these: "Oil & scheduled maintenance"
+   broke across three lines while its one-line body sat beside it, so the rows
+   read as ragged rather than ruled. Widening the track settles every title at
+   two lines or fewer without touching the body column. */
+.svc-ruled .ruled-row {
+  grid-template-columns: 2.5rem minmax(0, 21ch) minmax(0, 1fr);
+}
+@media (max-width: 720px) {
+  /* Below 720 the shared row drops its number and collapses to two tracks.
+     That is wrong for this list: with the number hidden, auto-placement puts
+     the title in the 2rem track and the body lands beside it, so the two
+     collide. One track, title over body. */
+  .svc-ruled .ruled-row { grid-template-columns: minmax(0, 1fr); }
+  .svc-ruled .ruled-row__body { grid-column: 1; }
+}
+
+/* ========================================================================== *
+   photo wall — real photographs
+   ========================================================================== */
+
+/* The shared frame is an empty, hatched, dashed placeholder, which is correct
+   when there is nothing to put in it. These cells hold this business's own
+   Google Business Profile photographs, so the placeholder treatment has to go:
+   solid hairline, black bed, image edge to edge. The caption moves off the
+   centre of the cell — a label floating in the middle of a photograph reads as
+   a watermark — and onto a scrim at the bottom left, set in the same uppercase
+   micro-type the rest of the page uses for labels. */
+.wall__frame--photo {
+  padding: 0;
+  border-style: solid;
+  background: #000;
+  place-items: stretch;
+}
+.wall__frame--photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.92;
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-base) linear;
+}
+.wall__frame--photo:hover img { transform: scale(1.03); opacity: 1; }
+.wall__frame--photo .wall__label {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  max-width: none;
+  text-align: left;
+  padding: 2.6rem var(--s-3) var(--s-2);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0));
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-text);
+}
+.wall__frame--photo:hover .wall__label { color: var(--c-accent); }
+.wall__cap { max-width: 68ch; }
+
+/* ==========================================================================
+   wordmark
+   --------------------------------------------------------------------------
+   Replaces the "A+" tile that used to sit beside the business name. Two
+   reasons that tile had to go rather than be restyled:
+
+   1. It repeated the wordmark. "A+" next to "A+ Auto Repair" reads as
+      "A+ A+ Auto Repair", which is worse than no mark at all.
+   2. A placeholder badge is a placeholder. It occupies the exact position a
+      real logo goes, so it reads as a decision somebody made. An absent mark
+      reads as a gap waiting to be filled, which is the truth and is also what
+      the shop owner needs to see.
+
+   The name is set the way a business name is set: tight, heavy, no effects.
+   Google's listing is the reference for how this business writes its own name,
+   and the header now matches it exactly. */
+
+.brand--wordmark { gap: 0; }
+.brand--wordmark .brand-name {
+  font-size: 1.02rem;
+  font-weight: 740;
+  letter-spacing: -0.012em;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   live reviews
+   --------------------------------------------------------------------------
+   The old .revwall was three empty frames with hatched placeholder lines --
+   built for a section that had no API behind it. This is the version that
+   actually gets filled, and it is styled as a result: a score line, a masonry
+   of real quotes, and a visible Google attribution link.
+
+   The empty state matters as much as the filled one. There is no skeleton, no
+   shimmer, no animated placeholder -- because the honest thing in a preview with
+   no key configured is a section that is simply not there yet, not a section
+   pretending to be loading. */
+
+.revwall--live { display: block; margin-top: var(--s-5); }
+
+/* -- score line -- */
+.rv__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-bottom: var(--s-3);
+  margin-bottom: var(--s-4);
+  border-bottom: 1px solid var(--c-line);
+}
+.rv__score {
+  font-size: var(--t-sm);
+  color: var(--c-text);
+  font-weight: 640;
+  letter-spacing: -0.005em;
+}
+
+/* -- stars --
+   Five bars rather than five glyphs. A Unicode star renders differently
+   depending on what the device has installed, which is exactly the kind of
+   detail that makes a mock-up look generated on the machine that made it. */
+.rv__stars { display: inline-flex; gap: 3px; }
+.rv__stars i {
+  width: 15px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--c-line);
+}
+.rv__stars i.is-on { background: var(--c-accent); }
+
+/* -- the quotes -- */
+.rv__list {
+  columns: 2;
+  column-gap: var(--s-3);
+}
+.rv {
+  margin: 0 0 var(--s-3);
+  break-inside: avoid;
+  padding: var(--s-3);
+  border: 1px solid var(--c-line);
+  border-radius: 4px;
+  background: var(--c-surface);
+}
+.rv__text {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  color: var(--c-text);
+  /* A quote is a quotation. Not italic -- italic at this size reads as a
+     different voice rather than as someone else's words. */
+}
+.rv__by {
+  margin-top: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  letter-spacing: 0.01em;
+}
+
+/* -- attribution --
+   Google's terms require the source be credited and linked. It is styled as a
+   quiet line rather than a badge, because a review section that shouts about
+   where it got its quotes looks like it is defending something. */
+.rv__attr {
+  display: inline-block;
+  margin-top: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--c-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--c-line);
+}
+.rv__attr:hover { color: var(--c-accent); text-decoration-color: currentColor; }
+.rv__attr[hidden] { display: none; }
+
+@media (max-width: 760px) {
+  .rv__list { columns: 1; }
+}

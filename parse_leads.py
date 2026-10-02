@@ -63,7 +63,11 @@ REQUIRED_COLUMNS = {"Business Name", "Industry", "Website", "Traffic Tier"}
 # message, so they are set here once rather than typed into six templates.
 SENDER = "Jake Viefhaus"
 SENDER_CITY = "Florissant"
-PORTFOLIO = "pwn4g3.pages.dev"
+# The studio site, not pwn4g3. A prospect following a cold text should land on
+# something written for them: three finished local-business sites, published
+# price, and no terminal chrome. pwn4g3 is the dev portfolio -- right for a
+# hiring manager, wrong for an HVAC owner deciding in eight seconds.
+PORTFOLIO = "webrehabstl.pages.dev"
 EMAIL = "geekhaus314@proton.me"
 LAUNCH_PRICE = 1200
 
@@ -294,6 +298,30 @@ class Lead:
             top = max(a.findings, key=lambda f: f.penalty)
             return top.detail
         return ""
+
+    @property
+    def spoken(self) -> str:
+        """The same observation, phrased so it can be said out loud.
+
+        `fact` is a finding's `detail` -- a fragment written to be printed on a
+        bullet, not spoken. `Finding.quote` is the human-readable one and is
+        already in the second person, which is what you want in a line
+        addressed to an owner; `message()` builds its opener from it for
+        exactly that reason. The answer script used `fact` instead, so the
+        correction above produced "reach out: No social preview image."
+
+        Falls back to `fact` where there is no quote to prefer: the parked,
+        unreachable and wrong-business branches are already sentences, and a
+        finding with no quote means the detail is all there is.
+        """
+        a = self.audit
+        if not a or not a.findings:
+            return self.fact
+        if a.serves_other_business or a.redirected_domain or a.is_parked or a.blocked or not a.reachable:
+            return self.fact
+        top = max(a.findings, key=lambda f: f.penalty)
+        quote = (top.quote or "").strip()
+        return friendly(quote) if quote else self.fact
 
     @property
     def healthy(self) -> bool:
@@ -638,6 +666,17 @@ def expansion_angle(lead: Lead) -> str:
             "Links to it don't render a proper preview in Facebook or iMessage, "
             "so your own posts about jobs look like bare links."
         )
+    if ev.get("meta_og_image") is False:
+        # Title and description are there, only the picture is not, so a
+        # preview card does render -- just with no image in it. Calling that
+        # a bare link would be the same mistake the og_title branch made
+        # before its key was being read correctly: a claim the owner can
+        # disprove by sharing their own link.
+        return (
+            "Your links carry a title and a description but no picture, so a "
+            "link to your site goes up on Facebook or in a text with no image "
+            "attached."
+        )
     return ""
 
 
@@ -940,7 +979,7 @@ def call_opener(lead: Lead) -> str:
         f"'Hi -- is this the {who}? {SENDER} here, I build websites out of "
         f"{SENDER_CITY}.'",
         "",
-        f"'That's what made me reach out: {lead.fact}.'" if lead.fact
+        f"'That's what made me reach out: {lead.spoken}.'" if lead.spoken
         else "'That's why I'm calling.'",
         "",
         f"'I build fixed-price sites for {trade_noun(lead.industry)} -- a form that "

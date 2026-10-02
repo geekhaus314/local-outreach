@@ -30,7 +30,7 @@
  * every reference resolved before it writes anything.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, statSync, cpSync } from 'node:fs';
 import { dirname, join, resolve, relative, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -51,8 +51,20 @@ export function flattenPage(target, outRoot = join(REPO, 'dist')) {
   }
 
   const html = readFileSync(join(srcDir, 'index.html'), 'utf8');
+
+  /* Social image tags carry their path in `content=`, not `href=` or `src=`,
+     so the attribute regex below never sees them. Skipping them meant the
+     built page advertised og:image/twitter:image pointing at a file the build
+     never copied -- every shared link came back with no preview, and nothing
+     in this repo noticed because the guard only checks markup that exists. */
+  const metaImages = [...html.matchAll(/<meta\b[^>]*>/g)]
+    .filter((t) => /(?:property|name)="(?:og:image|twitter:image)"/.test(t[0]))
+    .map((t) => (t[0].match(/content="([^"#:][^"]*)"/) || [])[1])
+    .filter(Boolean);
+
   const refs = [...html.matchAll(/(?:href|src)="([^"#:][^"]*)"/g)]
     .map((m) => m[1])
+    .concat(metaImages)
     .filter((r) => !/^(https?:|mailto:|tel:|#)/.test(r));
 
   const plan = [];
@@ -83,6 +95,17 @@ export function flattenPage(target, outRoot = join(REPO, 'dist')) {
 
   for (const { abs, name } of plan) {
     writeFileSync(join(outDir, 'assets', name), readFileSync(abs));
+  }
+
+  /* Screenshots are named in site.config.js and fetched by site.js at runtime,
+     so neither href= nor src= in index.html ever mentions them -- the reference
+     scan above cannot see them and would silently leave them behind. Carry the
+     whole directory across. Keeping them as files rather than inlining them is
+     what lets the browser pick avif over webp per client and lazy-load all but
+     the first. */
+  const shotsDir = join(srcDir, 'shots');
+  if (existsSync(shotsDir) && statSync(shotsDir).isDirectory()) {
+    cpSync(shotsDir, join(outDir, 'shots'), { recursive: true });
   }
 
   // Rewritten per-reference rather than with a blanket regex, because a blanket

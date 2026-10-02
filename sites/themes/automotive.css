@@ -1,0 +1,86 @@
+/* Auto repair preset.
+ *
+ * The read this is tuned for: someone whose car is making a noise, standing in
+ * a parking lot at 6am, deciding whether to call the shop on Lindbergh or the
+ * dealership. Skeptical by default — everyone has been told they needed a
+ * transmission when they needed a battery — and reading on a phone in daylight.
+ *
+ * So: cold, hard, high-contrast, and no flourish that could be mistaken for a
+ * sales trick. Motion stays near the floor. The personality comes from one red
+ * and from squared-off geometry, not from movement.
+ *
+ * ---- the palette ------------------------------------------------------
+ *
+ * Every other preset in this kit had already claimed the obvious trade
+ * combination: plumbing took warm black + hi-vis yellow, roofing took black +
+ * amber, HVAC took light blue, the token default is navy + orange. Navy-plus-
+ * orange in particular is the exact fingerprint of a generated landing page.
+ *
+ * What was left, and what an auto shop actually looks like under fluorescent
+ * light, is *gunmetal*: cold graphite, not the warm near-black plumbing used
+ * and not a blue. The surface colour here is the colour of a shop floor that
+ * has been swept once this week.
+ *
+ * The accent is caliper red. It is the one colour in this palette with a
+ * physical referent in the trade — brake calipers, stop lamps, the paint on a
+ * torque wrench — and it is not claimed by any other preset. It is used at most
+ * once per screen: eyebrows, the phone button, and the numbers that matter.
+ *
+ * Red as a text colour on a dark background is a contrast trap, so this red is
+ * pinned to a value that clears 5:1 against --c-bg rather than picked for
+ * vibrance, and --c-accent-ink is near-black rather than white because white on
+ * a saturated red lands around 3.5:1 and the button label is 14px. Dark ink on
+ * red also happens to read as a hazard label, which suits the trade.
+ *
+ * accent-2 is a desaturated steel blue. It only ever appears in the brand-mark
+ * gradient and the hero wash, and it is deliberately too grey to read as a
+ * second brand colour.
+ *
+ * ---- geometry ---------------------------------------------------------
+ *
+ * Square. Radius is 2–9px across the whole scale: a service invoice, a licence
+ * plate, a stamped VIN plate. Generous radii read as consumer app immediately,
+ * and a shop that looks like an app is a shop that looks like a middleman.
+ */
+
+:root {
+  /* Cold graphite. Fluorescent light on a swept concrete floor. */
+  --c-bg: #0c0e10;
+  --c-bg-2: #111417;
+  --c-surface: #15181c;
+  --c-surface-2: #1b1f24;
+  --c-line: #2b3138;
+
+  /* Aluminium, not paper. This palette is cold where plumbing's is warm. */
+  --c-text: #edf0f2;
+  --c-muted: #97a1ab;
+
+  /* Caliper red. Clears 5:1 on --c-bg. One per screen. */
+  --c-accent: #ff3a1f;
+  --c-accent-ink: #160c09;
+  /* Steel — too desaturated to compete, only used in gradients. */
+  --c-accent-2: #8fb6d1;
+
+  --c-good: #4ad37b;
+  --c-bad: #ff6a55;
+
+  /* Stamped metal. Nothing here is soft. */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 9px;
+  --r-pill: 3px;
+
+  --font-display: var(--font-sans);
+  --leading-tight: 0.96;
+  --tracking-tight: -0.028em;
+
+  /* Headline runs large: the two-second decision on a phone is made on size.
+     Held under plumbing's so a three-line headline still fits a 1.25fr column. */
+  --t-3xl: clamp(2.5rem, 1.35rem + 4.9vw, 4.9rem);
+  --t-2xl: clamp(1.8rem, 1.35rem + 2.1vw, 3rem);
+
+  --hero-wash: 0.16;
+
+  /* Mostly still. A shop site that animates reads as a franchise. */
+  --motion-intensity: 0.5;
+}

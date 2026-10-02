@@ -106,8 +106,8 @@ META_CHECKS: dict[str, dict] = {
         "pattern": re.compile(r'property\s*=\s*["\']og:image', re.I),
         "label": "No social preview image",
         "quote": (
-            "Your site has no social preview image, so when you post a link on "
-            "Facebook or in a text message it shows up as a bare link."
+            "Your site has no social preview image, so when you share a link "
+            "to it on Facebook or in a text it goes up without a picture."
         ),
     },
     "og_complete": {

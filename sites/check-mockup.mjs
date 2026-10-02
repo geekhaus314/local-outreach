@@ -28,7 +28,7 @@
  *
  * Two kinds of page live under sites/, and they are held to opposite rules:
  *
- *   mockup   a pitch artefact for a client's business. Unpublishable, sealed
+ *   mockup   a pitch artifact for a client's business. Unpublishable, sealed
  *            from the network, invented content declared and marked.
  *   studio   a real, public site -- currently site-rehab-stl, the destination
  *            every cold message links to. Indexable, free to link outward, and
@@ -44,7 +44,7 @@
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { resolve, dirname, join, relative } from 'node:path';
+import { resolve, dirname, join, relative, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SITES = dirname(fileURLToPath(import.meta.url));
@@ -111,7 +111,48 @@ function auditCommon(label, html, cfg, dir) {
   // static, so nothing on any of them has a reason to open a connection or
   // write to storage.
   const netApis = [...html.matchAll(/\b(fetch\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|document\.cookie|navigator\.send)\b/g)];
-  check(label, 'no network or storage APIs', netApis.length === 0, netApis.map((m) => m[1]).join(', '));
+  check(label, 'no network or storage APIs in markup', netApis.length === 0, netApis.map((m) => m[1]).join(', '));
+
+  // The markup scan above is necessary but not sufficient, and treating it as
+  // sufficient was a real hole: a page that wanted to phone home could do it
+  // from a sibling script and stay green forever. The live-reviews work hit
+  // exactly that -- a fetch() in reviews.js, and a passing build.
+  //
+  // So every script the page loads is scanned too, and what it is allowed to
+  // do comes from the config's `network:` list rather than from whatever the
+  // script happens to contain. A script that reaches for something not on that
+  // list fails here.
+  const scripts = [...html.matchAll(/<script[^>]+src="([^"#:][^"]*)"/g)].map((m) => m[1]);
+  const allowed = [...cfg.matchAll(/\{\s*path:\s*'([^']+)'\s*,\s*via:\s*'([^']+)'/g)]
+    .map((m) => ({ path: m[1], via: m[2] }));
+
+  for (const src of scripts) {
+    const file = resolve(dir, src);
+    if (!existsSync(file)) continue;
+    // core/site.js is shared by every page and is audited by its own checks
+    // below; the per-page scripts are the ones this rule is about.
+    if (basename(file) === 'site.js') continue;
+    const code = readFileSync(file, 'utf8');
+
+    const writes = [...code.matchAll(/\b(localStorage|sessionStorage|document\.cookie|indexedDB|sendBeacon)\b/g)];
+    check(label, `${basename(file)}: no storage or beacon`, writes.length === 0,
+      writes.map((m) => m[1]).join(', '));
+
+    const calls = [...code.matchAll(/fetch\(\s*['"`]([^'"`]+)/g)].map((m) => m[1]);
+    if (!calls.length) continue;
+
+    for (const target of calls) {
+      const ok = allowed.some((a) => a.via === basename(file) && a.path === target && /^\//.test(target));
+      check(label, `${basename(file)}: fetch "${target}" is declared in config network[]`, ok,
+        ok ? '' : `undeclared or not same-origin (declare { path: '${target}', via: '${basename(file)}' })`);
+    }
+
+    // A declared path still has to be a read. A GET that is allowed to be
+    // declared must not carry a body, or it is a POST wearing a declaration.
+    check(label, `${basename(file)}: no non-GET request bodies`,
+      !/method:\s*['"](POST|PUT|PATCH|DELETE)['"]/.test(code),
+      'a mock-up must not write anywhere');
+  }
   check(label, 'no form posts anywhere', !/<form[^>]*(action|method)=/i.test(html));
 
   // ---- wiring ------------------------------------------------------------ //
@@ -127,7 +168,7 @@ function auditCommon(label, html, cfg, dir) {
 }
 
 /* ------------------------------------------------------------------------- *
- * mockup: a pitch artefact. Unpublishable, sealed, nothing invented undeclared.
+ * mockup: a pitch artifact. Unpublishable, sealed, nothing invented undeclared.
  * ------------------------------------------------------------------------- */
 function auditMockup(label, html, cfg) {
   check(label, 'declares kind: mockup',

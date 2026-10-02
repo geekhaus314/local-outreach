@@ -23,7 +23,7 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* A page declares which of the two contracts it is holding to. `mockup` is a
-     pitch artefact: unpublishable, unable to reach the network, with invented
+     pitch artifact: unpublishable, unable to reach the network, with invented
      content marked as invented. `studio` is a real site -- indexable, allowed to
      link outward -- and none of the mock-up guards apply to it. Everything below
      that differs between the two branches reads `kind` rather than assuming. */
@@ -38,6 +38,12 @@
     roofing: '../themes/roofing.css',
     photography: '../themes/photography.css',
     hvac: '../themes/hvac.css',
+    // Gunmetal + caliper red, for the trade none of the others are. Registering
+    // it here as well as <link>ing it in the markup is required, not tidy: an
+    // unregistered name falls through to THEME_FILES.plumbing below, so the page
+    // would ship automotive.css and then have this function inject plumbing.css
+    // on top of it half a second later.
+    automotive: '../themes/automotive.css',
     // The studio preset is a full theme rather than a trade, so it is not
     // offered in the switcher -- that picker exists to answer "would you make it
     // look like my business", and a designer's own site is not an answer to it.
@@ -299,6 +305,13 @@
     // -- facts
     setText('[data-fact="name"]', f.name);
     setText('[data-fact="address"]', f.address);
+    // Three more that exist as bound markup on the auto page. Without these the
+    // markup carries a literal value that looks bound and is not, which is the
+    // drift the config is supposed to prevent — edit the address in one place
+    // and leave the other two behind.
+    setText('[data-fact="locality"]', f.locality);
+    setText('[data-fact="phone"]', f.phone);
+    setText('[data-fact="hours"]', f.hours);
     setText('[data-fact="observedTitle"]', f.observedTitle);
     setText('[data-fact="observedDetail"]', f.observedDetail);
     setText('[data-fact="headline"]', s.headline);
@@ -340,6 +353,31 @@
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
       );
 
+    /* Screenshots ship with the page. They used to be hotlinked from the
+       pwn4g3 portfolio, whose origin sends
+       `cross-origin-resource-policy: same-origin`, which blocks them on every
+       other origin -- including this one. curl reports 200 and the browser
+       still refuses to decode, so the section rendered as seven broken-image
+       icons with nothing in the network tab to explain it. Bundled, the output
+       keeps the property build-standalone.mjs promises: no reference to
+       anything outside its own directory, and nothing to break when some other
+       project moves or hardens its headers.
+       avif + webp only, 296KB for all seven instead of 1.4MB of png; webp has
+       been universal since Safari 14 (2020) and avif is the fallback upgrade. */
+    const SHOTS = 'shots';
+    const shot = (name, ext) => `${SHOTS}/${name}.${ext}`;
+
+    /* width/height are 1000x625 because every source is 1440x900 (ar 1.6),
+       the same ratio the CSS asks for -- so the row reserves its space instead
+       of jumping when the shot lands, and object-fit: cover crops nothing. */
+    const shotTag = (im, title, eager) => `
+      <picture class="work-row__pic">
+        <source type="image/avif" srcset="${esc(shot(im.src, 'avif'))}">
+        <img class="work-row__shot" src="${esc(shot(im.src, 'webp'))}"
+             alt="${esc(im.alt || title)}" width="1000" height="625"
+             loading="${eager ? 'eager' : 'lazy'}" decoding="async">
+      </picture>`;
+
     const buildList = (sel, items, tpl) => {
       document.querySelectorAll(sel).forEach((host) => {
         if (!items || !items.length) return;
@@ -366,6 +404,13 @@
     buildList('[data-sample="badges"]', s.trustBadges, (badge) => `
       <span class="chip">${esc(badge)}</span>`);
 
+    /* Where the business already exists, rendered from facts rather than the
+       markup because it is the list the pitch argument hangs on. It sits after
+       `esc` rather than up with the other facts for the same reason the list
+       builders do: it reaches innerHTML. */
+    buildList('[data-fact="channels"]', f.channels, (c) => `
+      <span class="chan">${esc(c)}</span>`);
+
     /* ---- studio pages: the service rows and the work rows --------------- */
     // Built from config for the same reason the mock-up's lists are: so the
     // services this page sells and the scopes estimator.js quotes are rendered
@@ -386,14 +431,19 @@
 
     buildList('[data-work]', cfg.work, (w, i) => `
       <article class="work-row" data-reveal style="--d:${Math.min(i * 70, 350)}ms">
-        <div>
+        ${w.images && w.images.length
+          ? `<div class="work-row__shots">
+               ${w.images.map((im, j) => shotTag(im, w.title, i === 0 && j === 0)).join('')}
+             </div>`
+          : ''}
+        <div class="work-row__text">
           <h3>${esc(w.title)}</h3>
           <p>${esc(w.body)}</p>
-        </div>
-        <div>
-          ${w.href
-            ? `<a href="${esc(w.href)}">${esc(w.linkText)}</a>`
-            : `<span class="muted">${esc(w.linkText)}</span>`}
+          <p class="work-row__link">
+            ${w.href
+              ? `<a href="${esc(w.href)}">${esc(w.linkText)}</a>`
+              : `<span class="muted">${esc(w.linkText)}</span>`}
+          </p>
         </div>
       </article>`);
 

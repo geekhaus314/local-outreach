@@ -6,9 +6,72 @@
      message links to, so the noindex that protects a client pitch page would
      suppress the one part of the pitch that actually works. -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Web Rehab STL — websites for plumbers, roofers and HVAC in St. Louis County</title>
-<meta name="description" content="I fix and build websites for local trades across the St. Louis metro, Metro East Illinois and west Missouri. From $1,200, done in a few days, no monthly fee.">
+<!-- Outcome, not activity. "Websites for plumbers" names the category; the
+     three verbs are what he is actually missing. The same strings live in
+     site.config.js so the browser and the outreach copy cannot drift apart. -->
+<title>Web Rehab STL — get found, get chosen, get booked in St. Louis</title>
+<meta name="description" content="Websites for St. Louis trades that get you found when people search, chosen over the other quotes, and booked while you work. From $1,200, days not months, no monthly fee.">
 <meta name="color-scheme" content="light">
+<link rel="canonical" href="https://webrehabstl.pages.dev/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Web Rehab STL">
+<meta property="og:title" content="Web Rehab STL — get found, get chosen, get booked in St. Louis">
+<meta property="og:description" content="Websites for St. Louis trades that get you found when people search, chosen over the other quotes, and booked while you work. From $1,200, days not months, no monthly fee.">
+<meta property="og:url" content="https://webrehabstl.pages.dev/">
+<meta property="og:image" content="og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Web Rehab STL — websites that get St. Louis trades found, chosen and booked">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Web Rehab STL — get found, get chosen, get booked in St. Louis">
+<meta name="twitter:description" content="Websites for St. Louis trades. From $1,200, days not months, no monthly fee.">
+<meta name="twitter:image" content="og.png">
+<meta name="twitter:image:alt" content="Web Rehab STL — websites that get St. Louis trades found, chosen and booked">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Structured data: no rating, no review count, no founding date. Anything
+     schema.org would let a search engine *display* has to be true and has to
+     be something I can point at, and the only claims here are the name, the
+     city, the email, the service area and the starting price. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Web Rehab STL",
+  "description": "Websites for St. Louis trades that get you found when people search, chosen over the other quotes, and booked while you work.",
+  "url": "https://webrehabstl.pages.dev/",
+  "email": "geekhaus314@proton.me",
+  "founder": { "@type": "Person", "name": "Jake" },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Florissant",
+    "addressRegion": "MO",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "St. Louis" },
+    { "@type": "City", "name": "Florissant" },
+    { "@type": "City", "name": "St. Charles" },
+    { "@type": "City", "name": "O'Fallon" },
+    { "@type": "City", "name": "Belleville" },
+    { "@type": "City", "name": "Edwardsville" },
+    { "@type": "City", "name": "Troy" },
+    { "@type": "AdministrativeArea", "name": "St. Louis County" },
+    { "@type": "AdministrativeArea", "name": "St. Charles County" },
+    { "@type": "AdministrativeArea", "name": "Metro East Illinois" }
+  ],
+  "priceRange": "$1,200+",
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "New website build" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website repair and speed work" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Local search setup" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bookings, quotes and payments" } }
+  ]
+}
+</script>
 <link rel="stylesheet" href="../core/tokens.css">
 <link rel="stylesheet" href="../core/site.css">
 <!-- The theme ships as a real link, not something site.js fetches at runtime.
@@ -48,7 +111,8 @@
         </h1>
         <p class="lede" data-reveal>
           If it is slow, out of date, or you would rather nobody saw it, I fix
-          that. If there is no site, I build one. Plumbers, roofers, HVAC.
+          that. If there is no site, I build one — so people find you, choose
+          you, and book you. Plumbers, roofers, HVAC.
         </p>
         <div class="hero-actions" data-reveal>
           <a class="btn btn-lg" href="#price">What it costs</a>
@@ -185,20 +249,23 @@
   </section>
 
   <!-- ── the work ──────────────────────────────────────────────────────
-       One project. Described, not linked, because the write-up of it lives on
-       a domain that makes the wrong impression and a roofer does not want to
-       read a post-mortem anyway. -->
+       Screenshots first, then the write-up, then a link that works. The
+       previous heading said "One, so far." because the config carried two
+       `work:` keys and the first three projects were dead code. It did. -->
   <section class="section" aria-labelledby="done-heading">
     <div class="wrap">
       <div class="stack" style="max-width:var(--wrap-narrow)">
-        <span class="eyebrow" data-reveal>Done so far</span>
-        <h2 class="h2" id="done-heading" data-reveal>One, so far.</h2>
+        <span class="eyebrow" data-reveal>Built and live</span>
+        <h2 class="h2" id="done-heading" data-reveal>
+          Three things I can show you.
+        </h2>
+        <p class="lede" data-reveal>
+          Real sites, real screenshots, and links you can open yourself. Two
+          are work for family — I would rather say that than let you assume
+          they are paying clients.
+        </p>
       </div>
       <div class="work-rows" style="margin-top:var(--s-4)" data-work></div>
-      <p class="form-note" style="margin-top:var(--s-3)" data-reveal>
-        That is the whole list. I would rather show one I can talk you through
-        than three I cannot.
-      </p>
     </div>
   </section>
 

@@ -423,7 +423,15 @@ def audit_url(url: str, business_name: str = "") -> AuditResult:
             generator = attrs.get("content", "").strip()
         if nm == "viewport" and not viewport:
             viewport = attrs.get("content", "").strip()
-        if nm.startswith("og:") and "og_title" not in res.evidence:
+        # Open Graph carries `property=`, Twitter carries `name=`. This only
+        # looked at `name`, so `og_title` was never recorded for a site using
+        # standard OG markup -- which is every site -- and expansion_angle's
+        # "your links are bare links" claim, gated on this key, fired for
+        # everyone. It was firing on a site whose OG tags were all present
+        # except the image, where the claim is simply false. It also matched
+        # any `og:*`, so it could store an og:image URL as the title.
+        prop = (attrs.get("property") or "").lower()
+        if (prop == "og:title" or nm == "og:title") and "og_title" not in res.evidence:
             res.evidence["og_title"] = attrs.get("content", "")[:120]
 
     if not title:
@@ -698,9 +706,18 @@ def audit_url(url: str, business_name: str = "") -> AuditResult:
             res.evidence[f"meta_{key}"] = present
             if not present:
                 spec = META_CHECKS[key]
+                # The detail is the observation `lead.fact` prints verbatim as
+                # "The fact to lead with", so it has to stand on its own. This
+                # used to be the bare fragment "not present in the page head",
+                # which came out as "The fact to lead with: not present in the
+                # page head." -- no subject, so nothing to check, and wrong
+                # besides: check_metadata scans the whole document rather than
+                # the head, which means a recipient could disprove our one
+                # verified fact just by scrolling. The label always names what
+                # is missing, so the label is the observation.
                 res.findings.append(
                     Finding(f"META_{key.upper()}", spec["label"], 0,
-                            "not present in the page head", spec["quote"])
+                            spec["label"], spec["quote"])
                 )
 
         if not res.redirected_domain:

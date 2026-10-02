@@ -1,4 +1,4 @@
-/* Web Rehab STL -- Jake's site, for local trades.
+/* Web Rehab STL -- Jake's site, for local businesses that need a developer.
  *
  * Not a client mock-up, and that distinction is enforced rather than assumed.
  * Two of the rules in this kit are inverted here:
@@ -19,29 +19,47 @@
  *
  * The reader is an owner-operator. He is 45, he is on a roof or under a sink,
  * he has been texted by four agencies this month, and he has never once
- * thought of himself as a customer of "digital infrastructure". The previous
- * version of this page was written for a different reader and said so out loud:
- * "you own the code", "digital infrastructure", a monogram reading SR / 001, and
- * a portfolio link to a personal site. Every one of those is a signal that says
- * *developer*, and to a plumber they collectively say "this person will explain
- * things to me that I already know I do not understand".
+ * thought of himself as a customer of "digital infrastructure". He also has a
+ * browser, and he will open whatever you send him.
  *
- * So the register is the whole job here. Concretely, the things that changed:
+ * Two earlier versions missed in opposite directions, and both are worth
+ * naming so this one does not drift back to either:
  *
- *   code            -> "it's yours, and there's no monthly fee"
- *   infrastructure  -> "take bookings and payments"
- *   scope, band     -> "what it costs"
- *   a technical case-study write-up -> a sentence about what happened
- *   the portfolio   -> gone. It pointed at a personal site that reads as a
- *                      security portfolio, which is the last thing to send a
- *                      roofer who wants his website fixed.
+ *   v1 read as a *developer* to a plumber -- "you own the code", "digital
+ *      infrastructure", a monogram reading SR / 001. Correct that he is
+ *      technical; wrong that saying so out loud helps. To a tradesman it
+ *      reads "this person will explain things to me that I already know I
+ *      do not understand".
  *
- * The underlying claims are unchanged and still have to be true. Plain language
- * is not permission to say more than you can defend.
+ *   v2 over-corrected into something so plain it undersold him. 633 words,
+ *      no images, a portfolio of one, and a headline that led with what he
+ *      does to a file rather than what the business gets out of it. A page
+ *      selling web work has to itself look like work.
  *
- * `kind: 'studio'` is what check-mockup.mjs branches on. Without it this
- * directory would be failed for having no demo bar and no noindex, which is the
- * correct behaviour for a mock-up and exactly backwards here.
+ * So the register is now: a working software developer, professionally
+ * presented, selling an outcome. Not a hacker portfolio, and not a text
+ * file either. Concretely:
+ *
+ *   outcome first      -> the reader learns what changes for him before he
+ *                         learns any implementation detail
+ *   no terminal chrome -> this is not the pwn4g3 aesthetic re-skinned. The
+ *                         proof is real screenshots of shipped work, not
+ *                         monospace and green-on-black
+ *   honest limits       -> no ranking guarantees, no invented numbers, no
+ *                         "we grew their revenue 300%". Plain language is
+ *                         not permission to say more than you can defend.
+ *
+ * The underlying claims still have to be true. `kind: 'studio'` is what
+ * check-mockup.mjs branches on; without it this directory would be failed for
+ * having no demo bar and no noindex, which is the correct behaviour for a
+ * mock-up and exactly backwards here.
+ *
+ * ---------------------------------------------------------------------------
+ * NOTE: this file once carried TWO `work:` keys. In an object literal the last
+ * one wins, so the three real projects below were dead code and the page
+ * rendered the old single "clinic went dark" entry -- which is also why the
+ * heading said "One, so far." Duplicate keys are silent in JS. One `work:`.
+ * ---------------------------------------------------------------------------
  */
 window.SITE_CONFIG = {
   kind: 'studio',
@@ -60,10 +78,14 @@ window.SITE_CONFIG = {
     site: 'webrehabstl.pages.dev',
     siteHref: 'https://webrehabstl.pages.dev',
     launchPrice: 1200,
-    title: 'Web Rehab STL — websites for plumbers, roofers and HVAC in St. Louis County',
+    // Outcome, not activity. "Websites for plumbers" tells him the category;
+    // it does not tell him what changes. These three verbs are the whole
+    // promise, and they are the three things he already knows he is missing.
+    title: 'Web Rehab STL — get found, get chosen, get booked in St. Louis',
     description:
-      'I fix and build websites for local trades around St. Louis County. ' +
-      'From $1,200, done in a few days, no monthly fee.',
+      'Websites for St. Louis trades that get you found when people search, ' +
+      'chosen over the other quotes, and booked while you work. From $1,200, ' +
+      'days not months, no monthly fee.',
     lang: 'en',
 
     // Unpublished on purpose. Cold SMS is the outreach channel and the number is
@@ -124,108 +146,118 @@ window.SITE_CONFIG = {
     },
   },
 
-  /* ---- the four things I do ---------------------------------------------
-   * Named for what the owner gets rather than for what I do to the file. "Get
-   * found on Google" is a thing he has a problem with; "local search
-   * infrastructure" is a thing he has never heard of.
+  /* ---- what he gets -----------------------------------------------------
+   * Every title is the outcome, not the task. "A site that works" describes a
+   * file; "Found when they search for you" describes his business on a
+   * Tuesday. `label` stays short because it is the overline.
    *
-   * The same taxonomy estimator.js scores against, kept here so the two cannot
-   * describe different work. */
+   * The same taxonomy estimator.js scores against is kept in step by hand --
+   * estimator.js carries its own copy of the four labels (see its taxonomy
+   * block), so renaming here does not break scoring, but it does mean a fifth
+   * service added here has to be added there too or the estimate will never
+   * quote it.
+   *
+   * No ranking guarantees. "Found" is a claim about setup -- pages, titles,
+   * listings, structure -- not a promise to be number one, which nobody can
+   * make and which a prospect who has been burned will discount on sight. */
   services: [
     {
-      label: 'Fix',
-      title: 'A site that works',
-      body:
-        'The site is slow, out of date, or the sort of thing you would rather ' +
-        'nobody saw. I rebuild it so it does its job on a phone, and keep ' +
-        'whatever on it was still worth keeping.',
-      outcome: 'A site you are not embarrassed to text a customer.',
-    },
-    {
-      label: 'New',
-      title: 'A site from scratch',
-      body:
-        'Nothing yet, or nothing worth having. I build one page that says what ' +
-        'you do, where you work, and how to reach you -- and nothing else.',
-      outcome: 'A first impression that gets you the call.',
-    },
-    {
       label: 'Found',
-      title: 'Showing up when people search',
+      title: 'Found when they search for you',
       body:
-        'A nice site nobody finds is an expensive bookmark. I set up the pages, ' +
-        'titles and listings that make you come up for your trade nearby.',
-      outcome: 'People searching your trade find you.',
+        'Someone types your trade into a phone three miles from your house. ' +
+        'The pages, titles and listings that decide whether you come up are ' +
+        'set up properly, so you are one of the names they see.',
+      outcome: 'You are on the list instead of the other way around.',
     },
     {
-      label: 'Work',
-      title: 'Bookings, quotes and payments',
+      label: 'Chosen',
+      title: 'Chosen before they call the other three',
       body:
-        'If the site should be taking work while you are under a sink, it can. ' +
-        'Enquiries to your phone, bookings in a calendar, card payments taken.',
+        'Most people get three quotes. They look at all three, and they pick ' +
+        'the one that looks like it knows what it is doing. That is a design ' +
+        'problem, and it is the part I am best at.',
+      outcome: 'They pick you on the website, not on price alone.',
+    },
+    {
+      label: 'Booked',
+      title: 'Booked while your hands are full',
+      body:
+        'Enquiries that arrive in your phone the second they are sent, ' +
+        'appointments in a calendar, cards taken. It works the hours you ' +
+        'do not.',
       outcome: 'Work comes in without you chasing it.',
+    },
+    {
+      label: 'Yours',
+      title: 'Yours, with room to grow into it',
+      body:
+        'No monthly fee, no hostage hosting, no permission needed to change ' +
+        'anything. Start with one page and add the rest when you are ready ' +
+        'for it.',
+      outcome: 'Start small, scale up, and never rent your own site back.',
     },
   ],
 
   /* ---- work --------------------------------------------------------------
-   * Real projects, linked, and two of them verified live before this line was
-   * written. The third -- kanan-e.vercel.app -- currently answers HTTP 402
-   * DEPLOYMENT_DISABLED, so it is described and deliberately not linked. A dead
-   * link in a portfolio is the whole failure this project is built to avoid:
-   * the one thing a prospect can check himself, checking and finding nothing.
+   * Real projects, real screenshots, live links verified before this line was
+   * written. The screenshots come from the same asset store that serves the
+   * pwn4g3 portfolio, so they are shots of the actual sites rather than
+   * mockups -- which is the difference between a portfolio and an illustration.
    *
-   * Replacing the single clinic anecdote with these is the right call. "A clinic
-   * site went dark" was a story with nothing behind it -- no link, nothing to
-   * look at, and a reader with a browser had no way to tell it from invention.
-   * These are three sites he can open right now and judge in ten seconds, which
-   * is a better argument than anything written.
+   * KananOS moved. kanan-e.vercel.app answers 402 DEPLOYMENT_DISABLED; the
+   * build now lives at kananenterprises.vercel.app/united. Rechecked 2026-09-28:
+   * /united, /united/products, /united/cart, /united/auth/signin and
+   * /united/product/35 all return 200, so it is linked again. A dead link in a
+   * portfolio is the one thing a prospect can check himself, checking and
+   * finding nothing.
    *
-   * Honest caveat, because it cuts against the whole section: all three are
-   * family and personal work, in trades that are not the one being pitched. A
-   * paying client in the reader's own industry is worth more than all three, and
-   * if he ever lands one it should go first on this list. */
+   * Honest caveat: two of these are family work, and none is in the reader's
+   * own trade. A paying client in his industry is worth more than all three,
+   * and when he lands one it goes first on this list. */
   work: [
     {
-      title: 'Wildlife photographer, site rebuilt',
+      title: 'Hair and extensions clinic — live on its own domain',
       body:
-        'My mother photographs wildlife. This is her site — rebuilt, faster, and ' +
-        'arranged so the photographs are the first thing you see rather than the ' +
-        'third.',
-      href: 'https://angie-viefhaus.pages.dev',
-      linkText: 'angie-viefhaus.pages.dev',
-    },
-    {
-      title: 'Hair and extensions salon, built and still maintained',
-      body:
-        'My father-in-law’s business. Built it and I still look after it — which ' +
-        'is the part worth saying out loud, because a site that needs an ' +
-        'outsider to babysit it is not really fixed.',
+        'A working clinic site with service pages, a shop section and admin ' +
+        'tooling, on myhairloss.com with the www and admin subdomains live. ' +
+        'Built it, and I still look after it — which is the part worth ' +
+        'saying out loud, because a site that needs an outsider to babysit it ' +
+        'is not really fixed.',
       href: 'https://myhairloss.com',
       linkText: 'myhairloss.com',
+      images: [
+        { src: 'brian-home', alt: 'Brian Ivie Hair homepage' },
+        { src: 'myhairloss', alt: 'myhairloss.com site' },
+        { src: 'brian-services', alt: 'Service pages' },
+        { src: 'brian-shop', alt: 'Shop section' },
+      ],
     },
     {
-      title: 'Online shop, built end to end',
+      title: 'Wildlife photographer — rebuilt so the work is the first thing you see',
       body:
-        'A JavaScript and TypeScript store with payments, accounts, a cart, ' +
-        'email and a handful of APIs written for it. The point of listing it is ' +
-        'that it is a real system, not a brochure — accounts, money and ' +
-        'notifications are the parts that break.',
-      // No href. kanon-e.vercel.app answers 402 DEPLOYMENT_DISABLED as of the
-      // last check. Add the link back the moment the deployment is live; do not
-      // add it before, and do not mention the reason a prospect could not
-      // discover anyway.
-      linkText: 'Not online at the moment',
+        'My mother photographs wildlife. This is her site — rebuilt, faster, ' +
+        'and rearranged so the photographs land before the words do. Editorial ' +
+        'type, dark gallery presentation, full-screen lightbox.',
+      href: 'https://angie-viefhaus.pages.dev',
+      linkText: 'angie-viefhaus.pages.dev',
+      images: [
+        { src: 'angie-pages', alt: 'Angie Viefhaus photography portfolio' },
+      ],
     },
-  ],
-  work: [
     {
-      title: 'A clinic site that went dark, back up the same day',
+      title: 'Wholesale distributor — store, accounts and checkout',
       body:
-        'Their site stopped loading and they were taking bookings through it. It ' +
-        'was back on their own address that evening, taking bookings again.',
-      // No href. There is nothing to link to that a trade would open, and a dead
-      // or off-brand link is worse than a sentence.
-      linkText: 'Happy to talk you through it if you want to know more',
+        'A real store rather than a brochure: product catalogue, brand browse, ' +
+        'accounts, card payments and email — for a distributor here in ' +
+        'Florissant. The parts that break are accounts, money and ' +
+        'notifications, and this one handles all three.',
+      href: 'https://kananenterprises.vercel.app/united',
+      linkText: 'kananenterprises.vercel.app/united',
+      images: [
+        { src: 'kananos-home', alt: 'United Distribution storefront' },
+        { src: 'kanan-e-checkout', alt: 'Checkout flow' },
+      ],
     },
   ],
 

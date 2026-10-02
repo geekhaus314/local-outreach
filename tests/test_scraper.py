@@ -367,6 +367,14 @@ def _lead(**kw):
     elif audit == "other":
         audit = AuditResult(url="https://x.com", reachable=True, health=0,
                             serves_other_business="Some Other Plumbing")
+    elif audit == "og":
+        audit = AuditResult(url="https://faszold.com", reachable=True,
+                            health=100, needs_rehab=False, title="Faszold")
+        audit.findings.append(Finding(
+            "META_OG_IMAGE", "No social preview image", 0,
+            "No social preview image",
+            "Your site has no social preview image, so when you share a link "
+            "to it on Facebook or in a text it goes up without a picture."))
     elif audit == "healthy":
         audit = AuditResult(url="https://x.com", reachable=True, health=100,
                             title="X Plumbing")
@@ -824,3 +832,141 @@ def test_prep_block_is_labelled_and_collapsed():
 def test_prep_block_is_empty_when_there_is_no_read():
     from parse_leads import prep_block
     assert prep_block(_lead(Classification="NEEDS_REHAB", audit="contact")) == []
+
+
+# --------------------------------------------------------------------------- #
+# The fact the message hangs on
+# --------------------------------------------------------------------------- #
+# Deliberately complete on every other axis -- title, description, canonical,
+# viewport, og:title/description/type, phone link, real copy -- so the only
+# thing missing is the preview image. Otherwise a higher-penalty finding would
+# outrank it and the test would assert on the wrong thing.
+OG_LESS_PAGE = (
+    "<html><head><title>Acme Plumbing</title>"
+    '<meta name="description" content="Acme Plumbing is a local plumber '
+    'serving the greater St. Louis area since 1994 and counting.">'
+    '<meta name="viewport" content="width=device-width, initial-scale=1">'
+    '<link rel="canonical" href="https://acmeplumbing.com/">'
+    # Deliberately different from <title> so a test can tell which one was read.
+    '<meta property="og:title" content="Acme Plumbing, St. Louis">'
+    '<meta property="og:description" content="Local plumber in St. Louis.">'
+    '<meta property="og:type" content="website">'
+    '<script src="https://www.googletagmanager.com/gtag/js"></script>'
+    "</head><body>"
+    + "<p>We fix leaks, replace water heaters and clear slow drains.</p>" * 300
+    + '<a href="tel:3145550100">314-555-0100</a>'
+    # expansion_angle clears viewport, analytics and contact-form checks before
+    # it ever reaches the social-preview ones, so the fixture has to have all
+    # three or the test asserts on the wrong angle.
+    '<form action="/quote" method="post">'
+    '<input name="phone" placeholder="Your number">'
+    "<button>Request a quote</button></form>"
+    "</body></html>"
+)
+
+
+def test_missing_og_image_finding_names_its_subject(monkeypatch):
+    """`Finding.detail` prints verbatim as "The fact to lead with: {detail}."
+
+    The og:image finding used to carry the bare fragment "not present in the
+    page head", so the dashboard handed Jake "The fact to lead with: not
+    present in the page head." -- no subject, so nothing for the reader to go
+    check. The claim was wrong besides: check_metadata searches the whole
+    document rather than the head, which meant anyone who opened view-source
+    could disprove the one verified fact the whole message was built on.
+    """
+    _mock_fetch(monkeypatch, OG_LESS_PAGE)
+    r = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    og = [f for f in r.findings if f.code == "META_OG_IMAGE"]
+    assert og, f"expected a missing og:image finding, got {[f.code for f in r.findings]}"
+    assert og[0].detail == og[0].label, (
+        f"detail must name its subject, got {og[0].detail!r}"
+    )
+    assert "page head" not in og[0].detail
+
+
+def test_fact_stands_alone_and_spoken_is_the_readable_one():
+    """Two phrasings of one observation: a bullet to print, a line to say."""
+    lead = _lead(audit="og")
+    assert lead.fact == "No social preview image", lead.fact
+    # `spoken` is the finding's quote, passed through friendly() so it can
+    # follow a colon with a lowercase letter.
+    assert lead.spoken.startswith("your site has no social preview image"), \
+        lead.spoken
+    assert lead.spoken != lead.fact
+
+
+def test_answer_script_does_not_read_the_bullet_back_aloud():
+    """The correction is read out loud, so it has to be a sentence.
+
+    It used to interpolate `fact`, which produced "That's what made me reach
+    out: not present in the page head." -- the terse print form, spoken.
+    """
+    from parse_leads import call_opener
+    out = call_opener(_lead(audit="og"))
+    assert "your site has no social preview image" in out, out
+    assert "not present in the page head" not in out
+
+
+# --------------------------------------------------------------------------- #
+# The social-preview angle
+# --------------------------------------------------------------------------- #
+# No og:* tags at all, so the preview really is a bare link.
+NO_OG_PAGE = (
+    "<html><head><title>Acme Plumbing</title>"
+    '<meta name="description" content="Acme Plumbing is a local plumber '
+    'serving the greater St. Louis area since 1994 and counting.">'
+    '<meta name="viewport" content="width=device-width, initial-scale=1">'
+    '<script src="https://www.googletagmanager.com/gtag/js"></script>'
+    "</head><body>"
+    + "<p>We fix leaks, replace water heaters and clear slow drains.</p>" * 300
+    + '<a href="tel:3145550100">314-555-0100</a>'
+    '<form action="/quote" method="post">'
+    '<input name="phone" placeholder="Your number">'
+    "<button>Request a quote</button></form>"
+    "</body></html>"
+)
+
+
+def test_og_title_is_read_from_the_property_attribute(monkeypatch):
+    """Open Graph tags carry `property=`, not `name=`.
+
+    The extractor only read `name`, so `og_title` was never populated for
+    standard markup -- and expansion_angle gates its "your links are bare
+    links" claim on that key. The claim therefore fired on every site,
+    including ones where every OG tag except the image was present.
+    """
+    _mock_fetch(monkeypatch, OG_LESS_PAGE)
+    r = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    assert r.evidence.get("og_title") == "Acme Plumbing, St. Louis", (
+        f"property=\"og:title\" not recorded: {r.evidence.get('og_title')!r}"
+    )
+
+
+def test_missing_preview_image_is_not_reported_as_a_bare_link(monkeypatch):
+    """Title and description are present, so a preview card does render.
+
+    Only the image is missing. Calling that a bare link is a claim the owner
+    can disprove by sharing their own link -- the same failure as the
+    "not present in the page head" fragment.
+    """
+    from parse_leads import expansion_angle
+    _mock_fetch(monkeypatch, OG_LESS_PAGE)
+    lead = _lead()
+    lead.audit = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    angle = expansion_angle(lead)
+    assert "bare link" not in angle, angle
+    assert "no picture" in angle, angle
+    assert angle, "the missing image is a real, checkable gap -- it must be used"
+
+
+def test_bare_link_claim_still_fires_without_any_og_tags(monkeypatch):
+    """With no OG tags at all the old wording is correct, so it stays."""
+    from parse_leads import expansion_angle
+    _mock_fetch(monkeypatch, NO_OG_PAGE)
+    lead = _lead()
+    lead.audit = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    assert not lead.audit.evidence.get("og_title"), "fixture should have no og:title"
+    assert "bare links" in expansion_angle(lead)
+
+

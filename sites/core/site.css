@@ -456,17 +456,27 @@ a { color: inherit; text-decoration: none; }
 .est__caveat { font-size: var(--t-xs); color: var(--c-muted); margin-top: var(--s-3); }
 
 /* ---- selected work ------------------------------------------------------
-   A row per project with the measurable outcome beside it. The audit score is
-   the point: it is the only number here that was measured rather than felt. */
+   Screenshots on the left, what it is and where to see it on the right.
+   The screenshots are the argument: a page selling web work that shows no web
+   work is asking to be believed on trust alone, and the two things a busy
+   owner will actually do -- skim the pictures and tap a link -- are the two
+   things a plain ruled row used to make impossible. */
 .work-rows { border-top: 1px solid var(--c-line); }
 .work-row {
-  display: grid; gap: var(--s-2) var(--s-4);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-  padding-block: var(--s-3); border-bottom: 1px solid var(--c-line); align-items: center;
+  display: grid; gap: var(--s-3) var(--s-4);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  padding-block: var(--s-4); border-bottom: 1px solid var(--c-line); align-items: start;
 }
 @media (max-width: 760px) { .work-row { grid-template-columns: 1fr; } }
+.work-row__shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
+.work-row__pic { display: block; border: 1px solid var(--c-line); border-radius: 8px; overflow: hidden; }
+.work-row__shot {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 1200 / 750; object-fit: cover; object-position: top center;
+}
 .work-row h3 { font-size: var(--t-base); font-weight: 680; letter-spacing: var(--tracking-tight); }
 .work-row p { font-size: var(--t-sm); color: var(--c-muted); }
+.work-row__link { margin-top: var(--s-2); }
 .work-row__score { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--c-muted); white-space: nowrap; }
 .work-row__score b { color: var(--c-good); font-weight: 700; }
 

@@ -318,7 +318,7 @@ measured, not staged. Everything in its `sample:` block is invented.
 `check-mockup.mjs` holds the two kinds to opposite rules, and a page declares
 which it is with `kind:` in its config.
 
-**`kind: 'mockup'`** — a pitch artefact for someone else's business. Carries
+**`kind: 'mockup'`** — a pitch artifact for someone else's business. Carries
 `noindex` so it can never surface in a search for a real business, a fixed demo
 bar, a `facts`/`sample` split, and no external origins.
 
