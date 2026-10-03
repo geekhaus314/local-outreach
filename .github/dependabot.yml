@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # Covers all npm, pnpm, yarn, or bun packages (Svelte/React/Vue, TypeScript, Vite, Tailwind, adapter-cloudflare)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Covers GitHub Actions CI/CD workflows (.github/workflows)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
