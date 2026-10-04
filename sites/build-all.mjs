@@ -1,64 +1,39 @@
 #!/usr/bin/env node
 /**
- * Build both deployables, separately, because they are separate things.
+ * Build the client mock-up host. The public studio site is now built from the
+ * Next.js app in site-rehab-stl, not from the historical static snapshot here.
  *
  *   dist/mockups/          the pitch host. Every client mock-up plus the shared
  *                           kit, served together so the trade switcher works and
  *                           so you can hand someone a link into one mock-up and
  *                           navigate between the others.
  *
- *   dist/site-rehab-stl/   your own service site. Self-contained, no demo bar, no
- *                           noindex, no client content, no link out to anything
- *                           that is not yours.
+ * Deploy it separately from the public studio site, which is built in the
+ * site-rehab-stl repository. The split is not cosmetic, it is the whole point
+ * of `kind:` in the page config. Combining the projects would put mock-ups of
+ * real businesses on the same hostname as the studio's public site.
  *
- * The split is not cosmetic, it is the whole point of `kind:` in the page config.
- * Deploying both from one directory would put every client mock-up on the same
- * hostname as the thing you are selling -- a prospect browsing a mock-up of
- * SMP Plumbing would be one click from a directory of other clients' mock-ups,
- * and one of them is a real business that has not agreed to be a case study.
- * It also puts `noindex` pages and an indexable service site under one roof,
- * which is the sort of thing search engines punish and you cannot un-do.
- *
- * So: two Pages projects, two hostnames, two builds. Wire them up as:
- *
- *   npx wrangler pages deploy dist/mockups        --project-name local-outreach
- *   npx wrangler pages deploy dist/site-rehab-stl --project-name webrehabstl
- *
- * The studio page also has a flattened `assets/` copy of only the files it
- * references, which is what makes it deployable at a domain root with no
- * kit-relative paths to resolve.
+ *   npx wrangler pages deploy dist/mockups --project-name local-outreach
  */
 
 import {
-  readdirSync, readFileSync, statSync, cpSync, mkdirSync, rmSync, existsSync,
+  readdirSync, readFileSync, cpSync, mkdirSync, rmSync, existsSync,
 } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, relative } from 'node:path';
 
-import { flattenPage, SITES, REPO } from './build-standalone.mjs';
+import { SITES, REPO } from './build-standalone.mjs';
 
 const DIST = join(REPO, 'dist');
+const LEGACY_STUDIO_OUTPUT = join(DIST, 'site-rehab-stl');
 
-/* ---- 1. the studio site, flattened ---------------------------------------- */
-let studio;
-try {
-  studio = flattenPage('site-rehab-stl', DIST);
-} catch (e) {
-  console.error(`mockup host not built -- studio site failed: ${e.message || e}`);
-  process.exit(1);
+// Do not leave an old static export available to deploy in place of the
+// canonical Next.js site.
+if (existsSync(LEGACY_STUDIO_OUTPUT)) {
+  rmSync(LEGACY_STUDIO_OUTPUT, { recursive: true, force: true });
+  console.log('  removed obsolete dist/site-rehab-stl export');
 }
-if (studio.kind !== 'studio') {
-  console.error(
-    `sites/site-rehab-stl declares kind "${studio.kind}", not "studio". Refusing to ` +
-    'build the service site from a page that carries mock-up guards -- a noindex ' +
-    'or a demo bar in the output would be a silent failure that only shows up in ' +
-    'production.'
-  );
-  process.exit(1);
-}
-console.log(`  studio site   dist/${relative(DIST, studio.outDir)}  (${studio.plan.length} files)`);
 
-/* ---- 2. the mock-up host, copied whole ------------------------------------ */
+/* ---- the mock-up host, copied whole --------------------------------------- */
 const MOCKUP_HOST = join(DIST, 'mockups');
 rmSync(MOCKUP_HOST, { recursive: true, force: true });
 mkdirSync(MOCKUP_HOST, { recursive: true });
@@ -115,8 +90,6 @@ if (studioDirs.length) {
 }
 
 console.log(
-  '\n  deploy as two separate Pages projects:\n' +
-    '    npx wrangler pages deploy dist/mockups        --project-name <mockup-host>\n' +
-    '    npx wrangler pages deploy dist/site-rehab-stl --project-name webrehabstl'
+  '\n  deploy the mock-up host separately:\n' +
+    '    npx wrangler pages deploy dist/mockups --project-name local-outreach'
 );
-

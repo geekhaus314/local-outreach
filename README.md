@@ -225,6 +225,33 @@ say if they reply, and an explicit list of what not to say. A costed time budget
 sits at the top, and a drop list exists so nobody re-derives the same conclusion
 next week.
 
+### Optional: import one lead into the private pwn4g3 CRM
+
+Lead harvesting and the outreach queue remain local. To copy a single reviewed
+CSV record into the pwn4g3 D1 lead desk, first list the row numbers, then select
+one. The importer previews the exact business and evidence, prompts for
+confirmation, and does not send outreach:
+
+```bash
+python3 export_to_crm.py --list
+python3 export_to_crm.py --index 3
+```
+
+Set `PWN4G3_ADMIN_TOKEN` in `.env` or the shell before confirming an import.
+The pwn4g3 admin API additionally requires the request's source IP to be on
+its private allowlist; an unauthorized network receives 403. Use `--yes` only
+when the selected CSV row has already been reviewed:
+
+```bash
+python3 export_to_crm.py --index 3 --yes
+```
+
+Each invocation sends exactly one lead and its measured evidence. There is no
+automatic sync, bulk-import operation, or message-sending path. Use the CRM
+status workflow to manage the imported record; local CSV and generated queue
+files remain gitignored. Records marked as sourced from Google Maps HTML
+scraping are refused; use the sanctioned Places API or OpenStreetMap source.
+
 The message is generated from harvested data only. Three earlier drafts were
 unsendable — one told an OpenStreetMap lead "no website is attached to your
 Google Business Profile", which has no such thing; two told a prospect their site
@@ -285,7 +312,7 @@ sites/
   themes/
     plumbing.css  roofing.css  hvac.css  photography.css  studio.css
   st-charles-plumbing/   a client mock-up
-  site-rehab-stl/        Jake's own public site
+  site-rehab-stl/        historical migration reference; not deployed
   check-mockup.mjs       the guard
 ```
 
@@ -322,18 +349,22 @@ which it is with `kind:` in its config.
 `noindex` so it can never surface in a search for a real business, a fixed demo
 bar, a `facts`/`sample` split, and no external origins.
 
-**`kind: 'studio'`** — a real, public site. `site-rehab-stl` is the destination
-every cold message links to, so the mock-up rules are actively wrong for it: a
-`noindex` would suppress the only live part of the pitch, and a demo bar saying
-"nothing here works" would be a lie. It is indexable, free to link outward, has
-no `sample:` block at all, and the checker fails the build if an invented fact
-ever appears on it unmarked.
+**`kind: 'studio'`** — the old static public-site snapshot. The canonical
+public site is now the Next.js application in the separate `site-rehab-stl`
+repository. This snapshot remains for migration reference only and is no longer
+built or deployed from this repository.
+
+`node sites/build-all.mjs` builds only the mock-up host into `dist/mockups/`.
+The studio Pages project is built and deployed separately; see the README in
+the `site-rehab-stl` repository. The standalone builder refuses to build the
+historical studio snapshot so it cannot accidentally replace the canonical
+site with stale content.
 
 ### The estimator
 
-`core/estimator.js` answers the section the original Next.js prototype left as a
-heading and nothing else. Six questions produce a scope, a price band and a
-duration.
+`core/estimator.js` is the estimator from the historical static studio site.
+Four questions produce a scope, a price band and a duration; the canonical
+Next.js studio site maintains its own client-side version.
 
 It is allowed to quote a price, because a price can be defended. It is not
 allowed to quote the visitor's revenue, traffic or conversions, because those

@@ -270,6 +270,7 @@ class Lead:
         self.cls = get(row, "Classification")
         self.opportunity = as_int(row, "Opportunity Score")
         self.low_confidence = get(row, "Low Confidence") == "yes"
+        self.sources = get(row, "Sources")
         self.audit = check
         self.checked_today = checked_today
         self.state = HOLD
@@ -405,11 +406,22 @@ class Lead:
 
         if not self.website:
             self.state = VERIFY
-            self.notes.append(
-                "no site on the record, and the record is a free OpenStreetMap "
-                "extract where a missing website tag usually means nobody filled "
-                "it in, not that there is no site"
-            )
+            if "overpass" in self.sources:
+                self.notes.append(
+                    "no site on the record, and the record is a free OpenStreetMap "
+                    "extract where a missing website tag usually means nobody filled "
+                    "it in, not that there is no site"
+                )
+            elif "gmaps" in self.sources:
+                self.notes.append(
+                    "no site on their Google Maps listing (scraped record). A missing "
+                    "website in Google Maps usually means they have none, but worth "
+                    "one confirmation search before sending"
+                )
+            else:
+                self.notes.append(
+                    "no site on record; confirm with one search before sending"
+                )
             return
 
         self.state = HOLD
@@ -996,16 +1008,25 @@ def call_opener(lead: Lead) -> str:
 def guardrails(lead: Lead) -> list[str]:
     """The sentences that are one wrong fact away from being a lie."""
     out = [
-        "That you saw their Google Business Profile. The data came from "
-        "OpenStreetMap, which has no such thing.",
+        ("That you saw their Google Business Profile. " + (
+            "The data came from OpenStreetMap, which has no such thing."
+            if "overpass" in lead.sources and "gmaps" not in lead.sources else
+            "The data came from a Google Maps scrape, so the listing is real but "
+            "you have not 'read' it as a customer."
+            if "gmaps" in lead.sources else
+            "The data came from the Google Places API, so the listing is real."
+        )),
         "Any number you have not measured -- how many visitors they get, how "
         "many calls they lose, what a competitor is charging.",
     ]
     if lead.low_confidence and not lead.website:
         out.append(
-            "That they definitely have no website. The record is a free "
-            "OpenStreetMap extract and a missing website tag there usually means "
-            "nobody filled the field in."
+            "That they definitely have no website. " + (
+                "The record is a free OpenStreetMap extract where a missing "
+                "website tag usually means nobody filled the field in."
+                if "overpass" in lead.sources and "gmaps" not in lead.sources else
+                "Confirm with one search before you say it is certain."
+            )
         )
     if lead.website and lead.audit and lead.audit.redirected_domain:
         out.append(

@@ -133,7 +133,15 @@ if (invoked) {
   const outRoot =
     outFlag === -1 ? join(REPO, 'dist') : resolve(process.cwd(), argv[outFlag + 1]);
   const target =
-    argv.find((a, i) => !a.startsWith('--') && i !== outFlag + 1) || 'site-rehab-stl';
+    argv.find((a, i) => !a.startsWith('--') && (outFlag === -1 || i !== outFlag + 1)) || 'site-rehab-stl';
+
+  if (target === 'site-rehab-stl') {
+    console.error(
+      'The studio site is now built from the Next.js app in site-rehab-stl. ' +
+      'This directory is retained as a migration reference.'
+    );
+    process.exit(1);
+  }
 
   try {
     const { outDir, kind, plan } = flattenPage(target, outRoot);

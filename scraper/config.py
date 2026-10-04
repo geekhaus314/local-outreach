@@ -13,7 +13,7 @@ CACHE_DIR = DATA_DIR / "cache"
 LEADS_CSV = ROOT / "leads.csv"
 
 # Load .env by hand so we do not depend on python-dotenv being installed.
-def _load_dotenv(path: Path = ROOT / ".env") -> None:
+def load_dotenv(path: Path = ROOT / ".env") -> None:
     if not path.exists():
         return
     for raw in path.read_text(encoding="utf-8").splitlines():
@@ -26,7 +26,7 @@ def _load_dotenv(path: Path = ROOT / ".env") -> None:
         os.environ.setdefault(key, val)
 
 
-_load_dotenv()
+load_dotenv()
 
 
 @dataclass(frozen=True)

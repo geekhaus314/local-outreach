@@ -23,7 +23,7 @@ from .config import (
 )
 from .dedupe import dedupe
 from .persona import read_persona
-from .providers import google_places, overpass
+from .providers import google_places, overpass, gmaps
 from .providers.base import RawLead
 from .scoring import (
     CSV_HEADER,
@@ -34,6 +34,7 @@ from .scoring import (
     NO_PRESENCE,
     SOCIAL_ONLY,
     ScoredLead,
+    lead_sort_key,
     score_lead,
 )
 
@@ -56,23 +57,31 @@ def collect(
     trades=TRADES,
     use_google: bool = True,
     use_overpass: bool = True,
+    use_gmaps: bool = True,
 ) -> list[RawLead]:
     CONFIG.ensure_dirs()
     raw: list[RawLead] = []
 
     if use_google and google_places.available():
-        log(f"[1/2] Google Places enabled ({len(markets)} markets x {len(trades)} trades)")
+        log(f"[1/3] Google Places enabled ({len(markets)} markets x {len(trades)} trades)")
         for m in markets:
             got = google_places.fetch(m, trades)
             log(f"  {m.name:20} {len(got):4} raw results")
             raw.extend(got)
     elif use_google:
-        log("[1/2] Google Places SKIPPED - no GOOGLE_PLACES_API_KEY set")
+        log("[1/3] Google Places SKIPPED - no GOOGLE_PLACES_API_KEY set")
 
     if use_overpass and overpass.available():
-        log("[2/2] OpenStreetMap (free fallback - thin US coverage)")
+        log("[2/3] OpenStreetMap (free fallback - thin US coverage)")
         for m in markets:
             got = overpass.fetch(m, trades)
+            log(f"  {m.name:20} {len(got):4} raw results")
+            raw.extend(got)
+
+    if use_gmaps and gmaps.available():
+        log("[3/3] Google Maps scrape (gosom, no API key)")
+        for m in markets:
+            got = gmaps.fetch(m, trades)
             log(f"  {m.name:20} {len(got):4} raw results")
             raw.extend(got)
 
@@ -142,7 +151,7 @@ def build(raw: list[RawLead], audits: dict[str, AuditResult]) -> list[ScoredLead
     for s in scored:
         s.persona = read_persona(s, audits.get(s.website)).to_csv()
 
-    scored.sort(key=lambda s: (BUCKET_ORDER.get(s.classification, 9), -s.opportunity))
+    scored.sort(key=lambda s: lead_sort_key(s.classification, s.industry, s.opportunity))
     return scored
 
 
@@ -196,10 +205,10 @@ def summarize(leads: list[ScoredLead]) -> None:
 
     if not CONFIG.has_google():
         log("")
-        log("NOTE: only free OpenStreetMap data was used. Coverage of US local")
-        log("      businesses there is thin and its 'website' tag is unreliable,")
-        log("      so expect a small list and false 'no site' positives.")
-        log("      Set GOOGLE_PLACES_API_KEY in .env for real volume.")
+        log("NOTE: no GOOGLE_PLACES_API_KEY set. Data came from the free sources")
+        log("      (OpenStreetMap + gosom Google Maps scrape). OSM is thin; the")
+        log("      gosom scrape does not get a Maps HTML ToS pass. Fine for")
+        log("      prospecting volume; the Places API is the sanctioned route.")
 
 
 def run(
@@ -207,9 +216,10 @@ def run(
     trades=TRADES,
     use_google: bool = True,
     use_overpass: bool = True,
+    use_gmaps: bool = True,
     write: bool = True,
 ) -> list[ScoredLead]:
-    raw = collect(markets, trades, use_google, use_overpass)
+    raw = collect(markets, trades, use_google, use_overpass, use_gmaps)
     log(f"\nRaw leads collected: {len(raw)}")
 
     deduped = dedupe(raw)

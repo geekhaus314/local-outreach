@@ -41,8 +41,8 @@ def parse_args(argv=None):
              "Use this to focus on trades rather than restaurants.",
     )
     p.add_argument(
-        "--provider", choices=["google", "osm", "both", "auto"], default="auto",
-        help="data source. 'auto' = google when a key is present, else osm.",
+        "--provider", choices=["google", "osm", "gmaps", "both", "auto"], default="auto",
+        help="data source. 'auto' = google when a key is present, plus gmaps when installed, plus osm.",
     )
     p.add_argument("--max-queries", type=int, default=0,
                    help="cap the number of Places API queries (0 = no cap).")
@@ -122,6 +122,7 @@ def main(argv=None) -> int:
 
     use_google = args.provider in ("google", "both", "auto") and CONFIG.has_google()
     use_overpass = args.provider in ("osm", "both", "auto")
+    use_gmaps = args.provider in ("gmaps", "both", "auto")
 
     if args.provider == "google" and not CONFIG.has_google():
         print(
@@ -137,7 +138,7 @@ def main(argv=None) -> int:
 
     print(f"Markets: {len(markets)} | Trades: {len(trades)} | "
           f"Google: {'on' if use_google else 'off'} | "
-          f"OSM: {'on' if use_overpass else 'off'} | "
+          f"OSM: {'on' if use_overpass else 'off'} | GMaps: {'on' if use_gmaps else 'off'} | "
           f"Audit: {'on' if CONFIG.audit_enabled else 'off'}")
     print("-" * 68)
 
@@ -150,6 +151,7 @@ def main(argv=None) -> int:
             trades=trades,
             use_google=use_google,
             use_overpass=use_overpass,
+            use_gmaps=use_gmaps,
             write=not args.dry_run,
         )
     except KeyboardInterrupt:

@@ -39,6 +39,26 @@ INDUSTRY_TICKET = {
 
 MARKETPLACE_NOTE = "listed on a directory, not their own domain"
 
+# Online presence urgency rank (lower = customers search for them online more).
+# A plumber's phone rings off "plumber near me"; a walk-in boutique less so.
+INDUSTRY_ONLINE_URGENCY = {
+    "Plumbing": 0, "HVAC": 0, "Automotive": 0, "Roofing": 1, "Electrical": 1,
+    "Locksmith": 1, "Appliance": 1, "Pest Control": 2, "Dental": 2,
+    "Veterinary": 2, "Chiropractic": 2, "Healthcare": 2, "Landscaping": 2,
+    "Concrete": 2, "Windows": 3, "Flooring": 3, "Painting": 3, "Moving": 3,
+    "Pool": 3, "Cleaning": 3, "Solar": 3, "Real Estate": 3, "Storage": 4,
+    "Fitness": 4, "Professional Services": 4, "Personal Care": 4, "Retail": 5,
+    "Restaurant": 5, "General": 6,
+}
+
+
+def lead_sort_key(classification: str, industry: str, opportunity: float):
+    """Crappy site first within dire industries; no-site leads after those."""
+    urgency = INDUSTRY_ONLINE_URGENCY.get(industry, 6)
+    has_site_buckets = {DEAD_SITE, SOCIAL_ONLY, MARKETPLACE, NEEDS_REHAB}
+    bucket_rank = 0 if classification in has_site_buckets else (1 if classification == NO_PRESENCE else 2)
+    return (urgency, bucket_rank, -opportunity)
+
 
 @dataclass
 class ScoredLead:
@@ -216,7 +236,10 @@ def build_pitch_facts(raw: RawLead, audit: AuditResult | None, cls: str) -> list
     facts: list[str] = []
 
     if cls == NO_PRESENCE:
-        facts.append("No website is attached to their Google Business Profile.")
+        if raw.source == "overpass":
+            facts.append("No website listed in OpenStreetMap (weak signal -- verify first).")
+        else:
+            facts.append("No website is attached to their Google listing.")
     elif cls == SOCIAL_ONLY:
         host = (re.sub(r"^https?://", "", raw.website).split("/")[0]).lower()
         facts.append(f"Their only web presence is a {host} page.")

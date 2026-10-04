@@ -211,7 +211,7 @@ def _read(lead, audit) -> Persona:
     if reviews is not None:
         ev.append(f"{reviews} reviews")
     if lead.low_confidence:
-        ev.append("record is a free OpenStreetMap extract, low confidence")
+        ev.append("low-confidence source record; verify before sending")
     # site_health is a field on the lead, not a property of the audit object, so
     # it is emitted whether or not the audit is still in hand. Gating it on
     # `if audit:` dropped the single most useful number whenever the caller had
@@ -283,9 +283,9 @@ def _archetype(*, established, thin, classification, voice, rating, reviews, aud
             "Do not open with the website. Open with the one customer in the "
             "last week who searched for their trade and did not find them. The "
             "site is the symptom; being unfindable is the problem.",
-            "Do not imply they had a site and lost it. On a free OpenStreetMap "
-            "extract a missing website usually means nobody filled the field "
-            "in, and they will correct you.",
+            "Do not imply they had a site and lost it. If the record came "
+            "from a free extract a missing website may just mean the field "
+            "was blank -- and they will correct you.",
         )
 
     # 2. Their domain is broken. The pitch is the strongest thing you have.
