@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Abstract service bay line work">
+  <rect width="640" height="400" fill="#141a22"/>
+  <g stroke="#f2a53c" stroke-width="2" fill="none" opacity="0.85">
+    <path d="M80 300 L200 300 L250 210 L470 210 L520 300 L600 300"/>
+    <circle cx="250" cy="300" r="34"/>
+    <circle cx="470" cy="300" r="34"/>
+  </g>
+  <g stroke="#3b4553" stroke-width="2" opacity="0.8">
+    <path d="M0 340 L640 340"/>
+    <path d="M60 340 L60 120 M580 340 L580 120 M60 120 L580 120"/>
+  </g>
+  <g fill="#f2a53c" opacity="0.5">
+    <rect x="120" y="150" width="120" height="8" rx="4"/>
+    <rect x="120" y="170" width="80" height="8" rx="4"/>
+  </g>
+</svg>

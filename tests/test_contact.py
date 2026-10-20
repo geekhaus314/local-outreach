@@ -23,11 +23,12 @@ from scraper.contact import best, extract
     [
         # The obvious ones.
         ('<a href="mailto:Info@FlowKingRooter.com">Email</a>', "info@flowkingrooter.com"),
-        ("Call us, or write to sales@apexhvac.net today", "sales@apexhvac.net"),
+        ("Call us, or write to sales@flowkingrooter.com today", "sales@flowkingrooter.com"),
         # Obfuscated but still published.
         ("info [at] flowkingrooter [dot] com", "info@flowkingrooter.com"),
         ("info@ flowkingrooter.com", "info@flowkingrooter.com"),
         ("info(at)flowkingrooter.com", "info@flowkingrooter.com"),
+        ("info (at) flowkingrooter (dot) com", "info@flowkingrooter.com"),
     ],
 )
 def test_finds_published_addresses(html, expected):
@@ -53,6 +54,11 @@ def test_finds_published_addresses(html, expected):
         "no-reply@site.com sent your receipt",
         "do-not-reply@site.com",
         "noreply@site.com",
+        # The spelled-out "at" has to be a word, not the inside of one. Both of
+        # these came off a real dentist's homepage: analytics boilerplate and a
+        # directory URL, neither of which is the business's mailbox.
+        "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}",
+        "https://urgentcarelocations.org/mo/florissant",
     ],
 )
 def test_junk_is_dropped_not_ranked_down(html):
@@ -70,6 +76,12 @@ def test_on_site_domain_beats_free_mailbox():
         '<a href="mailto:info@flowkingrooter.com">Info</a>'
     )
     assert best(extract(html=html, site_domain="flowkingrooter.com")) == "info@flowkingrooter.com"
+
+
+def test_off_site_corporate_address_is_a_vendor_not_the_business():
+    """Faszold's page published its payment processor's address, not its own."""
+    html = '<a href="mailto:duncan.mckee@heartland.com">contact</a>'
+    assert best(extract(html=html, site_domain="faszold.com")) == ""
 
 
 def test_free_mailbox_still_counts_when_it_is_all_there_is():

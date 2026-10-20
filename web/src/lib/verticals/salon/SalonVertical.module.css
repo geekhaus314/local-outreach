@@ -1,0 +1,577 @@
+/*
+ * Salon package theme. Deliberately package-local: the global theme list is
+ * shared by every vertical, so a salon palette lives here instead of adding a
+ * fourth global ThemeName. Ink, newsprint cream and a single oxblood accent.
+ */
+
+.page {
+  --salon-ink: #191411;
+  --salon-paper: #f5efe4;
+  --salon-paper-deep: #ece3d4;
+  --salon-blood: #7c2d2a;
+  --salon-line: #d8cbb8;
+  --salon-muted: #6b5f52;
+  --salon-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  background: var(--salon-paper);
+  color: var(--salon-ink);
+}
+
+.page h1,
+.page h2,
+.page h3 {
+  font-family: var(--salon-serif);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  color: var(--salon-blood);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.kicker::after {
+  flex: 1;
+  max-width: 4rem;
+  height: 1px;
+  background: var(--salon-blood);
+  content: '';
+}
+
+/* Hero */
+
+.hero {
+  padding-block: clamp(2.5rem, 6vw, 5.5rem);
+  border-bottom: 1px solid var(--salon-line);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.heroCopy h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.94;
+}
+
+.lede {
+  max-width: 34rem;
+  margin-top: 1.75rem;
+  color: var(--salon-muted);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 2.25rem;
+}
+
+.actions :global(.button) {
+  border-radius: 0;
+  background: var(--salon-blood);
+  color: var(--salon-paper);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.actions :global(.button:hover) {
+  transform: none;
+  background: var(--salon-ink);
+}
+
+.callLink {
+  color: var(--salon-ink);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  color: var(--salon-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  list-style: none;
+}
+
+.trust li {
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--salon-blood);
+}
+
+.heroSide {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.heroFigure {
+  margin: 0;
+  border: 1px solid var(--salon-ink);
+  background: var(--salon-paper-deep);
+}
+
+.heroFigure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: saturate(0.72) contrast(1.05);
+}
+
+.chairNote {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--salon-line);
+  color: var(--salon-muted);
+  font-size: 0.85rem;
+}
+
+.chairLabel {
+  margin: 0;
+  color: var(--salon-ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.directions {
+  color: var(--salon-blood);
+  text-underline-offset: 0.2em;
+}
+
+/* Service menu */
+
+.menu {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.sectionHead {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 46rem;
+}
+
+.sectionHead h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.02;
+}
+
+.sectionNote {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--salon-muted);
+  line-height: 1.65;
+}
+
+.menuList {
+  margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  padding: 0;
+  border-top: 2px solid var(--salon-ink);
+  list-style: none;
+}
+
+.menuRow {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--salon-line);
+}
+
+.menuNumber {
+  padding-top: 0.35rem;
+  color: var(--salon-blood);
+  font-family: var(--salon-serif);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.menuBody {
+  min-width: 0;
+}
+
+.menuTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
+}
+
+.menuTitle h3 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+}
+
+.menuTitle h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.menuTitle h3 a:hover {
+  color: var(--salon-blood);
+}
+
+.menuDuration {
+  margin-left: auto;
+  color: var(--salon-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.menuBody > p {
+  max-width: 40rem;
+  margin: 0.6rem 0 0;
+  color: var(--salon-muted);
+  line-height: 1.6;
+}
+
+.menuFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  color: var(--salon-ink);
+  font-size: 0.82rem;
+  list-style: none;
+}
+
+.menuFeatures li::before {
+  margin-right: 0.45rem;
+  color: var(--salon-blood);
+  content: '—';
+}
+
+.menuLink {
+  align-self: center;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--salon-ink);
+  color: var(--salon-ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.menuLink:hover {
+  background: var(--salon-ink);
+  color: var(--salon-paper);
+}
+
+.empty {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--salon-line);
+  background: var(--salon-paper-deep);
+}
+
+/* Process */
+
+.room {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  border-block: 1px solid var(--salon-line);
+  background: var(--salon-paper-deep);
+}
+
+.roomGrid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.roomGrid h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.03;
+}
+
+.roomNote {
+  margin-top: 1.25rem;
+  color: var(--salon-muted);
+  line-height: 1.6;
+}
+
+.roomNote a {
+  color: var(--salon-blood);
+  text-underline-offset: 0.2em;
+}
+
+.process {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1.25rem;
+  padding-block: 1.4rem;
+  border-top: 1px solid var(--salon-line);
+}
+
+.process li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.processNumber {
+  color: var(--salon-blood);
+  font-family: var(--salon-serif);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.process h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.process p {
+  margin: 0.45rem 0 0;
+  color: var(--salon-muted);
+  line-height: 1.6;
+}
+
+/* Proof */
+
+.proof {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  background: var(--salon-ink);
+  color: var(--salon-paper);
+}
+
+.proofInner {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.proof .kicker {
+  color: var(--salon-paper);
+}
+
+.proof .kicker::after {
+  background: var(--salon-paper);
+}
+
+.proof h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  line-height: 1.05;
+}
+
+.proof .sectionNote {
+  margin-top: 1rem;
+  color: #cbbfae;
+}
+
+.rating {
+  display: grid;
+  justify-items: start;
+  gap: 0.35rem;
+  padding-left: clamp(0rem, 3vw, 3rem);
+  border-left: 1px solid #4a3f36;
+}
+
+.rating strong {
+  font-family: var(--salon-serif);
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.stars {
+  color: #c86b63;
+  letter-spacing: 0.18em;
+}
+
+.rating small {
+  color: #cbbfae;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* FAQ */
+
+.faq {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.faqGrid h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.03;
+}
+
+.faqList {
+  border-top: 2px solid var(--salon-ink);
+}
+
+.faqList details {
+  border-bottom: 1px solid var(--salon-line);
+}
+
+.faqList summary {
+  padding-block: 1.1rem;
+  cursor: pointer;
+  font-family: var(--salon-serif);
+  font-size: 1.15rem;
+}
+
+.faqList summary::marker {
+  color: var(--salon-blood);
+}
+
+.faqList details p {
+  max-width: 44rem;
+  margin: 0 0 1.25rem;
+  color: var(--salon-muted);
+  line-height: 1.65;
+}
+
+/* Booking */
+
+.booking {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  border-top: 1px solid var(--salon-line);
+  background: var(--salon-paper-deep);
+}
+
+.bookingGrid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.bookingCopy h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.03;
+}
+
+.contact {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 2rem;
+}
+
+.contact div {
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--salon-line);
+}
+
+.contact dt {
+  color: var(--salon-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.contact dd {
+  margin: 0.2rem 0 0;
+}
+
+.contact a {
+  color: var(--salon-blood);
+  text-underline-offset: 0.2em;
+}
+
+.formPanel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--salon-ink);
+  background: var(--salon-paper);
+}
+
+.formPanel :global(.button) {
+  border-radius: 0;
+  background: var(--salon-blood);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.formPanel :global(.button:hover) {
+  transform: none;
+  background: var(--salon-ink);
+}
+
+@media (max-width: 900px) {
+  .heroGrid,
+  .roomGrid,
+  .proofInner,
+  .faqGrid,
+  .bookingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroSide {
+    max-width: 32rem;
+  }
+
+  .rating {
+    padding-left: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid #4a3f36;
+    border-left: 0;
+  }
+
+  .menuRow {
+    grid-template-columns: 2.5rem 1fr;
+  }
+
+  .menuLink {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .menuDuration {
+    margin-left: 0;
+  }
+}

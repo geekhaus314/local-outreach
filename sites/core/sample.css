@@ -39,9 +39,10 @@
   color: var(--c-bad);
   background: var(--c-sample-bg);
   border: 1px dashed var(--c-sample-line);
-  border-radius: var(--r-pill);
+  border-radius: var(--r-sm);
   padding: 0.25em 0.7em;
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
 }
 
 /* The marker is injected as real DOM by site.js and placed in normal flow --
@@ -66,10 +67,5 @@
 /* Placeholder body copy for paragraphs that exist only to show the layout. */
 .ghosted {
   color: var(--c-muted);
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent 0 6px,
-    color-mix(in srgb, var(--c-muted) 14%, transparent) 6px 8px
-  );
-  border-radius: 3px;
+  border-radius: var(--r-sm);
 }

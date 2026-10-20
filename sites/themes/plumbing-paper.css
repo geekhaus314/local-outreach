@@ -1,0 +1,49 @@
+/* Plumbing, paper direction.
+ *
+ * The dark hi-vis preset is right for an emergency call at 9pm. This one is for
+ * a shop that wants to look established rather than urgent: warm paper, ink,
+ * one oxide accent, a serif display face. It is a token preset only; the page
+ * that uses it owns its layout in a page stylesheet.
+ *
+ * No gradients, no shadows, no glow. Square corners. If a value here starts
+ * looking like a SaaS landing page, it is wrong for this preset.
+ */
+
+:root {
+  --c-bg: #f3eee4;
+  --c-bg-2: #eae2d4;
+  --c-surface: #ece5d8;
+  --c-surface-2: #e3dacb;
+  --c-line: #c9bfae;
+
+  --c-text: #17130f;
+  --c-muted: #5f574c;
+
+  --c-accent: #b23a1f;
+  --c-accent-ink: #f3eee4;
+  --c-accent-2: #224a46;
+
+  --c-good: #2f6b46;
+  --c-bad: #a33222;
+
+  --r-sm: 0px;
+  --r-md: 0px;
+  --r-lg: 0px;
+  --r-pill: 0px;
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --t-3xl: clamp(2.7rem, 1.1rem + 4.4vw, 5rem);
+  --t-2xl: clamp(1.9rem, 1.4rem + 2.2vw, 3.2rem);
+  --tracking-tight: -0.03em;
+  --leading-tight: 0.98;
+
+  --wrap: 1180px;
+  --header-h: 76px;
+
+  --hero-wash: 0;
+  --motion-intensity: 0;
+}

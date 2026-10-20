@@ -81,7 +81,7 @@ Concrete and checkable, in rough order of how much they cost a business:
 - parked / for-sale / "coming soon" placeholder detection
 - HTTPS, and whether a secure connection ends up back on `http://`
 - mobile viewport tag
-- contact paths: `tel:`, `mailto:`, `<form>`
+- contact paths: `tel:`, `mailto:`, `<form>`, and published email addresses
 - online booking / scheduling (and the absence of it)
 - page title, meta description, Open Graph
 - CMS and version age (WordPress EOL detection)
@@ -211,6 +211,7 @@ details):
 | Column | Meaning |
 |---|---|
 | `Classification` | Which bucket |
+| `Email` | Address the business published on its own site; blank if none |
 | `Opportunity Score` | 0-100, primary sort key |
 | `Need Score` / `Value Score` | The two components |
 | `Site Health` | 0-100 from the audit, blank if no site |
@@ -221,7 +222,11 @@ details):
 
 `leads_dashboard.md` -- the outreach queue. Every lead is in one of five states,
 carrying the measured fact the message hangs on, the channel, the copy, what to
-say if they reply, and an explicit list of what not to say. A costed time budget
+say if they reply, and an explicit list of what not to say. Email is preferred
+over text when the site published an address, because a cold email does not
+interrupt the way a cold call does; the address is only ever one the business
+put on its own site (`mailto:`, visible text, or a spelled-out
+`info [at] domain [dot] com`), never guessed or bought. A costed time budget
 sits at the top, and a drop list exists so nobody re-derives the same conclusion
 next week.
 
@@ -295,83 +300,11 @@ evidence, that is the legitimate way to get it.
 
 ---
 
-## The mock-ups (`sites/`)
+## Archived design kit (`sites/`)
 
-A lead is only worth something once the prospect can see what you mean. `sites/`
-is the design kit for showing them: one token system, five presets, and a page
-per business built from a config rather than hand-edited.
-
-```
-sites/
-  core/
-    tokens.css        design tokens: colour, fluid type, space, motion
-    site.css          layout + components, every value a token
-    sample.css        the invented-content guard (see below)
-    site.js           runtime: config, theme, motion, reveal, mock-up seal
-    estimator.js      the project estimator (studio pages only)
-  themes/
-    plumbing.css  roofing.css  hvac.css  photography.css  studio.css
-  st-charles-plumbing/   a client mock-up
-  site-rehab-stl/        historical migration reference; not deployed
-  check-mockup.mjs       the guard
-```
-
-Check every page with:
-
-```
-node sites/check-mockup.mjs
-```
-
-### Mock-up notice
-
-**These are design mock-ups, not live websites.** Everything below the demo bar
-performs, and none of it works. Nothing on a mock-up sends, saves, stores or
-measures anything, and the contact form is a performance of a form rather than a
-form — there is no endpoint, no `fetch` and no storage anywhere in `sites/`.
-
-Anything marked `sample` is placeholder copy chosen to show the layout. It is not
-a claim about the business in question. Before showing one to anyone, read
-`core/sample.css`: the reason the distinction is enforced rather than trusted is
-that a prospect cannot tell which numbers are real and which were filler, and
-will not ask, because asking means admitting he does not know his own service
-area.
-
-`st-charles-plumbing` uses real public details for a real business. The
-observation in its hero — that the domain serves a different company's blog — is
-measured, not staged. Everything in its `sample:` block is invented.
-
-### Two kinds of page
-
-`check-mockup.mjs` holds the two kinds to opposite rules, and a page declares
-which it is with `kind:` in its config.
-
-**`kind: 'mockup'`** — a pitch artifact for someone else's business. Carries
-`noindex` so it can never surface in a search for a real business, a fixed demo
-bar, a `facts`/`sample` split, and no external origins.
-
-**`kind: 'studio'`** — the old static public-site snapshot. The canonical
-public site is now the Next.js application in the separate `site-rehab-stl`
-repository. This snapshot remains for migration reference only and is no longer
-built or deployed from this repository.
-
-`node sites/build-all.mjs` builds only the mock-up host into `dist/mockups/`.
-The studio Pages project is built and deployed separately; see the README in
-the `site-rehab-stl` repository. The standalone builder refuses to build the
-historical studio snapshot so it cannot accidentally replace the canonical
-site with stale content.
-
-### The estimator
-
-`core/estimator.js` is the estimator from the historical static studio site.
-Four questions produce a scope, a price band and a duration; the canonical
-Next.js studio site maintains its own client-side version.
-
-It is allowed to quote a price, because a price can be defended. It is not
-allowed to quote the visitor's revenue, traffic or conversions, because those
-cannot be measured from the outside and every version of them is invented — the
-same refusal `parse_leads.py` makes about estimating lost calls. `check-mockup.mjs`
-pins that: it strips the comments and string literals out of the estimator and
-fails the build if a revenue-shaped identifier ever holds a value.
+The legacy static design kit and its checks are documented in `sites/README.md`.
+It is kept for migration reference only; nothing in `sites/` is built or deployed, and the
+production app is in `web/`.
 
 ---
 
@@ -390,7 +323,7 @@ scraper/
     base.py              RawLead model
     google_places.py     primary source
     overpass.py          free fallback
-sites/                   the mock-up kit -> see above
+sites/                   archived design kit (see sites/README.md)
 run_scraper.py           CLI
 parse_leads.py           leads.csv -> leads_dashboard.md
 tests/test_scraper.py    81 tests, no network

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract local business preview</title>
+  <desc id="desc">Layered charcoal, cream, and gold arcs with a subtle grid.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0a"/>
+      <stop offset="0.55" stop-color="#1a1a1a"/>
+      <stop offset="1" stop-color="#2b2419"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#f2dfa0"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8a6a1f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.7" cy="0.28" r="0.6">
+      <stop offset="0" stop-color="#f5f1e8" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#f5f1e8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#f5f1e8" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1400" fill="url(#bg)"/>
+  <rect width="1200" height="1400" fill="url(#grid)"/>
+  <rect width="1200" height="1400" fill="url(#glow)"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round">
+    <path d="M180 1160C180 700 390 390 760 250" stroke-width="2" opacity="0.9"/>
+    <path d="M250 1200C250 790 430 500 780 340" stroke-width="1.2" opacity="0.55"/>
+    <path d="M320 1240C320 860 480 610 800 430" stroke-width="1" opacity="0.35"/>
+  </g>
+  <g fill="url(#gold)">
+    <circle cx="760" cy="250" r="7"/>
+    <circle cx="780" cy="340" r="4" opacity="0.7"/>
+    <circle cx="800" cy="430" r="3" opacity="0.5"/>
+  </g>
+  <path d="M0 1040C250 940 420 980 610 1120C790 1250 990 1290 1200 1210V1400H0Z" fill="#f5f1e8" opacity="0.07"/>
+</svg>

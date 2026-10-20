@@ -1,0 +1,31 @@
+{
+  "hostnames": ["royal-kutz.preview.localhost", "royal-kutz.localhost"],
+  "prospect": {
+    "name": "Royal Kutz Salon, Barber & Spa",
+    "industry": "Hair Salon",
+    "phone": "(636) 294-4856",
+    "address": "23 Ofallon Square, O'Fallon, MO 63366",
+    "website": "https://royalkutz.zenoti.com/webstoreNew/services",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.8,
+    "review_count": 181,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for royalkutz.zenoti.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "zenoti.com does not load at all.",
+      "4.8-star rating across 181 Google reviews."
+    ],
+    "sources": ["gmaps"],
+    "source_ids": "ChIJ0dOYbZTQ3ocR8kUXVp5RX7Q",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "2026-10-06",
+    "persona": ""
+  }
+}

@@ -35,6 +35,7 @@
   // trade is one small file, not a new branch.
   const THEME_FILES = {
     plumbing: '../themes/plumbing.css',
+    'plumbing-paper': '../themes/plumbing-paper.css',
     roofing: '../themes/roofing.css',
     photography: '../themes/photography.css',
     hvac: '../themes/hvac.css',
@@ -396,6 +397,13 @@
         <span class="ruled-row__n">${String(i + 1).padStart(2, '0')}</span>
         <h3 class="ruled-row__title">${esc(svc.title)}</h3>
         <p class="ruled-row__body">${esc(svc.blurb)}</p>
+      </div>`);
+
+    buildList('[data-sample="steps"]', s.steps, (step, i) => `
+      <div class="step-paper">
+        <span class="step-paper__n">${String(i + 1).padStart(2, '0')}</span>
+        <h3>${esc(step.title)}</h3>
+        <p>${esc(step.body)}</p>
       </div>`);
 
     buildList('[data-sample="areas"]', s.serviceArea, (area, i) => `

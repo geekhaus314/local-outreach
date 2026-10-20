@@ -1,0 +1,621 @@
+/*
+ * Restaurant package theme: a printed bill of fare. Warm paper, deep green,
+ * brick red and a single mustard rule. Package-local tokens so the shared theme
+ * list stays untouched.
+ */
+
+.page {
+  --r-green: #1e3a2f;
+  --r-green-soft: #2c5042;
+  --r-cream: #f3ead8;
+  --r-paper: #fbf6ea;
+  --r-brick: #a63c2c;
+  --r-gold: #d9a441;
+  --r-line: #d7c8ad;
+  --r-muted: #6a5f4c;
+  --r-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  background: var(--r-paper);
+  color: var(--r-green);
+}
+
+.page h1,
+.page h2,
+.page h3 {
+  font-family: var(--r-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 1.1rem;
+  color: var(--r-brick);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 1.6rem;
+  height: 2px;
+  background: var(--r-gold);
+  content: '';
+}
+
+/* Hero */
+
+.hero {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 2px solid var(--r-green);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.hero h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.8rem, 6.5vw, 5.4rem);
+  line-height: 0.98;
+}
+
+.subhead {
+  max-width: 38rem;
+  margin-top: 1.5rem;
+  color: var(--r-muted);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.35rem;
+  border: 1px solid var(--r-green);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.primary {
+  background: var(--r-green);
+  color: var(--r-cream);
+}
+
+.primary:hover {
+  background: var(--r-brick);
+  border-color: var(--r-brick);
+}
+
+.secondary {
+  color: var(--r-green);
+}
+
+.secondary:hover {
+  background: var(--r-cream);
+}
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  color: var(--r-muted);
+  font-size: 0.82rem;
+  list-style: none;
+}
+
+.trust li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trust li::before {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--r-gold);
+  content: '';
+}
+
+.visitCard {
+  border: 1px solid var(--r-green);
+  background: var(--r-cream);
+}
+
+.heroFigure {
+  margin: 0;
+  border-bottom: 1px solid var(--r-green);
+}
+
+.heroFigure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.visitBody {
+  padding: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+
+.cardLabel {
+  margin: 0 0 0.5rem;
+  color: var(--r-brick);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.visitLine {
+  margin: 0 0 1rem;
+  font-family: var(--r-serif);
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.visitList {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.visitList div {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.6rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--r-line);
+}
+
+.visitList dt {
+  color: var(--r-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.visitList dd {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.visitCall {
+  display: inline-block;
+  margin-top: 1.1rem;
+  color: var(--r-brick);
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+
+/* Bill of fare */
+
+.menu {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+.sectionHead {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 46rem;
+}
+
+.sectionHead h2 {
+  max-width: 16ch;
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.3rem);
+  line-height: 1.03;
+}
+
+.sectionHead p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--r-muted);
+  line-height: 1.65;
+}
+
+.bill {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(2rem, 5vw, 4rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-top: 2px solid var(--r-green);
+}
+
+.billItem {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--r-line);
+}
+
+.billNumber {
+  padding-top: 0.25rem;
+  color: var(--r-gold);
+  font-family: var(--r-serif);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.billTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
+.billTitle h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+}
+
+.billTitle h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.billTitle h3 a:hover {
+  color: var(--r-brick);
+}
+
+.leader {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--r-line);
+  transform: translateY(-0.25rem);
+}
+
+.billMeta {
+  color: var(--r-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.billBody > p {
+  margin: 0.55rem 0 0;
+  color: var(--r-muted);
+  line-height: 1.6;
+}
+
+.billFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  font-size: 0.8rem;
+  list-style: none;
+}
+
+.billFeatures li::before {
+  margin-right: 0.35rem;
+  color: var(--r-brick);
+  content: '•';
+}
+
+.billLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--r-brick);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-underline-offset: 0.2em;
+  text-transform: uppercase;
+}
+
+.empty {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--r-line);
+  background: var(--r-cream);
+}
+
+/* Process */
+
+.process {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+  background: var(--r-green);
+  color: var(--r-cream);
+}
+
+.process .eyebrow {
+  color: var(--r-gold);
+}
+
+.process h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.04;
+}
+
+.note {
+  max-width: 36rem;
+  margin-top: 1rem;
+  color: var(--r-muted);
+  line-height: 1.65;
+}
+
+.process .note {
+  color: #cfc3ae;
+}
+
+.note a {
+  color: var(--r-gold);
+  text-underline-offset: 0.2em;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.steps {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1.1rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--r-green-soft);
+}
+
+.steps li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.stepNumber {
+  color: var(--r-gold);
+  font-family: var(--r-serif);
+  font-size: 1.05rem;
+}
+
+.steps h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.steps p {
+  margin: 0.4rem 0 0;
+  color: #cfc3ae;
+  line-height: 1.6;
+}
+
+/* Proof */
+
+.proof {
+  padding-block: clamp(2.75rem, 5vw, 4.5rem);
+  border-block: 2px solid var(--r-green);
+  background: var(--r-cream);
+}
+
+.proofInner {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.proofLabel {
+  margin: 0 0 0.6rem;
+  color: var(--r-brick);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.proof h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  line-height: 1.06;
+}
+
+.proof p {
+  max-width: 34rem;
+  margin: 0.85rem 0 0;
+  color: var(--r-muted);
+  line-height: 1.65;
+}
+
+.rating {
+  display: grid;
+  justify-items: start;
+  gap: 0.3rem;
+  padding-left: clamp(0rem, 3vw, 3rem);
+  border-left: 1px solid var(--r-line);
+}
+
+.rating strong {
+  font-family: var(--r-serif);
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.rating span {
+  color: var(--r-gold);
+  letter-spacing: 0.2em;
+}
+
+.rating small {
+  color: var(--r-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* FAQ */
+
+.faq {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.faq h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.04;
+}
+
+.faqList {
+  border-top: 2px solid var(--r-green);
+}
+
+.faqList details {
+  border-bottom: 1px solid var(--r-line);
+}
+
+.faqList summary {
+  padding-block: 1.05rem;
+  cursor: pointer;
+  font-family: var(--r-serif);
+  font-size: 1.12rem;
+}
+
+.faqList summary::marker {
+  color: var(--r-brick);
+}
+
+.faqList p {
+  max-width: 44rem;
+  margin: 0 0 1.2rem;
+  color: var(--r-muted);
+  line-height: 1.65;
+}
+
+/* Booking */
+
+.booking {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+  border-top: 2px solid var(--r-green);
+  background: var(--r-cream);
+}
+
+.bookingGrid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.booking h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.04;
+}
+
+.contact {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+
+.contact div {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--r-line);
+}
+
+.contact dt {
+  color: var(--r-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.contact dd {
+  margin: 0.2rem 0 0;
+}
+
+.contact a {
+  color: var(--r-brick);
+  text-underline-offset: 0.2em;
+}
+
+.formPanel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--r-green);
+  background: var(--r-paper);
+}
+
+.formPanel :global(.button) {
+  border-radius: 0;
+  background: var(--r-green);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.formPanel :global(.button:hover) {
+  transform: none;
+  background: var(--r-brick);
+}
+
+@media (max-width: 960px) {
+  .heroGrid,
+  .processGrid,
+  .proofInner,
+  .faqGrid,
+  .bookingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .visitCard {
+    max-width: 34rem;
+  }
+
+  .bill {
+    grid-template-columns: 1fr;
+  }
+
+  .rating {
+    padding-left: 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--r-line);
+    border-left: 0;
+  }
+}

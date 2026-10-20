@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Abstract diagram of a vehicle chassis and diagnostic lines">
+  <defs>
+    <linearGradient id="autoSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10141b"/>
+      <stop offset="1" stop-color="#1c232e"/>
+    </linearGradient>
+    <linearGradient id="autoRoad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3442"/>
+      <stop offset="1" stop-color="#141a22"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" fill="url(#autoSky)"/>
+  <g opacity="0.16" stroke="#f2a53c" stroke-width="1">
+    <path d="M0 540 L1200 540 M0 600 L1200 600 M0 660 L1200 660"/>
+    <path d="M600 540 L240 720 M600 540 L960 720"/>
+  </g>
+  <path d="M0 560 L600 470 L1200 560 L1200 720 L0 720 Z" fill="url(#autoRoad)"/>
+  <g stroke="#f2a53c" stroke-width="6" fill="none" opacity="0.9">
+    <path d="M150 470 L300 470 L380 360 L820 360 L900 470 L1050 470"/>
+    <circle cx="380" cy="470" r="58" fill="#1c232e"/>
+    <circle cx="820" cy="470" r="58" fill="#1c232e"/>
+  </g>
+  <g stroke="#5f6b7c" stroke-width="3" fill="none" opacity="0.7">
+    <circle cx="380" cy="470" r="24"/>
+    <circle cx="820" cy="470" r="24"/>
+    <path d="M470 360 L470 300 M600 360 L600 280 M730 360 L730 300"/>
+  </g>
+  <g fill="#f2a53c">
+    <rect x="470" y="288" width="120" height="10" rx="5"/>
+    <rect x="530" y="268" width="120" height="10" rx="5" opacity="0.6"/>
+  </g>
+  <g stroke="#3b4553" stroke-width="4">
+    <path d="M60 140 L300 140 M60 140 L60 300"/>
+    <path d="M900 140 L1140 140 M1140 140 L1140 300"/>
+  </g>
+</svg>

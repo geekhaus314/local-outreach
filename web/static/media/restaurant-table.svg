@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Abstract place setting</title>
+  <rect width="800" height="600" fill="#f3ead8"/>
+  <circle cx="400" cy="300" r="170" fill="none" stroke="#1e3a2f" stroke-width="10"/>
+  <circle cx="400" cy="300" r="118" fill="none" stroke="#d9a441" stroke-width="6"/>
+  <rect x="150" y="140" width="8" height="320" fill="#1e3a2f"/>
+  <path d="M134 140v86c0 14 10 24 20 24s20-10 20-24v-86" fill="none" stroke="#1e3a2f" stroke-width="8"/>
+  <rect x="642" y="150" width="10" height="310" fill="#a63c2c"/>
+  <path d="M668 150c26 0 42 22 42 54s-16 54-42 54" fill="none" stroke="#a63c2c" stroke-width="8"/>
+  <circle cx="400" cy="300" r="10" fill="#a63c2c"/>
+</svg>

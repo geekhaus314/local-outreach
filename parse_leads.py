@@ -79,6 +79,7 @@ DEAD_SITE_PROOF = "Write up: pwn4g3.pages.dev/blog/rescued-dead-client-site-one-
 # Cold SMS to a business number is legal in Missouri, but the recipient has to be
 # able to stop it. Appending this costs nothing and removes the question.
 OPTOUT = "Reply STOP and I won't text again."
+EMAIL_OPTOUT = "If this isn't useful, reply 'unsubscribe' and I won't follow up."
 
 # --------------------------------------------------------------------------- #
 # Trade vocabulary
@@ -265,6 +266,7 @@ class Lead:
         self.industry = industry_from_name(self.name, self.claimed_industry)
         self.trade_mismatch = self.industry != self.claimed_industry
         self.phone = get(row, "Phone")
+        self.email = get(row, "Email")
         self.address = get(row, "Address")
         self.website = get(row, "Website")
         self.cls = get(row, "Classification")
@@ -366,7 +368,7 @@ class Lead:
                 ]
                 return
 
-        if not self.phone:
+        if not self.phone and not self.email:
             self.state = HOLD
             self.blockers = [
                 "no phone and no email anywhere in the record, and no website to "
@@ -453,7 +455,23 @@ def domain_flavour(domain: str) -> str:
 
 def signature(channel: str) -> str:
     base = f"-- {SENDER}, {SENDER_CITY} · {PORTFOLIO}"
-    return f"{base}\n{OPTOUT}" if channel == "text" else base
+    if channel == "text":
+        return f"{base}\n{OPTOUT}"
+    if channel == "email":
+        return f"{base}\n{EMAIL_OPTOUT}"
+    return base
+
+
+def email_subject(lead: Lead) -> str:
+    """A subject the recipient can match to their own site, not a sales hook."""
+    a = lead.audit
+    if a and a.serves_other_business:
+        return "Your web address is showing a different business"
+    if a and (a.redirected_domain or a.is_parked or not a.reachable):
+        return "Your website isn't loading"
+    if lead.state == EXPAND:
+        return f"One idea for {lead.name}'s site"
+    return f"Quick question about {lead.name}'s website"
 
 
 def check_step(lead: Lead) -> str:
@@ -740,6 +758,9 @@ def rechecks(leads: list[Lead]) -> None:
             continue
         audit.evidence.setdefault("body_text", "")
         lead.audit = audit
+        # An address published on the page is fresher than a row harvested last
+        # week, and it is only ever taken from markup the business published.
+        lead.email = lead.email or audit.evidence.get("email", "")
         lead.checked_today = True
 
 
@@ -906,11 +927,13 @@ def render_lead(idx: int, lead: Lead) -> str:
         out.append("")
 
     out.append("**Channel**")
+    if lead.email:
+        out.append(f"- Email: {lead.email}")
     if lead.phone:
         nums = [p.strip() for p in re.split(r"[;/]", lead.phone) if p.strip()]
         for n in nums:
             out.append(f"- Text or call: {n}")
-    else:
+    if not lead.email and not lead.phone:
         out.append("- None. This is why the lead is not sendable.")
     out.append(f"- {lead.website or 'no website on record'}")
     out.append(f"- Time: about {STATE_MINUTES[lead.state]} minutes")
@@ -930,18 +953,36 @@ def render_lead(idx: int, lead: Lead) -> str:
             out.append(f"- {note}")
         out.append("")
 
-    out.append("**Text message** -- copy this")
-    out.append("```text")
-    out.append(message(lead, "text"))
-    out.append("```")
-    out.append("")
-
-    if lead.phone:
-        out.append("**If they answer** -- read this instead of the text")
+    # Email first: it does not interrupt the way a cold call does, and an
+    # address here is one the business published on its own site. Text is the
+    # fallback when there is no mailbox.
+    if lead.email:
+        out.append("**Email** -- copy this")
+        out.append(f"- To: {lead.email}")
+        out.append(f"- Subject: {email_subject(lead)}")
         out.append("```text")
-        out.append(call_opener(lead))
+        out.append(message(lead, "email"))
         out.append("```")
         out.append("")
+        if lead.phone:
+            out.append("**If they reply with a number or call you** -- read this")
+            out.append("```text")
+            out.append(call_opener(lead))
+            out.append("```")
+            out.append("")
+    else:
+        out.append("**Text message** -- copy this")
+        out.append("```text")
+        out.append(message(lead, "text"))
+        out.append("```")
+        out.append("")
+
+        if lead.phone:
+            out.append("**If they answer** -- read this instead of the text")
+            out.append("```text")
+            out.append(call_opener(lead))
+            out.append("```")
+            out.append("")
 
     out.append("**Do not say**")
     for line in guardrails(lead):
@@ -1048,7 +1089,7 @@ def guardrails(lead: Lead) -> list[str]:
 
 # --------------------------------------------------------------------------- #
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--no-check", action="store_true",
                     help="trust the stored CSV facts instead of re-fetching sites")
     args = ap.parse_args()

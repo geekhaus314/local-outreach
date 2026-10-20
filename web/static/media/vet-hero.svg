@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Abstract paw print and care cross</title>
+  <rect width="800" height="600" fill="#e7efe7"/>
+  <circle cx="300" cy="330" r="118" fill="#2f5d57"/>
+  <ellipse cx="300" cy="370" rx="62" ry="50" fill="#e7efe7"/>
+  <circle cx="236" cy="264" r="26" fill="#e7efe7"/>
+  <circle cx="286" cy="238" r="26" fill="#e7efe7"/>
+  <circle cx="338" cy="246" r="26" fill="#e7efe7"/>
+  <circle cx="378" cy="286" r="24" fill="#e7efe7"/>
+  <rect x="548" y="190" width="56" height="196" fill="#d9c7a3"/>
+  <rect x="478" y="260" width="196" height="56" fill="#d9c7a3"/>
+  <circle cx="576" cy="440" r="88" fill="none" stroke="#2f5d57" stroke-width="10"/>
+  <circle cx="576" cy="440" r="54" fill="none" stroke="#2f5d57" stroke-width="6"/>
+</svg>

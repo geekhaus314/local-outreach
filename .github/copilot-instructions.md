@@ -33,7 +33,9 @@ queue stages:
    from `scraper/providers/base.py`.
 2. `scraper/dedupe.py` merges duplicate businesses across sources.
 3. `scraper/audit.py` fetches and measures business websites using the guarded
-   HTTP client in `scraper/http_client.py`.
+   HTTP client in `scraper/http_client.py`. It also records contact addresses
+   the page itself publishes via `scraper/contact.py`; a missing address is
+   left blank rather than guessed.
 4. `scraper/scoring.py` classifies and scores the measured leads;
    `scraper/pipeline.py` coordinates the stages and writes `leads.csv`.
 5. `parse_leads.py` revalidates available site evidence and renders the

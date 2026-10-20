@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "clinic-engine",
+  "compatibility_date": "2026-10-01",
+  "pages_build_output_dir": ".svelte-kit/cloudflare",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "local-outreach",
+      "database_id": "35ce94f3-eb11-4bde-93b7-012c54026538",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.field textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--color-focus);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 22%, transparent);
+}
+
+.consent {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.consent input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-accent);
+}
+
+.actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.privacy {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.privacy a {
+  color: var(--color-text);
+}
+
+.error {
+  grid-column: 1 / -1;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, #b91c1c 35%, var(--color-border));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #b91c1c 8%, var(--color-surface));
+  color: #991b1b;
+}
+
+.state {
+  display: grid;
+  gap: 0.8rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.state h3 {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.state p {
+  color: var(--color-text-muted);
+}
+
+.reset {
+  justify-self: start;
+}
+
+@media (max-width: 640px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}

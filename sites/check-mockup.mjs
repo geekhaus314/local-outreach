@@ -74,17 +74,17 @@ const hasNoindex = (html) => /<meta\b[^>]*\bnoindex\b/i.test(html);
 const hasDemobar = (html) => /class="[^"]*\bdemobar\b/.test(html);
 const hasAttr = (html, name) => new RegExp(`\\b${name}="`).test(html);
 
-function check(page, name, ok, detail = '', { warn = false } = {}) {
+function check(label, name, ok, detail = '', { warn = false } = {}) {
   if (ok) {
     if (!quiet) console.log(`  ${GRN}pass${OFF}  ${name}`);
     return;
   }
   if (warn) {
     warnings++;
-    console.log(`  ${YEL}warn${OFF}  ${name}${detail ? '  — ' + detail : ''}`);
+    console.log(`  ${YEL}warn${OFF}  ${label}: ${name}${detail ? '  — ' + detail : ''}`);
   } else {
     failures++;
-    console.log(`  ${RED}FAIL${OFF}  ${name}${detail ? '  — ' + detail : ''}`);
+    console.log(`  ${RED}FAIL${OFF}  ${label}: ${name}${detail ? '  — ' + detail : ''}`);
   }
 }
 
@@ -223,6 +223,20 @@ function auditMockup(label, html, cfg) {
   check(label, 'no trade buttons hardcoded in the markup',
     !inlinePicker,
     inlinePicker ? 'buttons are in the HTML, so they render whether or not they are wanted' : '');
+
+  // ---- the generated-page fingerprint ----------------------------------- //
+  // Emoji as icons and inline gradients/shadow/pill styles are the two things
+  // that most reliably make a page read as machine-assembled. The kit scan
+  // covers stylesheets; these catch the markup that did not go through one.
+  check(label, 'no emoji in markup',
+    !/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/u.test(html));
+  check(label, 'no emoji in config',
+    !/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/u.test(cfg));
+  check(label, 'no banned inline styles',
+    !/style="[^"]*(?:gradient|box-shadow|backdrop-filter|border-radius:\s*(?:999|9999))/i.test(html));
+  check(label, 'content is not hidden behind scroll-reveal',
+    !/style="[^"]*opacity:\s*0/i.test(html),
+    'a reader should not have to scroll to make the copy visible');
 }
 
 /* ------------------------------------------------------------------------- *
@@ -416,6 +430,55 @@ function runEstimatorScenarios(label, check) {
   return { allClear, hijacked, needsConversation };
 }
 
+/* ------------------------------------------------------------------------- *
+ * the kit: the shared CSS every mock-up inherits.
+ *
+ * A page can be clean while the stylesheet it wears still carries the
+ * generated-page fingerprint. Checking the kit once here is cheaper than
+ * repeating the rule for every page, and it catches a regression at the file
+ * that caused it. The bans are absolute, not warnings: gradients, shadows and
+ * pill radii have no legitimate use in this design language.
+ * ------------------------------------------------------------------------- */
+const BANNED_CSS = [
+  [/border-radius\s*:\s*(?:999|9999|100vmax)/i, 'no pill radius'],
+  [/(?:linear|radial|conic)-gradient/i, 'no gradients'],
+  [/box-shadow/i, 'no box-shadow'],
+  [/(?:backdrop-filter|drop-shadow)/i, 'no blur or drop-shadow'],
+];
+
+function cssIn(dir) {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.css'))
+    .map((f) => join(dir, f));
+}
+
+function auditKit() {
+  console.log(`\n${DIM}kit${OFF} ${DIM}(shared css)${OFF}`);
+  // Shared stylesheets are the enforcement point: they must be clean, because
+  // every page inherits them. A page that still carries the old language in its
+  // own stylesheet gets a warning rather than a failure, so this rule can land
+  // before every existing mock-up is migrated.
+  const shared = [
+    ...cssIn(join(SITES, 'core')),
+    ...cssIn(join(SITES, 'themes')),
+  ];
+  for (const file of shared) {
+    const css = readFileSync(file, 'utf8');
+    const label = `kit/${relative(SITES, file)}`;
+    for (const [re, what] of BANNED_CSS) check(label, what, !re.test(css));
+  }
+  for (const p of pageDirs()) {
+    for (const file of cssIn(p)) {
+      const css = readFileSync(file, 'utf8');
+      const label = `kit/${relative(SITES, file)}`;
+      for (const [re, what] of BANNED_CSS) {
+        check(label, what, !re.test(css), 'migrate to the paper language', { warn: true });
+      }
+    }
+  }
+}
+
 function auditPage(dir) {
   const html = readFileSync(join(dir, 'index.html'), 'utf8');
   const cfgPath = join(dir, 'site.config.js');
@@ -434,6 +497,7 @@ if (!pages.length) {
   process.exit(0);
 }
 console.log(`checking ${pages.length} page${pages.length === 1 ? '' : 's'}`);
+auditKit();
 pages.forEach(auditPage);
 
 console.log(

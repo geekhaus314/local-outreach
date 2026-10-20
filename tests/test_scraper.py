@@ -26,6 +26,7 @@ from scraper.http_client import normalize_url, registrable_domain
 from scraper.providers.base import RawLead
 from scraper.providers.overpass import _is_chain, _is_parked
 from scraper.scoring import (
+    CSV_HEADER,
     DEAD_SITE,
     HAS_SITE,
     MARKETPLACE,
@@ -408,6 +409,54 @@ def test_dead_domain_message_names_the_measured_fact():
     assert "Some Other Plumbing" in msg
 
 
+def test_published_email_is_a_channel_without_a_phone():
+    """The queue stopped calling every email-only lead unreachable."""
+    lead = _lead(Phone="", Email="info@example-plumbing.com",
+                 Website="", Classification="NO_PRESENCE")
+    lead.classify()
+    assert lead.state != "hold"
+    assert lead.email == "info@example-plumbing.com"
+
+
+def test_no_phone_and_no_email_still_holds():
+    lead = _lead(Phone="", Email="", Website="", Classification="NO_PRESENCE")
+    lead.classify()
+    assert lead.state == "hold"
+
+
+def test_website_email_becomes_the_channel_after_recheck():
+    from scraper.audit import AuditResult
+    audit = AuditResult(url="https://x.com", reachable=True, health=30,
+                        needs_rehab=True, title="X")
+    audit.evidence["email"] = "hello@x.com"
+    audit.findings.append(Finding(
+        "NO_CONTACT", "No way to make contact", 65, "no tel/mailto/form",
+        "There's no way to reach you from the site."))
+    lead = _lead(Phone="", Email="", Website="https://x.com",
+                 Classification="NEEDS_REHAB", audit=audit)
+    # rechecks() folds a freshly published address into the row before classify.
+    lead.email = lead.email or audit.evidence.get("email", "")
+    lead.classify()
+    assert lead.email == "hello@x.com"
+    assert lead.state != "hold"
+
+
+def test_email_copy_opts_out_and_does_not_use_the_sms_line():
+    from parse_leads import message
+    msg = message(_lead(Classification="NEEDS_REHAB", audit="contact",
+                        Email="info@x.com"), "email")
+    assert "unsubscribe" in msg.lower()
+    assert "Reply STOP" not in msg
+
+
+def test_render_prefers_email_when_the_lead_has_one():
+    from parse_leads import render_lead
+    out = render_lead(1, _lead(Classification="NEEDS_REHAB", audit="contact",
+                               Email="info@x.com", Phone="314-555-0100"))
+    assert "**Email** -- copy this" in out
+    assert "Subject:" in out
+
+
 def test_message_does_not_repeat_itself_as_an_evidence_list():
     """The old format restated the opener verbatim as a bullet list."""
     from parse_leads import message
@@ -562,6 +611,74 @@ def _mock_fetch(monkeypatch, html, status=200, final_url=None):
     monkeypatch.setattr(audit_mod, "fetch_page", lambda url: Page())
 
 
+def test_audit_records_an_address_the_page_publishes(monkeypatch):
+    """The queue can only email a lead if the site published an address."""
+    _mock_fetch(
+        monkeypatch,
+        "<html><head><title>Acme Plumbing</title></head><body>"
+        "<p>We fix leaks.</p>"
+        '<a href="mailto:Info@AcmePlumbing.com">Email us</a>'
+        "</body></html>",
+    )
+    r = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    assert r.evidence.get("email") == "info@acmeplumbing.com"
+
+
+def test_audit_does_not_invent_an_email(monkeypatch):
+    """No address on the page means no address, not a guessed one."""
+    _mock_fetch(
+        monkeypatch,
+        "<html><head><title>Acme Plumbing</title></head><body>"
+        "<p>Call 314-555-0100.</p></body></html>",
+    )
+    r = audit_url("https://acmeplumbing.com/", "Acme Plumbing")
+    assert "email" not in r.evidence
+    assert "emails" not in r.evidence
+
+
+def test_scored_lead_carries_the_published_email_into_the_csv():
+    a = AuditResult(url="https://x.com", reachable=True, health=40,
+                    needs_rehab=True, title="X Plumbing")
+    a.evidence["email"] = "info@x.com"
+    s = score_lead(lead(website="https://x.com"), a, "2026-10-19")
+    assert s.email == "info@x.com"
+    assert dict(zip(CSV_HEADER, s.to_csv_row()))["Email"] == "info@x.com"
+
+
+def test_viewport_without_width_is_not_called_a_missing_tag(monkeypatch):
+    """Duda emits a viewport tag without width; the old copy denied it existed."""
+    _mock_fetch(
+        monkeypatch,
+        "<html><head><title>Buckingham Pest Control</title>"
+        '<meta id="view" name="viewport" content="initial-scale=1, '
+        'minimum-scale=1, maximum-scale=5">'
+        "</head><body>" + "<p>Pest control in St. Charles.</p>" * 100 +
+        "</body></html>",
+    )
+    r = audit_url("https://buckinghampestcontrol.com/", "Buckingham Pest Control")
+    assert r.evidence["has_viewport"] is False
+    finding = next(f for f in r.findings if f.code == "NO_MOBILE")
+    assert "No <meta" not in finding.detail
+    assert "width=device-width" in finding.detail
+
+
+def test_linked_schedule_page_is_not_reported_as_no_booking(monkeypatch):
+    """A phone-first homepage with a booking link is not a site that cannot book."""
+    _mock_fetch(
+        monkeypatch,
+        "<html><head><title>Buckingham Pest Control</title>"
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        "</head><body>"
+        '<a href="tel:6362747400">Call us (636) 274-7400</a>'
+        '<a href="/schedule-now">Schedule Your Appointment Today!</a>'
+        + "<p>Pest control in St. Charles.</p>" * 100 +
+        "</body></html>",
+    )
+    r = audit_url("https://buckinghampestcontrol.com/", "Buckingham Pest Control")
+    assert r.evidence["has_online_booking"] is True
+    assert not any(f.code == "NO_BOOKING" for f in r.findings)
+
+
 def test_meta_description_with_spaces_is_not_truncated(monkeypatch):
     """A 149-character description used to parse as 4 characters.
 
@@ -689,7 +806,7 @@ def _scored(
     """
     from scraper.scoring import ScoredLead
     return ScoredLead(
-        name=name, industry=industry, phone="314-555-0199",
+        name=name, industry=industry, phone="314-555-0199", email="",
         address="100 Main St", website=website, traffic_tier="low",
         decision_maker="Owner", classification=classification, opportunity=70,
         need_score=70, value_score=70, site_health=site_health, rating=rating,

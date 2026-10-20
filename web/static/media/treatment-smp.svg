@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Scalp micropigmentation illustration</title>
+  <desc id="desc">A fine grid of gold follicle dots fading across a charcoal field.</desc>
+  <defs>
+    <radialGradient id="fade" cx="0.65" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#d4af37" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#d4af37" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#d4af37" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2.1" fill="url(#fade)"/>
+      <circle cx="15" cy="13" r="1.5" fill="url(#fade)"/>
+      <circle cx="9" cy="19" r="1.1" fill="url(#fade)"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <rect width="800" height="600" fill="url(#dots)"/>
+  <circle cx="600" cy="180" r="190" fill="none" stroke="#d4af37" stroke-width="1.2" opacity="0.5"/>
+  <circle cx="600" cy="180" r="130" fill="none" stroke="#d4af37" stroke-width="0.8" opacity="0.35"/>
+  <path d="M0 500C150 430 300 450 440 520C580 590 710 580 800 520V600H0Z" fill="#f5f1e8" opacity="0.06"/>
+</svg>

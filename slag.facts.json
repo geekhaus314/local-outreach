@@ -1,0 +1,163 @@
+{
+  "$schema": "./slag.facts.schema.json",
+  "version": 1,
+  "generatedAt": "2026-10-20T05:35:54.475Z",
+  "facts": [
+    {
+      "id": "delivery.mode",
+      "question": "Is this production software or a prototype/mockup? What quality bar applies? Answer \"production\" or \"prototype\".",
+      "value": "production",
+      "status": "confirmed",
+      "source": "--mode flag",
+      "required": true,
+      "evidence": [],
+      "notes": "Production means mock data, placeholders, dead controls and unconfirmed facts fail the gate. Prototype relaxes presentation rules but never security."
+    },
+    {
+      "id": "scope.core",
+      "question": "List the core user actions that must work end-to-end. Each one needs a real path through UI, server and storage.",
+      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "Example: \"user signs up, creates a project, invites a teammate, and sees it after reload\"."
+    },
+    {
+      "id": "scope.out",
+      "question": "What is explicitly out of scope for this build?",
+      "value": "No hosted SaaS. Non-hair niches do not get custom domains, only preview subdomains. No fake testimonials, invented prices, or client-side secrets.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": false,
+      "evidence": [],
+      "notes": "Out-of-scope items must not appear in the README as implemented features."
+    },
+    {
+      "id": "stack.frontend",
+      "question": "Which frontend framework, version, router, styling system and component library?",
+      "value": "SvelteKit 2.21.4 with Svelte 5.33.14, file-based routing, TypeScript, CSS modules plus global CSS custom-property themes; no component library.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "Do not assume a stack from the template. Confirm the exact packages and versions."
+    },
+    {
+      "id": "stack.backend",
+      "question": "Which backend/API runtime and hosting model? Use \"none\" only for a genuinely static site.",
+      "value": "SvelteKit server routes deployed to Cloudflare Pages/Workers through @sveltejs/adapter-cloudflare 7.2.9. Booking requests are proxied server-side to a webhook.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "Confirm where server code runs before creating API routes or server actions."
+    },
+    {
+      "id": "stack.database",
+      "question": "Which database, ORM/query layer and migration strategy? Use \"none\" if nothing must persist.",
+      "value": "Cloudflare D1 (SQLite) accessed through Worker bindings, with SQL migrations under web/migrations. No ORM. R2 stores raw scrape artifacts and generated assets.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "A database dependency without a schema or migrations is an unfinished data layer."
+    },
+    {
+      "id": "data.entities",
+      "question": "List the entities, their fields, relationships, and who may access each one.",
+      "value": "Business/Prospect (name, industry, locations, contact, source, raw facts), Audit (website findings, scores, evidence), Pitch (generated message, status, target), Mockup (template, theme, content version, preview host), BookingRequest (name, email, optional phone, service, message, consent), and JobRun (queue/cron status, retries, errors). Admin access is restricted; public preview and booking paths are unauthenticated.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": false,
+      "evidence": [],
+      "notes": "Each entity must have a real schema/model, not only a TypeScript interface."
+    },
+    {
+      "id": "auth.model",
+      "question": "Who signs in, how are sessions verified server-side, and what roles exist? Use \"none\" for a public app.",
+      "value": "No sign-in for public preview sites or booking. The internal pipeline dashboard and admin API are protected by Cloudflare Access; identity is verified at the edge before requests reach the Worker.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "Client-side user flags, localStorage tokens and literal password checks are not auth."
+    },
+    {
+      "id": "payments",
+      "question": "Which payment or billing provider is required? Use \"none\" if not needed.",
+      "value": null,
+      "status": "unknown",
+      "source": null,
+      "required": false,
+      "evidence": [],
+      "notes": "Name the provider and the flow (checkout, subscription, webhook)."
+    },
+    {
+      "id": "integrations",
+      "question": "Which third-party services are required, and which credentials do they need? Use \"none\" if none.",
+      "value": "Cloudflare D1, R2, Queues, Cron Triggers, and Access. Booking webhook via server-only BOOKING_WEBHOOK_URL, BOOKING_API_KEY, and BOOKING_FROM_EMAIL.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": false,
+      "evidence": [],
+      "notes": "List only integrations that must actually work in this build."
+    },
+    {
+      "id": "deployment",
+      "question": "What is the deployment target, and which environments must work (local, preview, production)?",
+      "value": "Cloudflare Workers/Pages through @sveltejs/adapter-cloudflare for the SvelteKit app, plus D1, R2, Queues, and Cron Triggers. Local dev, preview subdomains, and production must work. Custom domains are reserved for the hair niche; other industries use preview hostnames.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "The build must be runnable on the stated target, not only on the agent machine."
+    },
+    {
+      "id": "quality.acceptance",
+      "question": "What is the definition of done per core action, including tests, error/empty/loading states, and accessibility?",
+      "value": "npm run check reports zero errors and warnings; npm test passes; npm run build passes; D1 migrations apply cleanly; live smoke tests cover host routing, theme/template selection, service pages, unknown-host 404, and booking 503 when the webhook is unbound. Booking has loading, success, validation-error, and unavailable states. Queue jobs are idempotent and surface failures. No dead controls.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [
+        "**/*.test.*",
+        "**/*.spec.*",
+        "**/tests/**",
+        "**/e2e/**",
+        "**/__tests__/**"
+      ],
+      "notes": "If there are no tests, this fact cannot be proven."
+    },
+    {
+      "id": "data.seed",
+      "question": "Should demo/seed data exist? If yes, should it ever appear in production? How is real data loaded?",
+      "value": null,
+      "status": "unknown",
+      "source": null,
+      "required": false,
+      "evidence": [],
+      "notes": "Saying yes to seed data does not make mock data a production data source."
+    },
+    {
+      "id": "design.direction",
+      "question": "What brand, references, real copy and real assets should be used? Or has the user explicitly delegated visual direction?",
+      "value": "A rolodex of distinct, industry-specific templates that look and run like production-ready local-business sites, not one themed page reused everywhere and not AI-slop mockups. Use real scraped business data and honest proof; do not imply a business offers services it does not.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": false,
+      "evidence": [],
+      "notes": "Delegated design still needs real content and functional behavior."
+    },
+    {
+      "id": "nonfunctional",
+      "question": "Expected scale, latency, accessibility, compliance and browser support requirements?",
+      "value": null,
+      "status": "unknown",
+      "source": null,
+      "required": false,
+      "evidence": [],
+      "notes": "Only list constraints that change implementation decisions."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Abstract takeaway bag</title>
+  <rect width="800" height="600" fill="#f3ead8"/>
+  <path d="M260 230h280l30 270H230z" fill="#1e3a2f"/>
+  <path d="M330 230c0-52 30-88 70-88s70 36 70 88" fill="none" stroke="#a63c2c" stroke-width="12"/>
+  <rect x="300" y="320" width="200" height="10" fill="#d9a441"/>
+  <rect x="300" y="360" width="128" height="8" fill="#f3ead8"/>
+  <rect x="300" y="390" width="160" height="8" fill="#f3ead8"/>
+</svg>

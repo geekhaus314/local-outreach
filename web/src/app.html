@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="%slag.theme%">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="%slag.themeColor%" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+    <script>
+      (function () {
+        try {
+          var names = ['clinical-trust', 'premium-luxury', 'modern-wellness'];
+          var colors = {
+            'clinical-trust': '#0f172a',
+            'premium-luxury': '#0a0a0a',
+            'modern-wellness': '#2f4f4f'
+          };
+          var stored = window.localStorage.getItem('slag.theme');
+          var match = document.cookie.match(/(?:^|; )slag-theme=([^;]+)/);
+          var cookie = match ? decodeURIComponent(match[1]) : null;
+          var theme = names.indexOf(stored) >= 0 ? stored : names.indexOf(cookie) >= 0 ? cookie : null;
+          if (theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', colors[theme]);
+          }
+        } catch (error) {
+          if (window.console) window.console.debug('Theme bootstrap skipped', error);
+        }
+      })();
+    </script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>

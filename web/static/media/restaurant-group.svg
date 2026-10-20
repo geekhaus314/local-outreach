@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title">
+  <title id="title">Abstract long table set for a group</title>
+  <rect width="800" height="600" fill="#f3ead8"/>
+  <rect x="110" y="300" width="580" height="18" fill="#a63c2c"/>
+  <rect x="150" y="318" width="16" height="170" fill="#1e3a2f"/>
+  <rect x="634" y="318" width="16" height="170" fill="#1e3a2f"/>
+  <g fill="#1e3a2f">
+    <rect x="160" y="140" width="52" height="110" rx="8"/>
+    <rect x="300" y="140" width="52" height="110" rx="8"/>
+    <rect x="448" y="140" width="52" height="110" rx="8"/>
+    <rect x="596" y="140" width="52" height="110" rx="8"/>
+  </g>
+  <g fill="#d9a441">
+    <circle cx="280" cy="270" r="22"/>
+    <circle cx="420" cy="270" r="22"/>
+    <circle cx="560" cy="270" r="22"/>
+  </g>
+</svg>

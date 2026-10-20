@@ -1,0 +1,392 @@
+.page {
+  overflow: hidden;
+}
+
+.hero {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.heroCard {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 0.55fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-border);
+  box-shadow: var(--shadow-card);
+}
+
+.heroCopy,
+.heroImage,
+.heroAside {
+  background: var(--color-surface);
+}
+
+.heroCopy {
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.heroCopy h1 {
+  max-width: 14ch;
+  font-size: clamp(2.3rem, 5vw, 4.2rem);
+  letter-spacing: -0.04em;
+}
+
+.subhead {
+  max-width: 34rem;
+  margin-top: 1.2rem;
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
+}
+
+.heroImage {
+  min-height: 24rem;
+}
+
+.heroImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroAside {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  padding: 1.5rem;
+}
+
+.asideLabel {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.asideLabel:first-child {
+  margin-top: 0;
+}
+
+.asideValue {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  text-decoration: none;
+}
+
+.asideText {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.sectionHead h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.sectionHead > p {
+  max-width: 28rem;
+  color: var(--color-text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cardTop span:first-child {
+  color: var(--color-accent);
+}
+
+.card h3 {
+  margin-top: 0.9rem;
+  font-size: 1.4rem;
+}
+
+.card h3 a {
+  text-decoration: none;
+}
+
+.card > p {
+  margin-top: 0.55rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.card ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.9rem 0 1.5rem;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  list-style: none;
+}
+
+.card li {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.card li::before {
+  color: var(--color-accent);
+  content: '✓';
+}
+
+.cardFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.78rem;
+}
+
+.cardFoot span {
+  color: var(--color-text-muted);
+}
+
+.cardFoot a {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.process {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  background: var(--color-bg-alt);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  padding: 1.25rem;
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-surface);
+}
+
+.steps li > span {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.steps h3 {
+  margin-top: 0.7rem;
+  font-size: 1.25rem;
+}
+
+.steps p {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+}
+
+.proof {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.proofInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.proofInner h2 {
+  max-width: 17ch;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+}
+
+.proofInner > div > p:last-child {
+  max-width: 34rem;
+  margin-top: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.proofScore {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--color-bg-alt);
+}
+
+.proofScore strong {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.proofScore span {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.proofScore small {
+  color: var(--color-text-muted);
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+.faqGrid h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.faqList {
+  border-top: 1px solid var(--color-border);
+}
+
+.faqList details {
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faqList summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faqList p {
+  margin-top: 0.6rem;
+  color: var(--color-text-muted);
+}
+
+.booking {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  background: var(--color-bg-alt);
+}
+
+.bookingCard {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.bookingCopy h2 {
+  max-width: 12ch;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.bookingCopy > p:not(.eyebrow) {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+}
+
+.phoneLink {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.formPanel {
+  padding: 0;
+}
+
+@media (max-width: 980px) {
+  .heroCard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heroAside {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .asideLabel {
+    margin-top: 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .faqGrid,
+  .bookingCard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .heroCard,
+  .grid,
+  .heroAside {
+    grid-template-columns: 1fr;
+  }
+
+  .heroImage {
+    min-height: 16rem;
+  }
+
+  .proofInner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

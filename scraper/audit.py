@@ -26,6 +26,7 @@ from .config import (
     SOCIAL_HOSTS,
     WEAK_PARKED_MARKERS,
 )
+from .contact import extract as extract_emails
 from .http_client import fetch_page, normalize_url, registrable_domain
 from .surfaces import (
     META_CHECKS,
@@ -113,6 +114,18 @@ BOOKING_MARKERS = (
     "online booking", "reserve now", "booksy", "square appointments",
     "calendly", "service titan", "jobber", "housecall pro", "fenix",
     "squarespace scheduling", " acuity scheduling", "schedulicity",
+)
+# The plain-language and linked forms. Buckingham's homepage says "Schedule Your
+# Appointment Today!" and links /schedule-now, and the old marker list missed
+# both, producing "your site is a phone call" for a site with a booking form.
+# These are deliberately generous: a false negative only loses a finding, while
+# a false positive sends the owner a claim they can disprove in one click.
+BOOKING_RE = re.compile(
+    r"\b(?:book|booking|appointment|appointments|schedul(?:e|ing)|reserve)\b",
+    re.I,
+)
+BOOKING_HREF_RE = re.compile(
+    r'href\s*=\s*["\'][^"\']*(?:book|appointment|schedul)', re.I
 )
 ANALYTICS_MARKERS = (
     "google-analytics", "googletagmanager", "gtag(", "ga.js",
@@ -462,16 +475,33 @@ def audit_url(url: str, business_name: str = "") -> AuditResult:
         )
 
     # ---- mobile --------------------------------------------------------- #
-    has_viewport = bool(viewport) and "width" in viewport.lower()
+    # A viewport tag without width=device-width is still a mobile failure, but
+    # it is not a missing tag. Duda emits the id-first form
+    # `<meta id="view" name="viewport" content="initial-scale=1, ...">`, and the
+    # old message told that business it had no viewport tag at all -- a claim
+    # they could disprove by viewing source. Same finding, honest wording.
+    has_viewport_tag = bool(viewport)
+    has_viewport = has_viewport_tag and "width" in viewport.lower()
     res.evidence["has_viewport"] = has_viewport
     res.evidence["no_viewport"] = not has_viewport
     if not has_viewport:
+        if not has_viewport_tag:
+            detail = "No <meta name=viewport> tag"
+            quote = (
+                "Your site isn't set up for phones -- visitors on mobile see a "
+                "shrunken desktop page, and most of your customers will be "
+                "searching from one."
+            )
+            penalty = 55
+        else:
+            detail = f"Viewport tag omits width=device-width ({viewport[:60]})"
+            quote = (
+                "Your viewport tag doesn't set width=device-width, so phones can "
+                "still render the full desktop layout instead of reflowing it."
+            )
+            penalty = 30
         res.findings.append(
-            Finding("NO_MOBILE", "No mobile viewport", 55,
-                    "No <meta name=viewport> tag",
-                    "Your site isn't set up for phones -- visitors on mobile see a "
-                    "shrunken desktop page, and most of your customers will be "
-                    "searching from one.")
+            Finding("NO_MOBILE", "No mobile viewport", penalty, detail, quote)
         )
 
     # ---- stack / age ---------------------------------------------------- #
@@ -516,7 +546,11 @@ def audit_url(url: str, business_name: str = "") -> AuditResult:
     has_phone = bool(re.search(r'href\s*=\s*["\']tel:', low))
     has_mail = bool(re.search(r'href\s*=\s*["\']mailto:', low))
     has_form = any(m in low for m in FORM_MARKERS)
-    has_booking = any(m in vis or m in low for m in BOOKING_MARKERS)
+    has_booking = (
+        any(m in vis or m in low for m in BOOKING_MARKERS)
+        or bool(BOOKING_RE.search(vis))
+        or bool(BOOKING_HREF_RE.search(html))
+    )
     res.evidence.update(
         has_phone=has_phone, has_email=has_mail,
         has_contact_form=has_form, has_online_booking=has_booking,
@@ -597,6 +631,14 @@ def audit_url(url: str, business_name: str = "") -> AuditResult:
     # number together mean there is no small local business on the other end of
     # that phone number, which is not something the markup alone will say.
     res.evidence["body_text"] = vis[:4000]
+
+    # ---- published contact addresses ------------------------------------ #
+    # Only addresses the business published on this page. A missing email is
+    # an honest answer, not a reason to guess one.
+    emails = extract_emails(html=html, text=vis, site_domain=res.domain)
+    if emails:
+        res.evidence["email"] = emails[0].address
+        res.evidence["emails"] = [c.address for c in emails]
     if text_len < 200 and not res.is_parked:
         res.findings.append(
             Finding("THIN_CONTENT", "Almost no content", 30,

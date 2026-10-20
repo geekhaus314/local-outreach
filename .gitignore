@@ -16,3 +16,14 @@ dist/
 venv/
 .env
 .DS_Store
+
+# Clinic engine build and dependency output.
+web/node_modules/
+web/.svelte-kit/
+web/.wrangler/
+web/build/
+web/.dev.vars
+web/.env.*
+
+# slag verification evidence
+.slag/

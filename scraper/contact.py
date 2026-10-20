@@ -89,10 +89,14 @@ EMAIL_RE = re.compile(
     r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}\b"
 )
 
-# "info [at] example [dot] com" -- the full spelling out.
+# "info [at] example [dot] com" -- the full spelling out. The separator words
+# are boundary-anchored: without `\b`, the "at" inside "dataLayer.push" parsed
+# as an obfuscated address (local "d", host "alayer.push") and the "at" inside
+# "urgentcarelocations.org" produced "urgentcareloc@ions.org". Both are real
+# examples off a dentist's homepage. A bare `@` needs no boundary.
 DEOBF_DOT_RE = re.compile(
-    r"([A-Za-z0-9._%+\-]+)\s*(?:\[|\(|\{)?\s*(?:at|@)\s*(?:\]|\)|\})?\s*"
-    r"([A-Za-z0-9\-]+)\s*(?:\[|\(|\{)?\s*(?:dot|punkt)\s*(?:\]|\)|\})?\s*"
+    r"([A-Za-z0-9._%+\-]+)\s*(?:\[|\(|\{)?\s*(?:@|\bat\b)\s*(?:\]|\)|\})?\s*"
+    r"([A-Za-z0-9\-]+)\s*(?:\[|\(|\{)?\s*(?:\bdot\b|\bpunkt\b)\s*(?:\]|\)|\})?\s*"
     r"([A-Za-z]{2,24})\b",
     re.I,
 )
@@ -101,7 +105,7 @@ DEOBF_DOT_RE = re.compile(
 # separator is spelled out but the domain is left intact, which is the more
 # common variant of the trick.
 DEOBF_AT_RE = re.compile(
-    r"([A-Za-z0-9._%+\-]+)\s*(?:\[|\(|\{)?\s*(?:at|@)\s*(?:\]|\)|\})?\s*"
+    r"([A-Za-z0-9._%+\-]+)\s*(?:\[|\(|\{)?\s*(?:@|\bat\b)\s*(?:\]|\)|\})?\s*"
     r"([A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,24})\b",
     re.I,
 )
@@ -198,6 +202,12 @@ def _mk(address: str, source: str, site_domain: str) -> Candidate | None:
     on_site = False
     if site_domain:
         on_site = registrable_domain(host) == registrable_domain(site_domain)
+    # A non-free mailbox on somebody else's corporate domain is almost always
+    # the vendor, not the business: faszold.com published duncan.mckee@heartland.com,
+    # which is the payment processor. Free mailboxes stay because a two-person
+    # shop often has nothing else.
+    if site_domain and not on_site and registrable_domain(host) not in FREE_MAIL_HOSTS:
+        return None
     return Candidate(address=address, source=source, local=local, host=host,
                      on_site_domain=on_site)
 

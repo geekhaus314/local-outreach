@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title">
+  <title id="title">Abstract dining room with a long table, pendant lights and an arched doorway</title>
+  <rect width="1200" height="900" fill="#f3ead8"/>
+  <path d="M120 760V420c0-140 115-255 255-255s255 115 255 255v340z" fill="#1e3a2f"/>
+  <path d="M175 760V425c0-112 92-203 204-203s204 91 204 203v335z" fill="#f3ead8"/>
+  <rect x="690" y="170" width="14" height="170" fill="#1e3a2f"/>
+  <path d="M640 340h114l-18 42H658z" fill="#a63c2c"/>
+  <circle cx="697" cy="325" r="9" fill="#d9a441"/>
+  <rect x="920" y="205" width="10" height="135" fill="#1e3a2f"/>
+  <path d="M878 340h94l-15 34h-64z" fill="#d9a441"/>
+  <rect x="250" y="610" width="700" height="16" fill="#a63c2c"/>
+  <rect x="285" y="626" width="18" height="150" fill="#1e3a2f"/>
+  <rect x="895" y="626" width="18" height="150" fill="#1e3a2f"/>
+  <circle cx="420" cy="560" r="36" fill="none" stroke="#1e3a2f" stroke-width="8"/>
+  <circle cx="600" cy="560" r="36" fill="none" stroke="#1e3a2f" stroke-width="8"/>
+  <circle cx="780" cy="560" r="36" fill="none" stroke="#1e3a2f" stroke-width="8"/>
+  <path d="M420 508v-46M600 508v-46M780 508v-46" stroke="#1e3a2f" stroke-width="6"/>
+  <path d="M110 800h980" stroke="#1e3a2f" stroke-width="10"/>
+</svg>

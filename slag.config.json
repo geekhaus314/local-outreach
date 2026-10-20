@@ -1,0 +1,31 @@
+{
+  "$schema": "./slag.schema.json",
+  "version": 1,
+  "strictness": "standard",
+  "mode": "auto",
+  "factsFile": "slag.facts.json",
+  "framework": "auto",
+  "include": [
+    "**/*"
+  ],
+  "ignore": [
+    "sites/**"
+  ],
+  "commands": {
+    "typecheck": "cd web && npm run check",
+    "test": "cd web && npm test",
+    "build": "cd web && npm run build"
+  },
+  "capabilities": [],
+  "limits": {},
+  "verification": {
+    "timeoutMs": 600000,
+    "requireEvidence": true,
+    "requiredCommands": [
+      "typecheck",
+      "test",
+      "build"
+    ],
+    "allowNoCommands": false
+  }
+}

@@ -67,6 +67,7 @@ class ScoredLead:
     phone: str
     address: str
     website: str
+    email: str
     traffic_tier: str
     decision_maker: str
     classification: str
@@ -94,8 +95,9 @@ class ScoredLead:
 
     def to_csv_row(self) -> list:
         return [
-            self.name, self.industry, self.phone, self.address, self.website,
-            self.traffic_tier, self.decision_maker, self.classification,
+            self.name, self.industry, self.phone, self.email, self.address,
+            self.website, self.traffic_tier, self.decision_maker,
+            self.classification,
             self.opportunity, self.need_score, self.value_score,
             "" if self.site_health is None else self.site_health,
             "" if self.rating is None else f"{self.rating:.1f}",
@@ -108,7 +110,8 @@ class ScoredLead:
 
 
 CSV_HEADER = [
-    "Business Name", "Industry", "Phone", "Address", "Website", "Traffic Tier",
+    "Business Name", "Industry", "Phone", "Email", "Address", "Website",
+    "Traffic Tier",
     "Decision Maker", "Classification", "Opportunity Score", "Need Score",
     "Value Score", "Site Health", "Rating", "Review Count", "Audit Summary",
     "Pitch Facts", "Sources", "Source IDs", "Low Confidence", "Maps URL",
@@ -288,6 +291,7 @@ def score_lead(
         name=raw.name,
         industry=raw.industry,
         phone=raw.phone,
+        email=(audit.evidence.get("email", "") if audit else ""),
         address=raw.address,
         website=site,
         traffic_tier={
