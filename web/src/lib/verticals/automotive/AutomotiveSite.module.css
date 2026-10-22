@@ -17,73 +17,6 @@
   color: inherit;
 }
 
-.bar {
-  border-bottom: 1px solid var(--auto-line);
-  background: rgba(15, 19, 26, 0.92);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  backdrop-filter: blur(8px);
-}
-
-.barInner {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 0;
-}
-
-.mark {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-
-.markBolt {
-  width: 0.7rem;
-  height: 1.4rem;
-  background: var(--auto-amber);
-  clip-path: polygon(40% 0, 100% 0, 60% 45%, 100% 45%, 20% 100%, 45% 55%, 0 55%);
-}
-
-.nav {
-  display: flex;
-  gap: 1.25rem;
-  margin-left: auto;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--auto-steel);
-}
-
-.nav a {
-  text-decoration: none;
-}
-
-.nav a:hover {
-  color: var(--auto-amber);
-}
-
-.callBtn {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.85rem;
-  border: 1px solid var(--auto-amber);
-  color: var(--auto-amber);
-  padding: 0.45rem 0.8rem;
-  text-decoration: none;
-}
-
-.callBtn:hover {
-  background: var(--auto-amber);
-  color: var(--auto-ink);
-}
-
 .hero {
   padding: 4.5rem 0;
   background:
@@ -494,47 +427,11 @@
   padding: 1.75rem;
 }
 
-.foot {
-  border-top: 1px solid var(--auto-line);
-  padding: 1.75rem 0;
-}
-
-.footInner {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.78rem;
-  color: var(--auto-steel);
-}
-
-.footInner p {
-  margin: 0;
-}
-
-.footNav {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.footNav a {
-  text-decoration: none;
-}
-
-.footNav a:hover {
-  color: var(--auto-amber);
-}
-
 @media (max-width: 900px) {
   .heroGrid,
   .processGrid,
   .bookingGrid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .nav {
-    display: none;
   }
 
   .railItem {

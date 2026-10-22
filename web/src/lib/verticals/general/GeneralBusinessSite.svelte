@@ -9,24 +9,9 @@
   const location = $derived(business.locations[0] ?? null);
   const phone = $derived(business.phone);
   const proof = $derived(content.proof);
-  const nav = $derived(content.nav);
-  const year = new Date().getFullYear();
 </script>
 
-<div class={`theme-scope ${styles.page}`}>
-  <header class={styles.header}>
-    <div class="shell">
-      <div class={styles.headerInner}>
-        <a class={styles.wordmark} href="/">{business.shortName}</a>
-        <nav class={styles.nav} aria-label="Sections">
-          {#each nav as item}
-            <a href={item.href}>{item.label}</a>
-          {/each}
-        </nav>
-      </div>
-    </div>
-  </header>
-
+<div class={styles.page}>
   <section class={styles.hero}>
     <div class="shell">
       <div class={styles.heroGrid}>
@@ -146,18 +131,4 @@
       </div>
     </div>
   </section>
-
-  <footer class={styles.footer}>
-    <div class="shell">
-      <div class={styles.footerInner}>
-        <p>© {year} {business.name}</p>
-        <nav class={styles.footerNav} aria-label="Footer">
-          {#if location}
-            <a href={location.directionsUrl}>Directions</a>
-          {/if}
-          <a href="/privacy">Privacy</a>
-        </nav>
-      </div>
-    </div>
-  </footer>
 </div>

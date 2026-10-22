@@ -15,45 +15,6 @@
   color: inherit;
 }
 
-.header {
-  border-bottom: 1px solid var(--gen-line);
-  background: var(--gen-paper);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-
-.headerInner {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.1rem 0;
-}
-
-.wordmark {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  text-decoration: none;
-}
-
-.nav {
-  margin-left: auto;
-  display: flex;
-  gap: 1.4rem;
-  font-size: 0.9rem;
-  color: var(--gen-muted);
-}
-
-.nav a {
-  text-decoration: none;
-}
-
-.nav a:hover {
-  color: var(--gen-accent);
-}
-
 .hero {
   padding: 4.5rem 0 3.5rem;
 }
@@ -343,45 +304,10 @@
   padding: 1.75rem;
 }
 
-.footer {
-  border-top: 1px solid var(--gen-line);
-  padding: 1.75rem 0;
-}
-
-.footerInner {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.82rem;
-  color: var(--gen-muted);
-}
-
-.footerInner p {
-  margin: 0;
-}
-
-.footerNav {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.footerNav a {
-  text-decoration: none;
-}
-
-.footerNav a:hover {
-  color: var(--gen-accent);
-}
-
 @media (max-width: 900px) {
   .heroGrid,
   .bookingGrid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .nav {
-    display: none;
   }
 
   .listing dd {

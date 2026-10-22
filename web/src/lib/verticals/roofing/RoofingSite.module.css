@@ -1,0 +1,422 @@
+.page {
+  --roof-ink: #15181d;
+  --roof-panel: #1d2229;
+  --roof-line: #333a43;
+  --roof-steel: #97a1af;
+  --roof-safety: #f5c518;
+
+  background: var(--roof-ink);
+  color: #eef1f5;
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+.page a {
+  color: inherit;
+}
+
+.hero {
+  background:
+    linear-gradient(180deg, rgba(245, 197, 24, 0.05), transparent 70%),
+    var(--roof-ink);
+}
+
+.stormRail {
+  background: var(--roof-safety);
+  color: var(--roof-ink);
+}
+
+.stormText {
+  margin: 0;
+  padding: 0.55rem 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+  padding: 4.5rem 0;
+}
+
+.kicker {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: var(--roof-safety);
+  margin: 0 0 1rem;
+}
+
+.heroCopy h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+}
+
+.lede {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--roof-steel);
+  max-width: 42rem;
+  margin: 0 0 2rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.primary,
+.secondary {
+  padding: 0.9rem 1.6rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--roof-safety);
+  color: var(--roof-ink);
+}
+
+.primary:hover {
+  filter: brightness(1.08);
+}
+
+.secondary {
+  border: 1px solid var(--roof-line);
+}
+
+.secondary:hover {
+  border-color: var(--roof-safety);
+}
+
+.checklist {
+  background: var(--roof-panel);
+  border: 1px solid var(--roof-line);
+  border-top: 4px solid var(--roof-safety);
+  padding: 1.75rem;
+}
+
+.checklistTitle {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 1rem;
+}
+
+.checklist ul {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.checklist li {
+  padding-left: 1.6rem;
+  position: relative;
+  color: #cfd6df;
+  font-size: 0.95rem;
+}
+
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.28em;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid var(--roof-safety);
+}
+
+.checklistArea {
+  margin: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--roof-steel);
+  border-top: 1px solid var(--roof-line);
+  padding-top: 1rem;
+}
+
+.inspect,
+.process,
+.faq,
+.booking {
+  padding: 4.5rem 0;
+}
+
+.process {
+  background: var(--roof-panel);
+  border-top: 1px solid var(--roof-line);
+  border-bottom: 1px solid var(--roof-line);
+}
+
+.sectionHead {
+  max-width: 46rem;
+  margin-bottom: 2.5rem;
+}
+
+.sectionHead h2,
+.processHead h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem;
+}
+
+.sectionHead p {
+  color: var(--roof-steel);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--roof-panel);
+  border: 1px solid var(--roof-line);
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cardNumber {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--roof-line);
+  line-height: 1;
+}
+
+.cardCategory {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--roof-safety);
+  margin: 0;
+}
+
+.card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.card h3 a {
+  text-decoration: none;
+}
+
+.card h3 a:hover {
+  color: var(--roof-safety);
+}
+
+.card > p {
+  margin: 0;
+  color: var(--roof-steel);
+  line-height: 1.6;
+  font-size: 0.94rem;
+}
+
+.card ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.86rem;
+}
+
+.card ul li {
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.card ul li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--roof-safety);
+  font-family: var(--font-mono, monospace);
+}
+
+.cardMeta {
+  margin-top: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--roof-steel);
+}
+
+.processHead {
+  margin-bottom: 2rem;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+  background: var(--roof-ink);
+  border: 1px solid var(--roof-line);
+  padding: 1.4rem 1.6rem;
+}
+
+.timelineDot {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: var(--roof-safety);
+  color: var(--roof-ink);
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.timelineBody h3 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+}
+
+.timelineBody p {
+  margin: 0;
+  color: var(--roof-steel);
+  line-height: 1.6;
+}
+
+.reviews {
+  padding: 2.5rem 0;
+  background: var(--roof-safety);
+  color: var(--roof-ink);
+}
+
+.reviewInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.reviewScore {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.reviewScore strong {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.reviewScore span {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.reviewNote {
+  margin: 0;
+  max-width: 34rem;
+  font-weight: 500;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.faqItem {
+  border: 1px solid var(--roof-line);
+  background: var(--roof-panel);
+  padding: 1.4rem 1.6rem;
+}
+
+.faqItem h3 {
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  margin: 0 0 0.5rem;
+}
+
+.faqItem p {
+  margin: 0;
+  color: var(--roof-steel);
+  line-height: 1.65;
+}
+
+.bookingGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.bookingCopy h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.bookingCopy p {
+  color: var(--roof-steel);
+  line-height: 1.65;
+}
+
+.bookingPhone a {
+  color: var(--roof-safety);
+}
+
+.bookingForm {
+  background: var(--roof-panel);
+  border: 1px solid var(--roof-line);
+  padding: 1.75rem;
+}
+
+@media (max-width: 900px) {
+  .heroGrid,
+  .bookingGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

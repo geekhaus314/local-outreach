@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import {
   classifyIndustry,
   classifyProspectTheme,
@@ -7,49 +6,39 @@ import {
   recommendTemplate,
   type LocalOutreachProspect
 } from '$lib/data/clinicContent';
-import { getDatabase, listBusinessSummaries, upsertProspect } from '$lib/server/db';
+import { badRequest, guardAdmin } from '$lib/server/admin';
+import { listBusinessSummaries, upsertProspect } from '$lib/server/db';
 import { isVerticalId, matchVertical } from '$lib/verticals/taxonomy';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-function requireAdmin(locals: App.Locals): boolean {
-  return typeof locals.adminEmail === 'string' && locals.adminEmail.length > 0;
-}
+export const GET: RequestHandler = async ({ url, locals, platform }) => {
+  const guard = guardAdmin(locals, platform);
+  if ('response' in guard) return guard.response;
 
-export const GET: RequestHandler = async ({ locals, platform }) => {
-  if (!requireAdmin(locals)) {
-    return json({ error: 'Not authorized.' }, { status: 403 });
-  }
-
-  const db = getDatabase(platform);
-  if (!db) {
-    return json({ error: 'The database binding is not configured.' }, { status: 503 });
-  }
-
-  const prospects = await listBusinessSummaries(db);
-  return json({ prospects });
+  const prospects = await listBusinessSummaries(guard.db, {
+    q: url.searchParams.get('q') ?? undefined,
+    vertical: url.searchParams.get('vertical') ?? undefined,
+    kind: url.searchParams.get('kind') ?? undefined,
+    status: url.searchParams.get('status') ?? undefined
+  });
+  return Response.json({ prospects });
 };
 
 export const POST: RequestHandler = async ({ request, locals, platform }) => {
-  if (!requireAdmin(locals)) {
-    return json({ error: 'Not authorized.' }, { status: 403 });
-  }
-
-  const db = getDatabase(platform);
-  if (!db) {
-    return json({ error: 'The database binding is not configured.' }, { status: 503 });
-  }
+  const guard = guardAdmin(locals, platform);
+  if ('response' in guard) return guard.response;
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return json({ error: 'Please send the prospect as JSON.' }, { status: 400 });
+    return badRequest('Please send the prospect as JSON.');
   }
 
   if (!body || typeof body !== 'object' || !('prospect' in body)) {
-    return json({ error: 'Body must include a prospect object.' }, { status: 400 });
+    return badRequest('Body must include a prospect object.');
   }
 
   const input = body as {
@@ -64,7 +53,7 @@ export const POST: RequestHandler = async ({ request, locals, platform }) => {
 
   const prospect = input.prospect;
   if (!prospect || typeof prospect.name !== 'string' || !prospect.name.trim()) {
-    return json({ error: 'prospect.name is required.' }, { status: 400 });
+    return badRequest('prospect.name is required.');
   }
 
   const kind = classifyIndustry(prospect);
@@ -74,7 +63,7 @@ export const POST: RequestHandler = async ({ request, locals, platform }) => {
   const hostnames = input.hostnames?.length ? input.hostnames : prospectHostnames(prospect);
   const vertical = isVerticalId(input.vertical) ? input.vertical : matchVertical(prospect);
 
-  await upsertProspect(db, prospect, {
+  await upsertProspect(guard.db, prospect, {
     id: slug,
     slug,
     template,
@@ -84,5 +73,5 @@ export const POST: RequestHandler = async ({ request, locals, platform }) => {
     indexable: input.indexable === true
   });
 
-  return json({ ok: true, slug, template, theme, vertical, hostnames }, { status: 201 });
+  return Response.json({ ok: true, slug, template, theme, vertical, hostnames }, { status: 201 });
 };

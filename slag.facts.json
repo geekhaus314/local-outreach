@@ -158,6 +158,36 @@
       "required": false,
       "evidence": [],
       "notes": "Only list constraints that change implementation decisions."
+    },
+    {
+      "id": "admin.console",
+      "question": "What must the web admin console do, and which entities does it expose?",
+      "value": "Full CRUD across the whole local-outreach pipeline: create/edit/delete prospects, trigger audit/pitch/mockup regeneration, manage bookings, and mark pitches sent. Exposes all entities: prospects/leads, audits and scores, pitches, previews/mockups, bookings, and job runs.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "The console is the graphical option; the headless path must stay first-class."
+    },
+    {
+      "id": "admin.console.ux",
+      "question": "What visual quality bar applies to the admin console?",
+      "value": "The admin interface must look as sophisticated and advanced as the engineering under the hood. No bare tables or default browser controls; it is a designed product surface.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "Applies to layout, typography, states, and interaction polish."
+    },
+    {
+      "id": "admin.headless",
+      "question": "What does headless mode mean for this tool?",
+      "value": "Headless means the same API routes stay callable without the UI, plus a thin CLI wrapper. The graphical admin console and the headless API/CLI are two interfaces over one backend, not two apps.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-20",
+      "required": true,
+      "evidence": [],
+      "notes": "No separate headless app. The CLI calls the same server routes the console uses."
     }
   ]
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="Abstract roofline and shingle course line work">
+  <rect width="1200" height="720" fill="#15181d"/>
+  <g stroke="#f5c518" stroke-width="4" fill="none">
+    <path d="M120 420 L600 160 L1080 420"/>
+  </g>
+  <g stroke="#3a4048" stroke-width="3" fill="none">
+    <path d="M170 420 L600 205 L1030 420"/>
+    <path d="M235 420 L600 250 L965 420"/>
+    <path d="M300 420 L600 295 L900 420"/>
+    <path d="M365 420 L600 340 L835 420"/>
+    <path d="M430 420 L600 385 L770 420"/>
+  </g>
+  <g stroke="#f5c518" stroke-width="3" opacity="0.7">
+    <path d="M540 190 L560 190 M600 160 L600 200 M620 190 L640 190"/>
+  </g>
+  <rect x="120" y="420" width="960" height="180" fill="#1d2229"/>
+  <g stroke="#3a4048" stroke-width="2">
+    <path d="M200 420 L200 600 M320 420 L320 600 M440 420 L440 600 M560 420 L560 600 M680 420 L680 600 M800 420 L800 600 M920 420 L920 600"/>
+  </g>
+  <rect x="500" y="470" width="200" height="130" fill="#f5c518" opacity="0.85"/>
+</svg>
