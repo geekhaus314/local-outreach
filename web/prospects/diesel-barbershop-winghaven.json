@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "dieselbarbershop.com",
+    "diesel-barbershop-winghaven.preview.localhost",
+    "diesel-barbershop-winghaven.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "menu",
+  "theme": "premium-luxury",
+  "prospect": {
+    "name": "Diesel Barbershop Winghaven",
+    "industry": "Restaurant",
+    "phone": "(636) 330-0031",
+    "address": "3030 Winghaven Blvd, O'Fallon, MO 63368",
+    "website": "http://dieselbarbershop.com/location/ofallon-mo-winghaven",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "General Manager",
+    "classification": "DEAD_SITE",
+    "opportunity": 91,
+    "need_score": 97,
+    "value_score": 82,
+    "site_health": 0,
+    "rating": 4.8,
+    "review_count": 422,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for dieselbarbershop.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "dieselbarbershop.com does not load at all.",
+      "4.8-star rating across 422 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJbTpsD1fR3ocRkw4WND_8bEw|ChIJjfTwPbrR3ocRanhpG_W40R4",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.8 stars; 422 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

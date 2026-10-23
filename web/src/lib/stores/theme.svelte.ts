@@ -4,7 +4,6 @@ import {
   DEFAULT_THEME,
   THEME_COOKIE,
   THEME_COOKIE_MAX_AGE,
-  THEME_NAMES,
   THEME_STORAGE_KEY,
   resolveTheme,
   themes,
@@ -31,8 +30,9 @@ export class ThemeState {
   }
 
   cycle(): void {
-    const index = THEME_NAMES.indexOf(this.theme);
-    this.set(THEME_NAMES[(index + 1) % THEME_NAMES.length]);
+    const names = Object.keys(themes) as ThemeName[];
+    const index = names.indexOf(this.theme);
+    this.set(names[(index + 1) % names.length]);
   }
 
   private persist(theme: ThemeName): void {

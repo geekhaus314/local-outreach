@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "windowworldstlouis.com",
+    "window-world-of-st-louis.preview.localhost",
+    "window-world-of-st-louis.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Window World of St. Louis",
+    "industry": "Window Installation Service",
+    "phone": "(314) 993-1800",
+    "address": "3600 Rider Trail S, Earth City, MO 63045",
+    "website": "https://windowworldstlouis.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.6,
+    "review_count": 1007,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for windowworldstlouis.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "windowworldstlouis.com does not load at all.",
+      "4.6-star rating across 1007 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJ3TSGuPUBdogReu8EUQeo24M",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.6 stars; 1007 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "hostnames": ["bosley.preview.localhost", "bosley.localhost"],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Bosley Hair Restoration",
+    "industry": "Hair Restoration",
+    "phone": "",
+    "address": "",
+    "website": "https://www.bosley.com/",
+    "email": "",
+    "traffic_tier": "Unknown",
+    "decision_maker": "Practice Manager",
+    "classification": "NO_PRESENCE",
+    "opportunity": 95,
+    "need_score": 90,
+    "value_score": 95,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "Not yet audited. Verify local St. Louis presence before contacting.",
+    "pitch_facts": [
+      "Bosley is a national hair restoration brand; local clinics often lack a strong owned web presence.",
+      "myhairloss.com is an exact-match domain patients trust for hair loss information."
+    ],
+    "sources": ["manual"],
+    "source_ids": "",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": ""
+  }
+}

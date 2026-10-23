@@ -19,7 +19,7 @@ test('the only real prospect matches the salon vertical', () => {
 test('salon is a declared vertical with its own meta and fallback', () => {
   const meta = VERTICAL_METAS.find((item) => item.id === 'salon');
   assert.ok(meta, 'salon meta is missing');
-  assert.equal(meta.theme, 'modern-wellness');
+  assert.equal(meta.theme, 'salon-wellness');
   assert.equal(meta.legacyTemplate, 'editorial');
 });
 

@@ -5,7 +5,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'restaurant',
     label: 'Restaurant & food service',
     industryKind: 'restaurant',
-    theme: 'premium-luxury',
+    theme: 'restaurant-luxury',
     legacyTemplate: 'menu',
     summary: 'Menus, reservations, hours and a food-forward identity.'
   },
@@ -13,7 +13,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'automotive',
     label: 'Automotive repair',
     industryKind: 'automotive',
-    theme: 'clinical-trust',
+    theme: 'automotive-industrial',
     legacyTemplate: 'service',
     summary: 'Diagnostics, repair scope, service bays and quote requests.'
   },
@@ -21,7 +21,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'roofing',
     label: 'Roofing',
     industryKind: 'roofing',
-    theme: 'clinical-trust',
+    theme: 'roofing-storm',
     legacyTemplate: 'project',
     summary: 'Storm damage, inspections, replacement scope and estimates.'
   },
@@ -29,7 +29,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'hvac',
     label: 'Heating & cooling',
     industryKind: 'hvac',
-    theme: 'clinical-trust',
+    theme: 'hvac-service',
     legacyTemplate: 'service',
     summary: 'Repair, maintenance plans, installation and emergency service.'
   },
@@ -37,7 +37,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'plumbing',
     label: 'Plumbing',
     industryKind: 'plumbing',
-    theme: 'clinical-trust',
+    theme: 'plumbing-emergency',
     legacyTemplate: 'service',
     summary: 'Leaks, drains, water heaters and emergency call-outs.'
   },
@@ -45,7 +45,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'electrical',
     label: 'Electrical',
     industryKind: 'electrical',
-    theme: 'clinical-trust',
+    theme: 'electrical-circuit',
     legacyTemplate: 'service',
     summary: 'Panels, wiring, lighting, safety inspections and permits.'
   },
@@ -53,7 +53,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'dental',
     label: 'Dental',
     industryKind: 'dental',
-    theme: 'clinical-trust',
+    theme: 'dental-clinical',
     legacyTemplate: 'clinic',
     summary: 'Preventive care, restorative work, insurance and new patients.'
   },
@@ -61,7 +61,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'orthodontics',
     label: 'Orthodontics',
     industryKind: 'orthodontics',
-    theme: 'clinical-trust',
+    theme: 'dental-clinical',
     legacyTemplate: 'clinic',
     summary: 'Braces, aligners, treatment timelines and consultations.'
   },
@@ -69,7 +69,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'landscaping',
     label: 'Landscaping & lawn care',
     industryKind: 'landscaping',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'project',
     summary: 'Design, installation, maintenance and seasonal programs.'
   },
@@ -77,7 +77,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'pest',
     label: 'Pest control',
     industryKind: 'pest',
-    theme: 'clinical-trust',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Inspections, treatment plans, prevention and follow-ups.'
   },
@@ -85,7 +85,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'moving',
     label: 'Moving & storage',
     industryKind: 'moving',
-    theme: 'clinical-trust',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Local moves, packing, storage and booking windows.'
   },
@@ -93,7 +93,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'remodeling',
     label: 'Remodeling & contracting',
     industryKind: 'remodeling',
-    theme: 'premium-luxury',
+    theme: 'general-honest',
     legacyTemplate: 'project',
     summary: 'Kitchens, baths, decks, permits and project timelines.'
   },
@@ -101,7 +101,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'windows',
     label: 'Windows & glass',
     industryKind: 'windows',
-    theme: 'clinical-trust',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Replacement windows, glass, screens and measurement visits.'
   },
@@ -109,7 +109,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'salon',
     label: 'Salon, barber & personal care',
     industryKind: 'salon',
-    theme: 'modern-wellness',
+    theme: 'salon-wellness',
     legacyTemplate: 'editorial',
     summary: 'Stylists, service menus, bookings and walk-in expectations.'
   },
@@ -117,7 +117,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'veterinary',
     label: 'Veterinary & pet care',
     industryKind: 'veterinary',
-    theme: 'modern-wellness',
+    theme: 'veterinary-warm',
     legacyTemplate: 'clinic',
     summary: 'Wellness visits, urgent care, grooming and pet owners.'
   },
@@ -125,7 +125,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'retail',
     label: 'Retail & suppliers',
     industryKind: 'retail',
-    theme: 'premium-luxury',
+    theme: 'retail-boutique',
     legacyTemplate: 'general',
     summary: 'Departments, inventory, hours and in-store pickup.'
   },
@@ -133,7 +133,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'painting',
     label: 'Painting & finishing',
     industryKind: 'painting',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'project',
     summary: 'Interior and exterior painting, prep work and estimates.'
   },
@@ -141,7 +141,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'locksmith',
     label: 'Locksmith',
     industryKind: 'locksmith',
-    theme: 'clinical-trust',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Lockouts, rekeying, hardware and response times.'
   },
@@ -149,7 +149,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'fitness',
     label: 'Fitness & training',
     industryKind: 'fitness',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'editorial',
     summary: 'Programs, classes, memberships and trial sessions.'
   },
@@ -157,7 +157,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'pool',
     label: 'Pool & spa service',
     industryKind: 'pool',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Openings, closings, maintenance and equipment repair.'
   },
@@ -165,7 +165,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'cleaning',
     label: 'Cleaning services',
     industryKind: 'cleaning',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Recurring cleans, deep cleans, move-outs and quotes.'
   },
@@ -173,7 +173,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'medical',
     label: 'Medical & health',
     industryKind: 'medical',
-    theme: 'clinical-trust',
+    theme: 'hair-restoration-clinical',
     legacyTemplate: 'clinic',
     summary: 'Providers, services, insurance and appointment requests.'
   },
@@ -181,7 +181,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'appliance',
     label: 'Appliance repair',
     industryKind: 'appliance',
-    theme: 'clinical-trust',
+    theme: 'general-honest',
     legacyTemplate: 'service',
     summary: 'Brands serviced, repair visits, diagnostics and warranties.'
   },
@@ -189,7 +189,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'real-estate',
     label: 'Real estate',
     industryKind: 'real-estate',
-    theme: 'premium-luxury',
+    theme: 'general-honest',
     legacyTemplate: 'general',
     summary: 'Listings, neighborhoods, agents and showing requests.'
   },
@@ -197,7 +197,7 @@ export const VERTICAL_METAS: readonly VerticalMeta[] = [
     id: 'general',
     label: 'General local business',
     industryKind: 'general',
-    theme: 'modern-wellness',
+    theme: 'general-honest',
     legacyTemplate: 'general',
     summary: 'Typed fallback for any local business not yet matched to a vertical.'
   }

@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "smilestlouis.com",
+    "st-louis-smile-center-derek-j-vadnal-d-m-d.preview.localhost",
+    "st-louis-smile-center-derek-j-vadnal-d-m-d.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "St. Louis Smile Center: Derek J. Vadnal, D.M.D.",
+    "industry": "Dental",
+    "phone": "+1-314-298-7772",
+    "address": "12105 Bridgeton Square 63044",
+    "website": "https://smilestlouis.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Practice Manager",
+    "classification": "DEAD_SITE",
+    "opportunity": 95,
+    "need_score": 97,
+    "value_score": 92,
+    "site_health": 0,
+    "rating": 5.0,
+    "review_count": 209,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for smilestlouis.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "smilestlouis.com does not load at all.",
+      "5.0-star rating across 209 Google reviews."
+    ],
+    "sources": [
+      "gmaps+overpass"
+    ],
+    "source_ids": "ChIJxxyX-Hsx34cR0GewyGGfjQY|ChIJxxyX-Hsx34cRVosjKD_1cQc|node/14004670901",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 5.0 stars; 209 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

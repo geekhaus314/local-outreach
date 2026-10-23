@@ -1,248 +1,529 @@
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/playfair-display/400.css';
-@import '@fontsource/playfair-display/600.css';
-@import '@fontsource/playfair-display/700.css';
-@import '@fontsource/plus-jakarta-sans/400.css';
-@import '@fontsource/plus-jakarta-sans/500.css';
-@import '@fontsource/plus-jakarta-sans/600.css';
-@import '@fontsource/plus-jakarta-sans/700.css';
+/* Vertical themes — pure vanilla CSS, zero dependencies, zero shared tropes.
+   Each block is activated by data-theme on the document element.
+   No gradient sheens, no pill radii, no hover lift, no glow shadows,
+   no reveal-on-scroll, no striped placeholders. Distinct design per category. */
 
-:root,
-:root[data-theme='clinical-trust'] {
-  color-scheme: light;
-  --color-bg: #ffffff;
-  --color-bg-alt: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-strong: #f1f5f9;
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
-  --color-brand: #0f172a;
-  --color-brand-contrast: #ffffff;
-  --color-accent: #0ea5e9;
-  --color-accent-contrast: #ffffff;
-  --color-border: #e2e8f0;
-  --color-focus: #0ea5e9;
-  --radius: 6px;
-  --radius-sm: 4px;
-  --radius-lg: 12px;
-  --font-display: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --shadow-card: 0 18px 50px -28px rgb(15 23 42 / 0.35);
-}
-
-:root[data-theme='premium-luxury'] {
-  color-scheme: light;
-  --color-bg: #fdfdfb;
-  --color-bg-alt: #f5f1e8;
-  --color-surface: #ffffff;
-  --color-surface-strong: #1a1a1a;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b6257;
-  --color-brand: #1a1a1a;
-  --color-brand-contrast: #fdfdfb;
-  --color-accent: #d4af37;
-  --color-accent-contrast: #1a1a1a;
-  --color-border: #e6dfd2;
-  --color-focus: #d4af37;
-  --radius: 0px;
-  --radius-sm: 0px;
-  --radius-lg: 0px;
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --shadow-card: 0 24px 60px -38px rgb(26 26 26 / 0.45);
-}
-
-:root[data-theme='modern-wellness'] {
-  color-scheme: light;
-  --color-bg: #faf7f2;
-  --color-bg-alt: #efe9de;
-  --color-surface: #ffffff;
-  --color-surface-strong: #e4dccd;
-  --color-text: #1f2a2a;
-  --color-text-muted: #5c6b6b;
-  --color-brand: #2f4f4f;
-  --color-brand-contrast: #faf7f2;
-  --color-accent: #c2a878;
-  --color-accent-contrast: #1f2a2a;
-  --color-border: #ddd3c3;
-  --color-focus: #2f4f4f;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-lg: 24px;
-  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --shadow-card: 0 24px 60px -34px rgb(47 79 79 / 0.32);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
+/* Backward-compatible color aliases used by layout and templates.
+   Mapped from the active vertical theme tokens. */
 html {
-  min-height: 100%;
-  background: var(--color-bg);
-  color: var(--color-text);
-  scroll-behavior: smooth;
-  text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+  --color-bg: var(--vt-bg);
+  --color-bg-alt: var(--vt-bg-alt);
+  --color-surface: var(--vt-surface);
+  --color-border: var(--vt-border);
+  --color-brand: var(--vt-brand);
+  --color-brand-contrast: var(--vt-brand-contrast);
+  --color-text: var(--vt-text);
+  --color-text-muted: var(--vt-text-muted);
+  --color-accent: var(--vt-accent);
+  --radius: var(--vt-radius);
+  --radius-sm: var(--vt-radius-sm);
+  --radius-lg: var(--vt-radius-lg);
+  --font-display: var(--vt-font-display);
+  --font-body: var(--vt-font-body);
+  --color-shadow: var(--vt-shadow);
+  --color-shadow-strong: var(--vt-shadow-strong);
+}
+
+/* ============================================================================
+   Hair Restoration — Clinical
+   Surgical precision. Deep navy, sterile white, single violet accent.
+   ============================================================================ */
+html[data-theme='hair-restoration-clinical'] {
+  --vt-bg: #ffffff;
+  --vt-bg-alt: #f4f6f8;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #e8ecf0;
+  --vt-surface-inverted: #0b1320;
+  --vt-text: #0b1320;
+  --vt-text-muted: #475569;
+  --vt-text-inverted: #ffffff;
+  --vt-brand: #0b1320;
+  --vt-brand-contrast: #ffffff;
+  --vt-accent: #7c3aed;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #cbd5e1;
+  --vt-border-strong: #94a3b8;
+  --vt-focus: #7c3aed;
+  --vt-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 24px 60px -38px rgb(11 19 32 / 0.35);
+  --vt-shadow-strong: 0 40px 100px -50px rgb(11 19 32 / 0.45);
+  --vt-chrome: #0b1320;
+  --vt-accent-2: #be185d;
+  --vt-accent-3: #0f766e;
+}
+
+/* ============================================================================
+   SMP — Ink & Oxblood
+   High-contrast ink on cream. Hairline rules, serif display.
+   ============================================================================ */
+html[data-theme='smp-ink'] {
+  --vt-bg: #faf7f2;
+  --vt-bg-alt: #efe9de;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #e4dccd;
+  --vt-surface-inverted: #1a1a1a;
+  --vt-text: #1a1a1a;
+  --vt-text-muted: #6b6257;
+  --vt-text-inverted: #faf7f2;
+  --vt-brand: #1a1a1a;
+  --vt-brand-contrast: #faf7f2;
+  --vt-accent: #7f1d1d;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #ddd3c3;
+  --vt-border-strong: #b9a887;
+  --vt-focus: #7f1d1d;
+  --vt-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 24px 60px -38px rgb(26 26 26 / 0.45);
+  --vt-shadow-strong: 0 40px 100px -50px rgb(26 26 26 / 0.55);
+  --vt-chrome: #1a1a1a;
+  --vt-accent-2: #991b1b;
+  --vt-accent-3: #b45309;
+}
+
+/* ============================================================================
+   Laser Therapy — Precision
+   Cold clinical white with electric cyan accent.
+   ============================================================================ */
+html[data-theme='laser-precision'] {
+  --vt-bg: #ffffff;
+  --vt-bg-alt: #f8fafc;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #f1f5f9;
+  --vt-surface-inverted: #0f172a;
+  --vt-text: #0f172a;
+  --vt-text-muted: #475569;
+  --vt-text-inverted: #ffffff;
+  --vt-brand: #0f172a;
+  --vt-brand-contrast: #ffffff;
+  --vt-accent: #0ea5e9;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #e2e8f0;
+  --vt-border-strong: #94a3b8;
+  --vt-focus: #0ea5e9;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 2px;
+  --vt-radius-sm: 1px;
+  --vt-radius-lg: 4px;
+  --vt-shadow: 0 18px 50px -28px rgb(15 23 42 / 0.25);
+  --vt-shadow-strong: 0 30px 80px -40px rgb(15 23 42 / 0.35);
+  --vt-chrome: #0f172a;
+  --vt-accent-2: #0891b2;
+  --vt-accent-3: #0f172a;
+}
+
+/* ============================================================================
+   Salon — Modern Wellness
+   Calm organic curves, generous radius.
+   ============================================================================ */
+html[data-theme='salon-wellness'] {
+  --vt-bg: #faf7f2;
+  --vt-bg-alt: #efe9de;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #e4dccd;
+  --vt-surface-inverted: #2f4f4f;
+  --vt-text: #1f2a2a;
+  --vt-text-muted: #5c6b6b;
+  --vt-text-inverted: #faf7f2;
+  --vt-brand: #2f4f4f;
+  --vt-brand-contrast: #faf7f2;
+  --vt-accent: #c2a878;
+  --vt-accent-contrast: #1f2a2a;
+  --vt-border: #ddd3c3;
+  --vt-border-strong: #b9a887;
+  --vt-focus: #2f4f4f;
+  --vt-font-display: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 16px;
+  --vt-radius-sm: 10px;
+  --vt-radius-lg: 24px;
+  --vt-shadow: 0 24px 60px -34px rgb(47 79 79 / 0.32);
+  --vt-shadow-strong: 0 40px 100px -50px rgb(47 79 79 / 0.42);
+  --vt-chrome: #2f4f4f;
+  --vt-accent-2: #8b4513;
+  --vt-accent-3: #5c6b6b;
+}
+
+/* ============================================================================
+   Restaurant — Premium Luxury
+   Charcoal, cream, restrained gold.
+   ============================================================================ */
+html[data-theme='restaurant-luxury'] {
+  --vt-bg: #fdfdfb;
+  --vt-bg-alt: #f5f1e8;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #1a1a1a;
+  --vt-surface-inverted: #1a1a1a;
+  --vt-text: #1a1a1a;
+  --vt-text-muted: #6b6257;
+  --vt-text-inverted: #fdfdfb;
+  --vt-brand: #1a1a1a;
+  --vt-brand-contrast: #fdfdfb;
+  --vt-accent: #d4af37;
+  --vt-accent-contrast: #1a1a1a;
+  --vt-border: #e6dfd2;
+  --vt-border-strong: #b9a887;
+  --vt-focus: #d4af37;
+  --vt-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 24px 60px -38px rgb(26 26 26 / 0.45);
+  --vt-shadow-strong: 0 40px 100px -50px rgb(26 26 26 / 0.55);
+  --vt-chrome: #0a0a0a;
+  --vt-accent-2: #b45309;
+  --vt-accent-3: #6b6257;
+}
+
+/* ============================================================================
+   Automotive — Industrial
+   Deep charcoal, electric orange, high contrast.
+   ============================================================================ */
+html[data-theme='automotive-industrial'] {
+  --vt-bg: #0f172a;
+  --vt-bg-alt: #1e293b;
+  --vt-surface: #1e293b;
+  --vt-surface-strong: #334155;
+  --vt-surface-inverted: #f8fafc;
+  --vt-text: #f8fafc;
+  --vt-text-muted: #94a3b8;
+  --vt-text-inverted: #0f172a;
+  --vt-brand: #f8fafc;
+  --vt-brand-contrast: #0f172a;
+  --vt-accent: #f97316;
+  --vt-accent-contrast: #0f172a;
+  --vt-border: #334155;
+  --vt-border-strong: #64748b;
+  --vt-focus: #f97316;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 4px;
+  --vt-radius-sm: 2px;
+  --vt-radius-lg: 8px;
+  --vt-shadow: 0 30px 80px -40px rgb(15 23 42 / 0.5);
+  --vt-shadow-strong: 0 50px 120px -60px rgb(15 23 42 / 0.6);
+  --vt-chrome: #0f172a;
+  --vt-accent-2: #ea580c;
+  --vt-accent-3: #94a3b8;
+}
+
+/* ============================================================================
+   Roofing — Storm
+   Weathered slate, storm blue, structural lines.
+   ============================================================================ */
+html[data-theme='roofing-storm'] {
+  --vt-bg: #f1f5f9;
+  --vt-bg-alt: #e2e8f0;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #cbd5e1;
+  --vt-surface-inverted: #1e293b;
+  --vt-text: #1e293b;
+  --vt-text-muted: #64748b;
+  --vt-text-inverted: #f8fafc;
+  --vt-brand: #1e293b;
+  --vt-brand-contrast: #f8fafc;
+  --vt-accent: #0284c7;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #94a3b8;
+  --vt-border-strong: #475569;
+  --vt-focus: #0284c7;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 20px 50px -30px rgb(30 41 59 / 0.3);
+  --vt-shadow-strong: 0 35px 90px -45px rgb(30 41 59 / 0.4);
+  --vt-chrome: #1e293b;
+  --vt-accent-2: #0369a1;
+  --vt-accent-3: #64748b;
+}
+
+/* ============================================================================
+   HVAC — Service
+   Clean blue-white with service-truck orange.
+   ============================================================================ */
+html[data-theme='hvac-service'] {
+  --vt-bg: #ffffff;
+  --vt-bg-alt: #f0f9ff;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #bae6fd;
+  --vt-surface-inverted: #0c4a6e;
+  --vt-text: #0c4a6e;
+  --vt-text-muted: #475569;
+  --vt-text-inverted: #ffffff;
+  --vt-brand: #0c4a6e;
+  --vt-brand-contrast: #ffffff;
+  --vt-accent: #f97316;
+  --vt-accent-contrast: #0c4a6e;
+  --vt-border: #bfdbfe;
+  --vt-border-strong: #93c5fd;
+  --vt-focus: #f97316;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 6px;
+  --vt-radius-sm: 3px;
+  --vt-radius-lg: 12px;
+  --vt-shadow: 0 18px 50px -28px rgb(12 74 110 / 0.25);
+  --vt-shadow-strong: 0 30px 80px -40px rgb(12 74 110 / 0.35);
+  --vt-chrome: #0c4a6e;
+  --vt-accent-2: #ea580c;
+  --vt-accent-3: #0369a1;
+}
+
+/* ============================================================================
+   Plumbing — Emergency
+   Deep navy with copper accents.
+   ============================================================================ */
+html[data-theme='plumbing-emergency'] {
+  --vt-bg: #ffffff;
+  --vt-bg-alt: #f8fafc;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #e2e8f0;
+  --vt-surface-inverted: #0f172a;
+  --vt-text: #0f172a;
+  --vt-text-muted: #475569;
+  --vt-text-inverted: #ffffff;
+  --vt-brand: #0f172a;
+  --vt-brand-contrast: #ffffff;
+  --vt-accent: #b45309;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #cbd5e1;
+  --vt-border-strong: #94a3b8;
+  --vt-focus: #b45309;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 20px 50px -30px rgb(15 23 42 / 0.3);
+  --vt-shadow-strong: 0 35px 90px -45px rgb(15 23 42 / 0.4);
+  --vt-chrome: #0f172a;
+  --vt-accent-2: #92400e;
+  --vt-accent-3: #64748b;
+}
+
+/* ============================================================================
+   Electrical — Circuit
+   Dark slate with safety yellow.
+   ============================================================================ */
+html[data-theme='electrical-circuit'] {
+  --vt-bg: #0f172a;
+  --vt-bg-alt: #1e293b;
+  --vt-surface: #1e293b;
+  --vt-surface-strong: #334155;
+  --vt-surface-inverted: #f8fafc;
+  --vt-text: #f8fafc;
+  --vt-text-muted: #94a3b8;
+  --vt-text-inverted: #0f172a;
+  --vt-brand: #f8fafc;
+  --vt-brand-contrast: #0f172a;
+  --vt-accent: #eab308;
+  --vt-accent-contrast: #0f172a;
+  --vt-border: #334155;
+  --vt-border-strong: #64748b;
+  --vt-focus: #eab308;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 4px;
+  --vt-radius-sm: 2px;
+  --vt-radius-lg: 8px;
+  --vt-shadow: 0 30px 80px -40px rgb(15 23 42 / 0.5);
+  --vt-shadow-strong: 0 50px 120px -60px rgb(15 23 42 / 0.6);
+  --vt-chrome: #0f172a;
+  --vt-accent-2: #ca8a04;
+  --vt-accent-3: #94a3b8;
+}
+
+/* ============================================================================
+   Dental — Clinical
+   Bright sterile white with teal.
+   ============================================================================ */
+html[data-theme='dental-clinical'] {
+  --vt-bg: #ffffff;
+  --vt-bg-alt: #f0fdfa;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #ccfbf1;
+  --vt-surface-inverted: #0f766e;
+  --vt-text: #0f766e;
+  --vt-text-muted: #475569;
+  --vt-text-inverted: #ffffff;
+  --vt-brand: #0f766e;
+  --vt-brand-contrast: #ffffff;
+  --vt-accent: #0ea5e9;
+  --vt-accent-contrast: #0f766e;
+  --vt-border: #99f6e4;
+  --vt-border-strong: #5eead4;
+  --vt-focus: #0ea5e9;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 8px;
+  --vt-radius-sm: 4px;
+  --vt-radius-lg: 16px;
+  --vt-shadow: 0 16px 48px -24px rgb(15 118 110 / 0.2);
+  --vt-shadow-strong: 0 28px 75px -35px rgb(15 118 110 / 0.3);
+  --vt-chrome: #0f766e;
+  --vt-accent-2: #115e59;
+  --vt-accent-3: #475569;
+}
+
+/* ============================================================================
+   Veterinary — Warm
+   Soft sage and warm cream.
+   ============================================================================ */
+html[data-theme='veterinary-warm'] {
+  --vt-bg: #faf7f2;
+  --vt-bg-alt: #f3e9d8;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #e4dccd;
+  --vt-surface-inverted: #2f4f4f;
+  --vt-text: #1f2a2a;
+  --vt-text-muted: #5c6b6b;
+  --vt-text-inverted: #faf7f2;
+  --vt-brand: #2f4f4f;
+  --vt-brand-contrast: #faf7f2;
+  --vt-accent: #84cc16;
+  --vt-accent-contrast: #1f2a2a;
+  --vt-border: #ddd3c3;
+  --vt-border-strong: #b9a887;
+  --vt-focus: #84cc16;
+  --vt-font-display: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 20px;
+  --vt-radius-sm: 12px;
+  --vt-radius-lg: 28px;
+  --vt-shadow: 0 20px 55px -30px rgb(47 79 79 / 0.28);
+  --vt-shadow-strong: 0 38px 95px -48px rgb(47 79 79 / 0.38);
+  --vt-chrome: #2f4f4f;
+  --vt-accent-2: #65a30d;
+  --vt-accent-3: #5c6b6b;
+}
+
+/* ============================================================================
+   Retail — Boutique
+   Charcoal with champagne gold.
+   ============================================================================ */
+html[data-theme='retail-boutique'] {
+  --vt-bg: #fdfdfb;
+  --vt-bg-alt: #f5f1e8;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #1a1a1a;
+  --vt-surface-inverted: #1a1a1a;
+  --vt-text: #1a1a1a;
+  --vt-text-muted: #6b6257;
+  --vt-text-inverted: #fdfdfb;
+  --vt-brand: #1a1a1a;
+  --vt-brand-contrast: #fdfdfb;
+  --vt-accent: #c5a059;
+  --vt-accent-contrast: #1a1a1a;
+  --vt-border: #e6dfd2;
+  --vt-border-strong: #b9a887;
+  --vt-focus: #c5a059;
+  --vt-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 2px;
+  --vt-radius-sm: 1px;
+  --vt-radius-lg: 4px;
+  --vt-shadow: 0 22px 58px -36px rgb(26 26 26 / 0.38);
+  --vt-shadow-strong: 0 38px 98px -48px rgb(26 26 26 / 0.48);
+  --vt-chrome: #0a0a0a;
+  --vt-accent-2: #b45309;
+  --vt-accent-3: #6b6257;
+}
+
+/* ============================================================================
+   General — Honest Fallback
+   Neutral slate, no invention.
+   ============================================================================ */
+html[data-theme='general-honest'] {
+  --vt-bg: #f8fafc;
+  --vt-bg-alt: #e2e8f0;
+  --vt-surface: #ffffff;
+  --vt-surface-strong: #cbd5e1;
+  --vt-surface-inverted: #1e293b;
+  --vt-text: #1e293b;
+  --vt-text-muted: #64748b;
+  --vt-text-inverted: #f8fafc;
+  --vt-brand: #1e293b;
+  --vt-brand-contrast: #f8fafc;
+  --vt-accent: #0ea5e9;
+  --vt-accent-contrast: #ffffff;
+  --vt-border: #94a3b8;
+  --vt-border-strong: #475569;
+  --vt-focus: #0ea5e9;
+  --vt-font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vt-font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --vt-radius: 0px;
+  --vt-radius-sm: 0px;
+  --vt-radius-lg: 0px;
+  --vt-shadow: 0 16px 48px -24px rgb(30 41 59 / 0.18);
+  --vt-shadow-strong: 0 28px 75px -35px rgb(30 41 59 / 0.28);
+  --vt-chrome: #1e293b;
+  --vt-accent-2: #0284c7;
+  --vt-accent-3: #64748b;
+}
+
+/* Base document styling using theme variables */
+html {
+  background: var(--vt-bg);
+  color: var(--vt-text);
+  font-family: var(--vt-font-body);
+  line-height: 1.6;
 }
 
 body {
-  min-height: 100%;
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1,
-h2,
-h3,
-h4,
-p,
-figure,
-blockquote {
-  margin: 0;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
+  background: var(--vt-bg);
+  color: var(--vt-text);
+  font-family: inherit;
 }
 
 a {
-  color: inherit;
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.2em;
-}
-
-img,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-:focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.shell {
-  width: min(1160px, calc(100% - 2.5rem));
-  margin-inline: auto;
-}
-
-.section {
-  padding-block: clamp(4rem, 8vw, 7rem);
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3rem;
-  padding: 0.8rem 1.4rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  background: var(--color-brand);
-  color: var(--color-brand-contrast);
-  font-weight: 600;
+  color: var(--vt-accent);
   text-decoration: none;
-  transition:
-    transform 160ms ease,
-    background-color 160ms ease,
-    border-color 160ms ease;
+  border-bottom: 1px solid var(--vt-border);
 }
 
-.button:hover {
-  transform: translateY(-1px);
+a:hover {
+  border-bottom-color: var(--vt-accent);
+  color: var(--vt-accent);
 }
 
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-  transform: none;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--vt-font-display);
+  color: var(--vt-brand);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
-.button--accent {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
 
-.button--ghost {
-  background: transparent;
-  border-color: var(--color-border);
-  color: var(--color-text);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: inherit;
 }

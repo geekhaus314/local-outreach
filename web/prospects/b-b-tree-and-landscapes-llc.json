@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "bbtreeandlandscaping.com",
+    "b-b-tree-and-landscapes-llc.preview.localhost",
+    "b-b-tree-and-landscapes-llc.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "project",
+  "theme": "modern-wellness",
+  "prospect": {
+    "name": "B&B Tree and Landscapes LLC",
+    "industry": "Landscaping",
+    "phone": "(636) 312-0919",
+    "address": "9845 St Charles Rock Rd Ste 108, St Ann, MO 63074",
+    "website": "http://bbtreeandlandscaping.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 93,
+    "need_score": 97,
+    "value_score": 86,
+    "site_health": 0,
+    "rating": 4.9,
+    "review_count": 356,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for bbtreeandlandscaping.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "bbtreeandlandscaping.com does not load at all.",
+      "4.9-star rating across 356 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJV5bLBnY034cRs8p477DI2Ug",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 356 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

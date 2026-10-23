@@ -21,7 +21,7 @@ const RULES: readonly TaxonomyRule[] = [
   {
     vertical: 'medical',
     pattern:
-      /hair (loss|restoration|replacement|transplant)|hair system|hairpiece|toupee|\bwig\b|alopecia|tricholog|scalp micropigmentation|\bsmp\b/
+      /hair (loss|restoration|replacement|transplant)|hair system|hairpiece|toupee|\bwig\b|alopecia|tricholog|scalp micropigmentation|\bsmp\b|laser hair|hair therapy|low.level laser|\bLLLT\b/
   },
   {
     vertical: 'salon',

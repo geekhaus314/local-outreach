@@ -4,25 +4,31 @@
 
   let { data }: { data: PageData } = $props();
 
-  const vertical = $derived(data.tenant.vertical);
+  // Redirect to /admin is handled by +page.server.ts when no tenant matches;
+  // this guard exists only to satisfy TypeScript's null check on data.tenant.
+  const vertical = $derived(data.tenant?.vertical);
 </script>
 
 <svelte:head>
-  <title>{data.tenant.seo.title}</title>
+  {#if data.tenant}
+    <title>{data.tenant.seo.title}</title>
+  {/if}
 </svelte:head>
 
-{#await loadVerticalComponent(vertical)}
-  <div class="shell loadState">
-    <p>Loading the {vertical} experience…</p>
-  </div>
-{:then Vertical}
-  <Vertical content={data.tenant} />
-{:catch}
-  <div class="shell loadState">
-    <h1>This preview could not be rendered.</h1>
-    <p>The vertical component for {vertical} failed to load. Check the server logs for details.</p>
-  </div>
-{/await}
+{#if data.tenant}
+  {#await loadVerticalComponent(vertical)}
+    <div class="shell loadState">
+      <p>Loading the {vertical} experience…</p>
+    </div>
+  {:then Vertical}
+    <Vertical content={data.tenant} />
+  {:catch}
+    <div class="shell loadState">
+      <h1>This preview could not be rendered.</h1>
+      <p>The vertical component for {vertical} failed to load. Check the server logs for details.</p>
+    </div>
+  {/await}
+{/if}
 
 <style>
   .loadState {

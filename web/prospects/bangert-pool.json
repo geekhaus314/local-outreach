@@ -1,0 +1,39 @@
+{
+  "hostnames": [
+    "bangert-pool.preview.localhost",
+    "bangert-pool.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "modern-wellness",
+  "prospect": {
+    "name": "Bangert Pool",
+    "industry": "Pool",
+    "phone": "",
+    "address": "",
+    "website": "",
+    "email": "",
+    "traffic_tier": "None",
+    "decision_maker": "Owner/Operator",
+    "classification": "NO_PRESENCE",
+    "opportunity": 79,
+    "need_score": 100,
+    "value_score": 44,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "no website to audit",
+    "pitch_facts": [
+      "No website listed in OpenStreetMap (weak signal -- verify first)."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "way/105819768",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Unclaimed online -- nobody is looking at them yet | Do not open with the website. Open with the one customer in the last week who searched for their trade and did not find them. The site is the symptom; being unfindable is the problem. | Do not imply they had a site and lost it. If the record came from a free extract a missing website may just mean the field was blank -- and they will correct you. | vocabulary: unclear | evidence: low-confidence source record; verify before sending; no website on the record | confidence: thin"
+  }
+}

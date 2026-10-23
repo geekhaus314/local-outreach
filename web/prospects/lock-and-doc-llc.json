@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "lockanddoc.com",
+    "lock-and-doc-llc.preview.localhost",
+    "lock-and-doc-llc.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "LOCK AND DOC, LLC",
+    "industry": "Locksmith",
+    "phone": "(314) 230-8038",
+    "address": "14628 Manchester Rd, Ballwin, MO 63011",
+    "website": "https://lockanddoc.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 92,
+    "need_score": 97,
+    "value_score": 85,
+    "site_health": 0,
+    "rating": 4.9,
+    "review_count": 396,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for lockanddoc.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "lockanddoc.com does not load at all.",
+      "4.9-star rating across 396 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJ4zeU0RnV2IcR5EFNPMo5dkU",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 396 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: good"
+  }
+}

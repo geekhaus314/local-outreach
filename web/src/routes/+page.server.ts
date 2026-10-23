@@ -1,12 +1,8 @@
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   if (!locals.tenant) {
-    error(404, 'No prospect mockup is configured for this host.');
+    throw redirect(302, '/admin');
   }
-
-  return {
-    tenant: locals.tenant
-  };
 };

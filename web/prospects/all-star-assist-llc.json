@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "movingbook-hrwsdt3a.manus.space",
+    "all-star-assist-llc.preview.localhost",
+    "all-star-assist-llc.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "ALL STAR ASSIST LLC",
+    "industry": "Mover",
+    "phone": "(314) 437-7235",
+    "address": "3909 St Timothy Ln B, St Ann, MO 63074",
+    "website": "https://movingbook-hrwsdt3a.manus.space/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.9,
+    "review_count": 449,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for movingbook-hrwsdt3a.manus.space: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "manus.space does not load at all.",
+      "4.9-star rating across 449 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJg3_QuTxoLSQR5kaMOUDdLHs",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 449 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: good"
+  }
+}

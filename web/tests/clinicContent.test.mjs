@@ -18,14 +18,14 @@ const royalKutz = envelope.prospect;
 const hostnames = envelope.hostnames;
 
 test('classifies hair, medical, and SMP prospects into distinct themes', () => {
-  assert.equal(classifyProspectTheme({ ...royalKutz, industry: 'Hair Salon' }), 'modern-wellness');
+  assert.equal(classifyProspectTheme({ ...royalKutz, industry: 'Hair Salon' }), 'salon-wellness');
   assert.equal(
     classifyProspectTheme({ ...royalKutz, name: 'Advanced Hair Restoration', industry: 'Hair Transplant Surgeon' }),
-    'clinical-trust'
+    'hair-restoration-clinical'
   );
   assert.equal(
     classifyProspectTheme({ ...royalKutz, name: 'Scalp Studio', industry: 'Scalp Micropigmentation' }),
-    'modern-wellness'
+    'smp-ink'
   );
 });
 
@@ -46,7 +46,7 @@ test('generates a complete mockup from a real prospect record', () => {
   const content = generateSiteContent(royalKutz, { hostnames });
 
   assert.equal(content.business.name, 'Royal Kutz Salon, Barber & Spa');
-  assert.equal(content.theme, 'modern-wellness');
+  assert.equal(content.theme, 'salon-wellness');
   assert.equal(content.isPreview, true);
   assert.equal(content.seo.noindex, true);
   assert.equal(content.proof.rating, 4.8);
@@ -88,7 +88,7 @@ test('rejects prospects without a name', () => {
 test('classifies a mislabeled barbershop by name before industry', () => {
   assert.equal(
     classifyProspectTheme({ ...royalKutz, name: 'Diesel Barbershop Winghaven', industry: 'Restaurant' }),
-    'modern-wellness'
+    'salon-wellness'
   );
   assert.equal(recommendTemplate('salon'), 'editorial');
   assert.equal(recommendTemplate('restaurant'), 'menu');

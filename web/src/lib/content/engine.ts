@@ -20,6 +20,7 @@ import type { ThemeName } from '../data/themes.ts';
 import { getVerticalContentBuilder } from '../verticals/registry.ts';
 import { matchVertical } from '../verticals/taxonomy.ts';
 import type { VerticalContent } from '../verticals/types.ts';
+import { verticalThemeForKind } from '../data/vertical-themes.ts';
 
 interface Place {
   streetAddress: string;
@@ -249,11 +250,7 @@ export function classifyIndustry(lead: LocalOutreachProspect): IndustryKind {
 }
 
 export function classifyProspectTheme(lead: LocalOutreachProspect, kind = classifyIndustry(lead)): ThemeName {
-  if (['medical-hair', 'dental', 'medical', 'home-services', 'automotive'].includes(kind)) {
-    return 'clinical-trust';
-  }
-  if (['smp', 'salon', 'landscaping'].includes(kind)) return 'modern-wellness';
-  return 'premium-luxury';
+  return verticalThemeForKind(kind).name;
 }
 
 function placeFromProspect(lead: LocalOutreachProspect): Place {

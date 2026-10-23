@@ -3,12 +3,13 @@ import test from 'node:test';
 
 import {
   DEFAULT_THEME,
-  THEME_NAMES,
   isThemeName,
   resolveTheme,
   themeList,
   themes
 } from '../src/lib/data/themes.ts';
+
+const THEME_NAMES = themeList.map((t) => t.name);
 
 test('every declared theme has a complete definition', () => {
   assert.equal(themeList.length, THEME_NAMES.length);
@@ -30,7 +31,7 @@ test('isThemeName accepts only registered themes', () => {
 });
 
 test('resolveTheme falls back for unknown values', () => {
-  assert.equal(resolveTheme('modern-wellness'), 'modern-wellness');
+  assert.equal(resolveTheme('salon-wellness'), 'salon-wellness');
   assert.equal(resolveTheme('not-a-theme'), DEFAULT_THEME);
-  assert.equal(resolveTheme(null, 'premium-luxury'), 'premium-luxury');
+  assert.equal(resolveTheme(null, 'general-honest'), 'general-honest');
 });

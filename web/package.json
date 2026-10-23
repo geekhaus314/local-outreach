@@ -25,8 +25,11 @@
     "@sveltejs/kit": "^2.21.4",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/node": "^26.4.1",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.31",
     "svelte": "^5.33.14",
     "svelte-check": "^4.2.1",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "wrangler": "^4.126.0"

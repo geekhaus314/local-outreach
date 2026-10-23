@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "ofallonvmc.com",
+    "o-fallon-veterinary-med-center.preview.localhost",
+    "o-fallon-veterinary-med-center.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "modern-wellness",
+  "prospect": {
+    "name": "O'Fallon Veterinary Med Center",
+    "industry": "Veterinarian",
+    "phone": "(636) 272-3100",
+    "address": "975 Cool Springs Industrial Dr, O'Fallon, MO 63366",
+    "website": "http://ofallonvmc.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.7,
+    "review_count": 277,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for ofallonvmc.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "ofallonvmc.com does not load at all.",
+      "4.7-star rating across 277 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJqW3F_qvQ3ocRF5s_qMTgPwE",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.7 stars; 277 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: good"
+  }
+}

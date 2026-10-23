@@ -8,11 +8,22 @@
     <script>
       (function () {
         try {
-          var names = ['clinical-trust', 'premium-luxury', 'modern-wellness'];
+          var names = Object.keys({ 'hair-restoration-clinical': 0, 'smp-ink': 0, 'laser-precision': 0, 'salon-wellness': 0, 'restaurant-luxury': 0, 'automotive-industrial': 0, 'roofing-storm': 0, 'hvac-service': 0, 'plumbing-emergency': 0, 'electrical-circuit': 0, 'dental-clinical': 0, 'veterinary-warm': 0, 'retail-boutique': 0, 'general-honest': 0 });
           var colors = {
-            'clinical-trust': '#0f172a',
-            'premium-luxury': '#0a0a0a',
-            'modern-wellness': '#2f4f4f'
+            'hair-restoration-clinical': '#0b1320',
+            'smp-ink': '#1a1a1a',
+            'laser-precision': '#0f172a',
+            'salon-wellness': '#2f4f4f',
+            'restaurant-luxury': '#0a0a0a',
+            'automotive-industrial': '#0f172a',
+            'roofing-storm': '#1e293b',
+            'hvac-service': '#0c4a6e',
+            'plumbing-emergency': '#0f172a',
+            'electrical-circuit': '#0f172a',
+            'dental-clinical': '#0f766e',
+            'veterinary-warm': '#2f4f4f',
+            'retail-boutique': '#0a0a0a',
+            'general-honest': '#1e293b'
           };
           var stored = window.localStorage.getItem('slag.theme');
           var match = document.cookie.match(/(?:^|; )slag-theme=([^;]+)/);

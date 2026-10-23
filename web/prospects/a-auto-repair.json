@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "aplusauto.org",
+    "a-auto-repair.preview.localhost",
+    "a-auto-repair.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "A+ Auto Repair",
+    "industry": "Automotive",
+    "phone": "(314) 291-2886",
+    "address": "3659 N Lindbergh Blvd, St Ann, MO 63074",
+    "website": "http://aplusauto.org/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Shop Manager",
+    "classification": "DEAD_SITE",
+    "opportunity": 95,
+    "need_score": 97,
+    "value_score": 92,
+    "site_health": 0,
+    "rating": 4.6,
+    "review_count": 119,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for aplusauto.org: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "aplusauto.org does not load at all.",
+      "4.6-star rating across 119 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJ7-D_IYMx34cRq80fBYspZ7A",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.6 stars; 119 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

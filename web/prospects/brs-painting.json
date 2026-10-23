@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "brspainting.com",
+    "brs-painting.preview.localhost",
+    "brs-painting.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "project",
+  "theme": "modern-wellness",
+  "prospect": {
+    "name": "BRS Painting",
+    "industry": "Painter",
+    "phone": "(636) 219-9749",
+    "address": "1605 E Terra Ln, O'Fallon, MO 63366",
+    "website": "https://brspainting.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.9,
+    "review_count": 180,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for brspainting.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "brspainting.com does not load at all.",
+      "4.9-star rating across 180 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJ1TLNifHQ3ocRvq6drZ75psw",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 180 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

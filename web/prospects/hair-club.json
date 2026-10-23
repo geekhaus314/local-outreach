@@ -1,0 +1,35 @@
+{
+  "hostnames": ["hair-club.preview.localhost", "hair-club.localhost"],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Hair Club",
+    "industry": "Hair Restoration",
+    "phone": "",
+    "address": "",
+    "website": "https://www.thehairclub.com/",
+    "email": "",
+    "traffic_tier": "Unknown",
+    "decision_maker": "Practice Manager",
+    "classification": "NO_PRESENCE",
+    "opportunity": 90,
+    "need_score": 85,
+    "value_score": 90,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "Not yet audited. Verify local St. Louis presence before contacting.",
+    "pitch_facts": [
+      "Hair Club is a national hair restoration brand; local offices often rely on national branding instead of a local owned site.",
+      "myhairloss.com captures patients searching for hair loss solutions in your city."
+    ],
+    "sources": ["manual"],
+    "source_ids": "",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": ""
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "hostnames": ["smp-stlouis.preview.localhost", "smp-stlouis.localhost"],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "St. Louis Scalp Micropigmentation",
+    "industry": "Hair Restoration",
+    "phone": "",
+    "address": "",
+    "website": "",
+    "email": "",
+    "traffic_tier": "Unknown",
+    "decision_maker": "Owner/Operator",
+    "classification": "NO_PRESENCE",
+    "opportunity": 92,
+    "need_score": 95,
+    "value_score": 85,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "No website found. SMP studios rely on visual before/afters; myhairloss.com is an ideal storefront.",
+    "pitch_facts": [
+      "No website detected for this Scalp Micropigmentation studio.",
+      "myhairloss.com captures patients searching 'scalp micropigmentation St. Louis'."
+    ],
+    "sources": ["manual"],
+    "source_ids": "",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": ""
+  }
+}

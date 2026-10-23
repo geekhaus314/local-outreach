@@ -5,7 +5,8 @@ import { resolveTenant } from '$lib/server/prospects';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const tenant = await resolveTenant(event.url, event.platform);
-  const theme = resolveTheme(event.cookies.get(THEME_COOKIE), tenant?.theme ?? DEFAULT_THEME);
+  const cookieTheme = resolveTheme(event.cookies.get(THEME_COOKIE));
+  const theme = tenant?.theme ?? cookieTheme;
   const themeColor = themes[theme].tokens.chromeColor;
 
   const accessEmail = event.request.headers.get('cf-access-authenticated-user-email');
@@ -23,7 +24,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const response = await resolve(event, {
     transformPageChunk: ({ html }) =>
-      html.replaceAll('%slag.theme%', theme).replaceAll('%slag.themeColor%', themeColor)
+      html
+        .replaceAll('%slag.theme%', theme)
+        .replaceAll('%slag.themeColor%', themeColor)
   });
 
   response.headers.set('X-Content-Type-Options', 'nosniff');

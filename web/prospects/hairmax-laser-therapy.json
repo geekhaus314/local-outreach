@@ -1,0 +1,35 @@
+{
+  "hostnames": ["hairmax.preview.localhost", "hairmax.localhost"],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "HairMax Laser Therapy",
+    "industry": "Hair Restoration",
+    "phone": "",
+    "address": "",
+    "website": "https://www.hairmax.com/",
+    "email": "",
+    "traffic_tier": "Unknown",
+    "decision_maker": "Practice Manager",
+    "classification": "NO_PRESENCE",
+    "opportunity": 88,
+    "need_score": 80,
+    "value_score": 90,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "Not yet audited. Laser hair therapy providers often sell devices; a local clinic site converts better.",
+    "pitch_facts": [
+      "HairMax sells laser hair therapy devices; local clinics offering LLLT need a location-specific site.",
+      "myhairloss.com is brandable for a local laser hair therapy practice."
+    ],
+    "sources": ["manual"],
+    "source_ids": "",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": ""
+  }
+}

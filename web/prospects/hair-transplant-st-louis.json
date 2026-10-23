@@ -1,0 +1,35 @@
+{
+  "hostnames": ["hair-transplant-stl.preview.localhost", "hair-transplant-stl.localhost"],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "St. Louis Hair Transplant Clinic",
+    "industry": "Hair Restoration",
+    "phone": "",
+    "address": "",
+    "website": "",
+    "email": "",
+    "traffic_tier": "Unknown",
+    "decision_maker": "Practice Manager",
+    "classification": "NO_PRESENCE",
+    "opportunity": 98,
+    "need_score": 100,
+    "value_score": 95,
+    "site_health": null,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "No website found. Hair transplant patients research extensively online; a missing site is lost revenue.",
+    "pitch_facts": [
+      "No website detected for this hair transplant clinic.",
+      "myhairloss.com is an exact-match domain for 'hair transplant St. Louis' searches."
+    ],
+    "sources": ["manual"],
+    "source_ids": "",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": ""
+  }
+}

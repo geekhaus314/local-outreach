@@ -1,0 +1,18 @@
+# wrangler.toml — local dev + Cloudflare Pages deployment for the outreach engine.
+# D1 binding `DB` is wired to the local-outreach database.
+# The SvelteKit adapter-cloudflare reads this at build/dev time.
+
+name = "local-outreach-engine"
+compatibility_date = "2026-10-20"
+env_name = "local-outreach"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "local-outreach"
+database_id = ""
+
+[observability]
+enabled = true
+
+[vars]
+ENVIRONMENT = "development"

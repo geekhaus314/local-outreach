@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "robinsonfamilyroofrepair.com",
+    "robinson-family-roof-repair.preview.localhost",
+    "robinson-family-roof-repair.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "project",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Robinson Family Roof Repair",
+    "industry": "Roofing",
+    "phone": "(314) 948-3777",
+    "address": "2220 N Hwy 67, Florissant, MO 63033",
+    "website": "https://robinsonfamilyroofrepair.com/florissant-branch-2-missouri",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 98,
+    "need_score": 97,
+    "value_score": 100,
+    "site_health": 0,
+    "rating": 4.9,
+    "review_count": 134,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for robinsonfamilyroofrepair.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "robinsonfamilyroofrepair.com does not load at all.",
+      "4.9-star rating across 134 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJI9srRDgz34cRH2FsrqN5qqs|ChIJJ6PESAg334cRmdVYKuzr8fA",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 134 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

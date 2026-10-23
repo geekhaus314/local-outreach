@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "rivercitydrywall-painting.com",
+    "river-city-drywall-and-painting.preview.localhost",
+    "river-city-drywall-and-painting.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "project",
+  "theme": "premium-luxury",
+  "prospect": {
+    "name": "River City Drywall and Painting",
+    "industry": "Construction Company",
+    "phone": "(636) 474-9657",
+    "address": "1011 Cool Springs Industrial Dr, O'Fallon, MO 63366",
+    "website": "http://rivercitydrywall-painting.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 90,
+    "need_score": 97,
+    "value_score": 79,
+    "site_health": 0,
+    "rating": 4.7,
+    "review_count": 107,
+    "audit_summary": "UNREACHABLE (blocked: DNS failure for rivercitydrywall-painting.com: [Errno -3] Temporary failure in name resolution)",
+    "pitch_facts": [
+      "rivercitydrywall-painting.com does not load at all.",
+      "4.7-star rating across 107 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJHzU2j6vQ3ocRcFLVZGkPbPQ",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.7 stars; 107 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}
