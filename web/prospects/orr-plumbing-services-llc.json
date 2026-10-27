@@ -1,0 +1,41 @@
+{
+  "hostnames": [
+    "facebook.com",
+    "orr-plumbing-services-llc.preview.localhost",
+    "orr-plumbing-services-llc.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Orr Plumbing Services LLC",
+    "industry": "Plumbing",
+    "phone": "(314) 398-0034",
+    "address": "2758 Old Hanley Rd, St. Louis, MO 63114",
+    "website": "https://facebook.com/Orr-Plumbing-Services-LLC-123290978062027",
+    "email": "",
+    "traffic_tier": "None",
+    "decision_maker": "Owner/Operator",
+    "classification": "SOCIAL_ONLY",
+    "opportunity": 86,
+    "need_score": 82,
+    "value_score": 92,
+    "site_health": null,
+    "rating": 4.7,
+    "review_count": 73,
+    "audit_summary": "audit skipped",
+    "pitch_facts": [
+      "Their only web presence is a www.facebook.com page.",
+      "4.7-star rating across 73 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJx9Xpo94134cReX7mzvm3eLY",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Unclaimed online -- nobody is looking at them yet | Do not open with the website. Open with the one customer in the last week who searched for their trade and did not find them. The site is the symptom; being unfindable is the problem. | Do not imply they had a site and lost it. If the record came from a free extract a missing website may just mean the field was blank -- and they will correct you. | vocabulary: unclear | evidence: 4.7 stars; 73 reviews; a social page is the whole online presence | confidence: thin"
+  }
+}

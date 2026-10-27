@@ -1,0 +1,40 @@
+{
+  "hostnames": [
+    "rene-ortiz-handyman-llc.preview.localhost",
+    "rene-ortiz-handyman-llc.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "project",
+  "theme": "premium-luxury",
+  "prospect": {
+    "name": "Rene Ortiz Handyman LLC",
+    "industry": "Construction Company",
+    "phone": "(314) 262-6598",
+    "address": "975 Thompson Dr, Florissant, MO 63031",
+    "website": "",
+    "email": "",
+    "traffic_tier": "None",
+    "decision_maker": "Owner/Operator",
+    "classification": "NO_PRESENCE",
+    "opportunity": 81,
+    "need_score": 100,
+    "value_score": 51,
+    "site_health": null,
+    "rating": 5.0,
+    "review_count": 6,
+    "audit_summary": "no website to audit",
+    "pitch_facts": [
+      "No website is attached to their Google listing.",
+      "5.0-star rating across 6 Google reviews."
+    ],
+    "sources": [
+      "gmaps"
+    ],
+    "source_ids": "ChIJk8APfzw334cR803UtFuep5c",
+    "low_confidence": false,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Unclaimed online -- nobody is looking at them yet | Do not open with the website. Open with the one customer in the last week who searched for their trade and did not find them. The site is the symptom; being unfindable is the problem. | Do not imply they had a site and lost it. If the record came from a free extract a missing website may just mean the field was blank -- and they will correct you. | vocabulary: unclear | evidence: 5.0 stars; 6 reviews; no website on the record | confidence: thin"
+  }
+}
