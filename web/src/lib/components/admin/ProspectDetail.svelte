@@ -24,6 +24,7 @@
   let loading = $state(true);
   let error = $state<string | null>(null);
   let busy = $state<string | null>(null);
+  let polishing = $state<string | null>(null);
   let notice = $state<{ kind: 'success' | 'error'; message: string } | null>(null);
 
   async function load(): Promise<void> {
@@ -53,6 +54,20 @@
       notice = { kind: 'error', message: cause instanceof Error ? cause.message : 'Regeneration failed.' };
     } finally {
       busy = null;
+    }
+  }
+
+  async function polishPitch(id: string): Promise<void> {
+    polishing = id;
+    notice = null;
+    try {
+      const result = await adminApi.polishPitch(id);
+      notice = { kind: 'success', message: 'Pitch polished with local AI.' };
+      await load();
+    } catch (cause) {
+      notice = { kind: 'error', message: cause instanceof Error ? cause.message : 'AI polish failed. Is Ollama running?' };
+    } finally {
+      polishing = null;
     }
   }
 
@@ -188,6 +203,9 @@
                   {#if pitch.status !== 'sent'}
                     <button class={styles.button} type="button" onclick={() => markPitchSent(pitch.id)}>Mark sent</button>
                   {/if}
+                  <button class={styles.button} type="button" disabled={polishing === pitch.id} onclick={() => polishPitch(pitch.id)}>
+                    {polishing === pitch.id ? 'Polishing…' : 'Polish'}
+                  </button>
                 </td>
               </tr>
               <tr>

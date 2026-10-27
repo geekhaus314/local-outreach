@@ -15,27 +15,26 @@
     "address": "4132 Seven Hills Dr, Florissant, MO 63033",
     "website": "http://wardhvac.net/",
     "email": "",
-    "traffic_tier": "Dead",
+    "traffic_tier": "Minimal",
     "decision_maker": "Owner/Operator",
-    "classification": "DEAD_SITE",
-    "opportunity": 98,
-    "need_score": 97,
+    "classification": "NEEDS_REHAB",
+    "opportunity": 75,
+    "need_score": 60,
     "value_score": 100,
-    "site_health": 0,
+    "site_health": null,
     "rating": 4.9,
     "review_count": 267,
-    "audit_summary": "UNREACHABLE (blocked: DNS failure for wardhvac.net: [Errno -3] Temporary failure in name resolution)",
+    "audit_summary": "audit skipped",
     "pitch_facts": [
-      "wardhvac.net does not load at all.",
       "4.9-star rating across 267 Google reviews."
     ],
     "sources": [
       "gmaps"
     ],
     "source_ids": "ChIJnYjUQfRK34cRhkfCGzD0p70",
-    "low_confidence": true,
+    "low_confidence": false,
     "maps_url": "",
     "last_audited": "",
-    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.9 stars; 267 reviews; low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+    "persona": "Established and protective of a reputation they earned | Do not tell them their site is bad -- they are 4.8 stars and they know exactly how good they are, and being told their web presence is a problem reads as an insult. Open with what you measured that is costing them enquiries, and ask which of their customers found them last. Make them the expert. | No jargon, no 'optimisation', no upsell. They have been sold a website before and can tell. A flat price and 'you own it' is the only thing that reads as honest here. | vocabulary: unclear | evidence: 4.9 stars; 267 reviews; live site that measures as underpowered | confidence: thin"
   }
 }

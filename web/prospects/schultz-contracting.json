@@ -15,18 +15,17 @@
     "address": "785 Redwing Dr, Florissant, MO 63031",
     "website": "http://schultzcontractingstl.com/",
     "email": "",
-    "traffic_tier": "Dead",
+    "traffic_tier": "Minimal",
     "decision_maker": "Owner/Operator",
-    "classification": "DEAD_SITE",
-    "opportunity": 87,
-    "need_score": 97,
+    "classification": "NEEDS_REHAB",
+    "opportunity": 64,
+    "need_score": 60,
     "value_score": 71,
-    "site_health": 0,
+    "site_health": null,
     "rating": 4.8,
     "review_count": 84,
-    "audit_summary": "UNREACHABLE (blocked: DNS failure for schultzcontractingstl.com: [Errno -3] Temporary failure in name resolution)",
+    "audit_summary": "audit skipped",
     "pitch_facts": [
-      "schultzcontractingstl.com does not load at all.",
       "4.8-star rating across 84 Google reviews."
     ],
     "sources": [
@@ -36,6 +35,6 @@
     "low_confidence": false,
     "maps_url": "",
     "last_audited": "",
-    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: 4.8 stars; 84 reviews; site health 0/100; listed site is dead, parked, or serving another business | confidence: good"
+    "persona": "Established and protective of a reputation they earned | Do not tell them their site is bad -- they are 4.8 stars and they know exactly how good they are, and being told their web presence is a problem reads as an insult. Open with what you measured that is costing them enquiries, and ask which of their customers found them last. Make them the expert. | No jargon, no 'optimisation', no upsell. They have been sold a website before and can tell. A flat price and 'you own it' is the only thing that reads as honest here. | vocabulary: unclear | evidence: 4.8 stars; 84 reviews; live site that measures as underpowered | confidence: thin"
   }
 }

@@ -206,6 +206,13 @@ export const adminApi = {
     return request<{ ok: boolean }>(`/api/admin/pitches/${encodeURIComponent(id)}`, { method: 'DELETE' });
   },
 
+  async polishPitch(id: string, instruction?: string) {
+    return request<{ pitch: AdminPitch }>(`/api/admin/pitches/${encodeURIComponent(id)}/polish`, {
+      method: 'POST',
+      body: JSON.stringify({ instruction })
+    });
+  },
+
   async listMockups(businessId?: string) {
     return request<{ mockups: AdminMockup[] }>(`/api/admin/mockups${query({ business_id: businessId })}`);
   },
