@@ -1,0 +1,40 @@
+{
+  "hostnames": [
+    "faszold.com",
+    "faszold-heating-cooling.preview.localhost",
+    "faszold-heating-cooling.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Faszold Heating & Cooling",
+    "industry": "HVAC",
+    "phone": "+1-636-397-1237",
+    "address": "1613 East Terra Lane O'Fallon 63366",
+    "website": "https://faszold.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 73,
+    "need_score": 80,
+    "value_score": 61,
+    "site_health": 35,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "redirects to classicairecare.com, legacy stack",
+    "pitch_facts": [
+      "faszold.com redirects to classicairecare.com, which is not their business."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "way/661751077",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: HVAC call | evidence: low-confidence source record; verify before sending; site health 35/100; listed site is dead, parked, or serving another business; their site leads on urgency; writes as a crew | confidence: thin"
+  }
+}

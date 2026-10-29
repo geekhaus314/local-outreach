@@ -1,0 +1,42 @@
+{
+  "hostnames": [
+    "premierdentalpartners.com",
+    "premier-dental-partners.preview.localhost",
+    "premier-dental-partners.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "clinic",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Premier Dental Partners",
+    "industry": "Dental",
+    "phone": "+1 314-878-0122",
+    "address": "12528 Olive Boulevard Creve Coeur 63141",
+    "website": "https://premierdentalpartners.com/",
+    "email": "",
+    "traffic_tier": "Minimal",
+    "decision_maker": "Practice Manager",
+    "classification": "NEEDS_REHAB",
+    "opportunity": 66,
+    "need_score": 75,
+    "value_score": 50,
+    "site_health": 10,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "no mobile layout",
+    "pitch_facts": [
+      "Your site isn't set up for phones -- visitors on mobile see a shrunken desktop page, and most of your customers will be searching from one.",
+      "Your site shows no Google reviews or trust badges, so visitors get no reassurance before they call you.",
+      "Your site has no meta description, so Google invents the text it shows under your listing in search results."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "node/4764550165",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Working, and quietly leaving enquiries on the table | Their site is not the problem and saying so is what buys you the rest of the conversation. Ask what they would like the site to do that it does not do now, then quote the gap. | Do not list defects they did not ask about. Nobody wants a performance review of a site they were fine with, and a long list reads as an upsell attempt. | vocabulary: unclear | evidence: low-confidence source record; verify before sending; site health 10/100; live site that measures as underpowered; writes as a crew | confidence: thin"
+  }
+}

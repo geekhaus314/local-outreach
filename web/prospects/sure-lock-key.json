@@ -1,0 +1,38 @@
+{
+  "hostnames": [
+    "surelockandkey.net",
+    "sure-lock-key.preview.localhost",
+    "sure-lock-key.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "Sure Lock & Key",
+    "industry": "Locksmith",
+    "phone": "+1 314-822-7300",
+    "address": "11019 Manchester Road Kirkwood 63122",
+    "website": "https://surelockandkey.net/",
+    "email": "",
+    "traffic_tier": "Active",
+    "decision_maker": "Owner/Operator",
+    "classification": "NEEDS_REHAB",
+    "opportunity": 16,
+    "need_score": 0,
+    "value_score": 43,
+    "site_health": 100,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "live, no major issues detected",
+    "pitch_facts": [],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "node/6841137447",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Not enough data to read | Go and open the site in a browser before you write a word. Every other archetype here is a prior, and this one is genuinely unknown. | Anything templated. A generic pitch to a business you have not looked at is the one that gets you deleted. | vocabulary: concrete job | evidence: low-confidence source record; verify before sending; site health 100/100; their site leads on urgency; their site shouts in caps; writes as a crew | confidence: thin"
+  }
+}

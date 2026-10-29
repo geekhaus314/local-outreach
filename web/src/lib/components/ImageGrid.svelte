@@ -31,6 +31,13 @@
     current = (current - 1 + images.length) % images.length;
   }
 
+  function onLightboxKeydown(event: KeyboardEvent): void {
+    if (!open) return;
+    if (event.key === 'Escape') closeLightbox();
+    if (event.key === 'ArrowRight') next();
+    if (event.key === 'ArrowLeft') prev();
+  }
+
   onMount(() => {
     if (typeof window === 'undefined') return;
     const handler = (event: KeyboardEvent) => {
@@ -52,11 +59,13 @@
 
   <div class="track">
     {#each images as image, index}
-      <figure class="card" onclick={() => openLightbox(index)}>
-        <div class="imageWrap">
-          <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-          <div class="imageOverlay"></div>
-        </div>
+      <figure class="card">
+        <button class="cardOpen" type="button" onclick={() => openLightbox(index)} aria-label={`Open ${image.alt}`}>
+          <div class="imageWrap">
+            <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+            <div class="imageOverlay"></div>
+          </div>
+        </button>
         {#if image.caption}
           <figcaption>{image.caption}</figcaption>
         {/if}
@@ -65,7 +74,14 @@
   </div>
 
   {#if open}
-    <div class="lightbox" onclick={closeLightbox} role="dialog" aria-modal="true" aria-label="Image lightbox">
+    <div
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image lightbox"
+      tabindex={-1}
+      onkeydown={onLightboxKeydown}
+    >
       <button class="lightboxClose" onclick={closeLightbox} aria-label="Close">✕</button>
       <button class="lightboxNav prev" onclick={(e) => { e.stopPropagation(); prev(); }} aria-label="Previous">‹</button>
       <figure class="lightboxFigure">
@@ -131,6 +147,21 @@
     border-color: var(--color-accent);
     transform: translateY(-0.25rem);
     box-shadow: var(--color-shadow);
+  }
+
+  .cardOpen {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .cardOpen:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   .imageWrap {

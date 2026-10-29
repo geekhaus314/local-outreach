@@ -1,6 +1,7 @@
 import type { D1Database } from '@cloudflare/workers-types';
 import type { SiteContent } from '$lib/content/types';
 import type { ThemeName } from '$lib/data/themes';
+import type { SessionUser } from '$lib/server/auth';
 
 declare global {
   namespace App {
@@ -8,7 +9,10 @@ declare global {
       tenant: SiteContent | null;
       theme: ThemeName;
       themeColor: string;
-      adminEmail: string | null;
+      /** Resolved DB session user (RBAC roles: owner, admin, viewer) or null. */
+      user: SessionUser | null;
+      /** Set for the auth endpoints so they can revoke by hash. */
+      sessionCookieToken: string | null;
     }
 
     interface Platform {
@@ -17,7 +21,6 @@ declare global {
         BOOKING_WEBHOOK_URL?: string;
         BOOKING_API_KEY?: string;
         BOOKING_FROM_EMAIL?: string;
-        ADMIN_EMAILS?: string;
       };
     }
   }

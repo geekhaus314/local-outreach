@@ -599,3 +599,194 @@ code {
   background: var(--adm-surface-2);
   font-size: 0.85em;
 }
+
+/* Unified portal additions ------------------------------------------------ */
+
+.userRole {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--adm-border);
+  border-radius: 999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--adm-muted);
+}
+
+/* Funnel: structural, data-driven bars. Typography and proportion carry the
+   visual weight — no imagery. Container query keeps columns readable when the
+   panel is squeezed into a narrow sidebar context. */
+
+.funnel {
+  display: grid;
+  gap: 0.75rem;
+  container-type: inline-size;
+}
+
+.funnelRow {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.funnelStage {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--adm-muted);
+}
+
+.funnelTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.funnelBar {
+  height: 1.5rem;
+  border-radius: 6px;
+  background: var(--adm-accent-soft);
+  border: 1px solid var(--adm-accent);
+  min-width: 3px;
+}
+
+.funnelCount {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  color: var(--adm-text);
+  white-space: nowrap;
+}
+
+.funnelValue {
+  font-size: 0.72rem;
+  color: var(--adm-muted);
+  white-space: nowrap;
+}
+
+@container (max-width: 32rem) {
+  .funnelRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Lead lifecycle selector row inside the leads table */
+
+.lifecycleSelect {
+  min-width: 11rem;
+}
+
+
+.linkButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--adm-text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.linkButton:hover {
+  color: var(--adm-accent);
+}
+
+.detailLink {
+  color: var(--adm-accent);
+  text-decoration: none;
+}
+
+.detailLink:hover {
+  text-decoration: underline;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.timeline li {
+  display: grid;
+  gap: 0.1rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--adm-border);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.fieldMeta {
+  font-size: 0.75rem;
+  color: var(--adm-muted);
+}
+
+.buttonGhostSmall {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--adm-muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.commsList {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.commsList li {
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius-sm);
+  padding: 0.6rem 0.75rem;
+  display: grid;
+  gap: 0.25rem;
+  background: var(--adm-bg);
+}
+
+.commsOut {
+  border-left: 3px solid var(--adm-accent);
+}
+
+.commsIn {
+  border-left: 3px solid var(--adm-success);
+}
+
+.commsMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--adm-muted);
+}
+
+.commsBadge {
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.commsBody {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}

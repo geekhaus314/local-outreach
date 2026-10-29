@@ -1,0 +1,15 @@
+/* Analytics portal visuals: structural data displays only — typographic stat
+   cards, proportional funnel bars, no images or decorative gradients. */
+
+.funnel {
+  display: grid;
+  gap: 0.75rem;
+  container-type: inline-size;
+}
+
+.gridTwo {
+  display: grid;
+  gap: 1rem;
+  margin-block: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
+}

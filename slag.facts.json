@@ -66,7 +66,7 @@
     {
       "id": "data.entities",
       "question": "List the entities, their fields, relationships, and who may access each one.",
-      "value": "Business/Prospect (name, industry, locations, contact, source, raw facts), Audit (website findings, scores, evidence), Pitch (generated message, status, target), Mockup (template, theme, content version, preview host), BookingRequest (name, email, optional phone, service, message, consent), and JobRun (queue/cron status, retries, errors). Admin access is restricted; public preview and booking paths are unauthenticated.",
+      "value": "Business/Prospect (name, industry, locations, contact, source, raw facts), Audit (website findings, scores, evidence), Pitch (generated message, status, target), Mockup (template, theme, content version, preview host), BookingRequest (name, email, optional phone, service, message, consent), and JobRun (queue/cron status, retries, errors). Admin access is restricted; public preview and booking paths are unauthenticated. Added for the unified platform: Lead lifecycle_status (cold, contacted, audited, proposal_sent, converted, rejected) with lifecycle_events transition history on the businesses entity (businesses.id is the Lead canonical id); CommunicationLog (direction, channel, body, occurred_at, response_to outcome) per business; Users (email, role) and Sessions (hashed token, expiry, last-seen) for RBAC. Lead records are exposed at /api/admin/leads; AuditReport stays the audits table exposed at /api/admin/audits; AnalyticsSummary is materialized on read by /api/admin/analytics (no cached table).",
       "status": "confirmed",
       "source": "user answer 2026-10-20",
       "required": false,
@@ -76,12 +76,12 @@
     {
       "id": "auth.model",
       "question": "Who signs in, how are sessions verified server-side, and what roles exist? Use \"none\" for a public app.",
-      "value": "No sign-in for public preview sites or booking. The internal pipeline dashboard and admin API are protected by Cloudflare Access; identity is verified at the edge before requests reach the Worker.",
+      "value": "DB-backed users with role-based access control (roles: owner, admin, viewer). Owner account registers through /api/auth/setup (only allowed while zero users exist). Login issues an HttpOnly session cookie verified server-side in hooks.server.ts against a D1 sessions table (SHA-256 token hashes, 14-day expiry). Passwords hashed with PBKDF2-SHA256 (210k iterations) via WebCrypto. Named guards requireAuth/requireAdmin/requireOwner protected every /api/admin/** endpoint.",
       "status": "confirmed",
-      "source": "user answer 2026-10-20",
+      "source": "user answer 2026-10-27",
       "required": true,
       "evidence": [],
-      "notes": "Client-side user flags, localStorage tokens and literal password checks are not auth."
+      "notes": "Confirmed via chat + downloaded slag_guardrail_configuration.md / slag_architecture_facts_feature_parity.md."
     },
     {
       "id": "payments",
@@ -132,12 +132,12 @@
     {
       "id": "data.seed",
       "question": "Should demo/seed data exist? If yes, should it ever appear in production? How is real data loaded?",
-      "value": null,
-      "status": "unknown",
-      "source": null,
+      "value": "Real leads seeded from the repo lived pipeline file leads.csv (88 scraped, measured St. Louis County businesses) via checked-in D1 migration 0004. This is real scraped outreach data, not mock data; it already existed in the working tree before this build.",
+      "status": "confirmed",
+      "source": "user answer 2026-10-27",
       "required": false,
       "evidence": [],
-      "notes": "Saying yes to seed data does not make mock data a production data source."
+      "notes": "Confirmed via chat + downloaded slag_guardrail_configuration.md / slag_architecture_facts_feature_parity.md."
     },
     {
       "id": "design.direction",
@@ -172,12 +172,12 @@
     {
       "id": "admin.console.ux",
       "question": "What visual quality bar applies to the admin console?",
-      "value": "The admin interface must look as sophisticated and advanced as the engineering under the hood. No bare tables or default browser controls; it is a designed product surface.",
+      "value": "The admin console must look as sophisticated as the engineering under it: designed product surface in vanilla CSS modules (no Tailwind utilities — error-level ban), high-contrast structural layouts, typography-driven components, monochrome CSS/SVG icons, no stock photography, no AI-slop 3D/gradient art, no watermarked or placeholder assets. Imagery breaks, if any, are pure-CSS wireframe-style mocks or programmatic elements.",
       "status": "confirmed",
-      "source": "user answer 2026-10-20",
+      "source": "user answer 2026-10-27",
       "required": true,
       "evidence": [],
-      "notes": "Applies to layout, typography, states, and interaction polish."
+      "notes": "Confirmed via chat + downloaded slag_guardrail_configuration.md / slag_architecture_facts_feature_parity.md."
     },
     {
       "id": "admin.headless",

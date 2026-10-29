@@ -1,0 +1,40 @@
+{
+  "hostnames": [
+    "mrthirstys.com",
+    "mr-thirsty-s.preview.localhost",
+    "mr-thirsty-s.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "menu",
+  "theme": "premium-luxury",
+  "prospect": {
+    "name": "Mr Thirsty's",
+    "industry": "Restaurant",
+    "phone": "+1 636 875 5500",
+    "address": "324 North Main Street Saint Charles 63301",
+    "website": "http://mrthirstys.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "General Manager",
+    "classification": "DEAD_SITE",
+    "opportunity": 75,
+    "need_score": 97,
+    "value_score": 40,
+    "site_health": 0,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "parked placeholder, legacy stack",
+    "pitch_facts": [
+      "mrthirstys.com is a parked placeholder page."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "way/351129124",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business; their site advertises price; writes as a crew | confidence: thin"
+  }
+}

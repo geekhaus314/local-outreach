@@ -1,0 +1,42 @@
+{
+  "hostnames": [
+    "teamcentral.org",
+    "team-central-gymnastics-academy.preview.localhost",
+    "team-central-gymnastics-academy.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "editorial",
+  "theme": "modern-wellness",
+  "prospect": {
+    "name": "Team Central Gymnastics Academy",
+    "industry": "Fitness",
+    "phone": "",
+    "address": "2675 Metro Boulevard",
+    "website": "https://teamcentral.org/",
+    "email": "",
+    "traffic_tier": "Minimal",
+    "decision_maker": "Owner/Operator",
+    "classification": "NEEDS_REHAB",
+    "opportunity": 57,
+    "need_score": 71,
+    "value_score": 35,
+    "site_health": 17,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "no way to make contact, outdated copyright year, no ads.txt",
+    "pitch_facts": [
+      "There's no phone link, no email link and no contact form on your site -- a visitor has no obvious way to reach you.",
+      "The newest copyright date anywhere on your site is 2016 -- which tells people the site hasn't been touched in a while.",
+      "There's no ads.txt on your site. If you ever run Google call ads or lead-gen campaigns, Google requires you to declare yourself there and will suspend the account for it."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "node/12804703696",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Working, and quietly leaving enquiries on the table | Their site is not the problem and saying so is what buys you the rest of the conversation. Ask what they would like the site to do that it does not do now, then quote the gap. | Do not list defects they did not ask about. Nobody wants a performance review of a site they were fine with, and a long list reads as an upsell attempt. | vocabulary: unclear | evidence: low-confidence source record; verify before sending; site health 17/100; live site that measures as underpowered; writes as a crew | confidence: thin"
+  }
+}

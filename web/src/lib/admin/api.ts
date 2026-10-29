@@ -13,6 +13,7 @@ export interface AdminProspectSummary {
 
 export interface AdminProspectDetail extends AdminProspectSummary {
   id: string;
+  lifecycle_status: string;
   website: string;
   email: string;
   phone: string;
@@ -33,6 +34,7 @@ export interface AdminProspectDetail extends AdminProspectSummary {
 export interface AdminAudit {
   id: string;
   business_id: string;
+  business_name: string | null;
   summary: string;
   findings: string;
   site_health: number | null;
@@ -42,6 +44,7 @@ export interface AdminAudit {
 export interface AdminPitch {
   id: string;
   business_id: string;
+  business_name: string | null;
   channel: string;
   body: string;
   status: string;
@@ -51,6 +54,7 @@ export interface AdminPitch {
 export interface AdminMockup {
   id: string;
   business_id: string;
+  business_name: string | null;
   template: string;
   theme: string;
   content_version: number;
@@ -252,5 +256,197 @@ export const adminApi = {
       method: 'POST',
       body: JSON.stringify({ id, kind })
     });
+  }
+};
+
+/* --- Unified platform extensions (leads, comms, users, analytics) --------- */
+
+export interface AdminLead {
+  id: string;
+  slug: string;
+  name: string;
+  industry: string;
+  industry_kind: string;
+  phone: string;
+  address: string;
+  website: string;
+  email: string;
+  rating: number | null;
+  review_count: number | null;
+  opportunity: number;
+  need_score: number;
+  value_score: number;
+  site_health: number | null;
+  classification: string;
+  lifecycle_status: string;
+  status: string;
+  last_audited: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminLifecycleEvent {
+  id: string;
+  business_id: string;
+  from_status: string;
+  to_status: string;
+  actor_id: string | null;
+  note: string;
+  created_at: string;
+}
+
+export interface AdminCommunication {
+  id: string;
+  business_id: string;
+  business_name: string | null;
+  business_slug: string | null;
+  direction: 'outbound' | 'inbound';
+  channel: string;
+  subject: string;
+  body: string;
+  occurred_at: string | null;
+  response_to: string | null;
+  outcome: string;
+  actor_id: string | null;
+  created_at: string;
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  disabled: number | boolean;
+  created_at: string;
+  last_seen_at: string | null;
+  lastSeenAt?: string | null;
+}
+
+export interface AnalyticsFunnelStage {
+  lifecycle: string;
+  count: number;
+  estimatedValue: number;
+}
+
+export interface AdminAnalytics {
+  leads: number;
+  funnel: AnalyticsFunnelStage[];
+  conversionRate: number;
+  convertedCount: number;
+  proposalsSent: number;
+  contactSubmissionCount: number;
+  outboundMessages: number;
+  inboundResponses: number;
+  responseRate: number;
+  monthlyOutreach: Array<{ month: string; outbound: number; inbound: number; events: number }>;
+  monthlyBookings: Array<{ month: string; count: number }>;
+  deadSiteCount: number;
+  noPresenceCount: number;
+  averageSiteHealth: number | null;
+  topOpportunities: Array<{ slug: string; name: string; industry: string; opportunity: number; lifecycle_status: string; website: string }>;
+  staleContacts: number;
+}
+
+export const LEAD_LIFECYCLE_STATUSES = [
+  'cold',
+  'contacted',
+  'audited',
+  'proposal_sent',
+  'converted',
+  'rejected'
+] as const;
+
+export interface LeadDetail extends ProspectDetail {
+  communications: AdminCommunication[];
+  lifecycleEvents: AdminLifecycleEvent[];
+}
+
+export const adminLeadsApi = {
+  async listLeads(filter: { q?: string; vertical?: string; kind?: string; lifecycle?: string; status?: string } = {}) {
+    return request<{ leads: AdminLead[] }>(`/api/admin/leads${query(filter)}`);
+  },
+  async getLead(slug: string) {
+    return request<LeadDetail>(`/api/admin/leads/${encodeURIComponent(slug)}`);
+  },
+  async createLead(body: unknown) {
+    return request<{ lead: AdminProspectDetail }>('/api/admin/leads', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+  },
+  async updateLead(slug: string, patch: Record<string, unknown>) {
+    return request<{ lead: AdminProspectDetail }>(
+      `/api/admin/leads/${encodeURIComponent(slug)}`,
+      { method: 'PATCH', body: JSON.stringify(patch) }
+    );
+  },
+  async deleteLead(slug: string) {
+    return request<{ ok: boolean; deleted: string }>(
+      `/api/admin/leads/${encodeURIComponent(slug)}`,
+      { method: 'DELETE' }
+    );
+  },
+  async transitionLifecycle(slug: string, lifecycle: string, note?: string) {
+    return request<{ from: string; to: string }>(
+      `/api/admin/leads/${encodeURIComponent(slug)}/lifecycle`,
+      { method: 'POST', body: JSON.stringify({ lifecycle_status: lifecycle, note: note ?? '' }) }
+    );
+  }
+};
+
+export const adminCommsApi = {
+  async list(filter: { business_id?: string; direction?: 'outbound' | 'inbound'; response_needed?: boolean; limit?: number } = {}) {
+    return request<{ communications: AdminCommunication[] }>(`/api/admin/communications${query({
+      business_id: filter.business_id,
+      direction: filter.direction,
+      response_needed: filter.response_needed ? '1' : undefined,
+      limit: filter.limit ? String(filter.limit) : undefined
+    })}`);
+  },
+  async create(body: unknown) {
+    return request<{ communication: AdminCommunication }>('/api/admin/communications', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+  },
+  async update(id: string, patch: Record<string, unknown>) {
+    return request<{ communication: AdminCommunication }>(
+      `/api/admin/communications/${encodeURIComponent(id)}`,
+      { method: 'PATCH', body: JSON.stringify(patch) }
+    );
+  },
+  async remove(id: string) {
+    return request<{ ok: boolean; deleted: string }>(`/api/admin/communications/${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    });
+  }
+};
+
+export const adminUsersApi = {
+  async list() {
+    return request<{ users: AdminUser[] }>('/api/admin/users');
+  },
+  async create(body: unknown) {
+    return request<{ user: AdminUser }>('/api/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+  },
+  async update(id: string, patch: Record<string, unknown>) {
+    return request<{ user: AdminUser }>(`/api/admin/users/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(patch)
+    });
+  },
+  async remove(id: string) {
+    return request<{ ok: boolean; deleted: string }>(`/api/admin/users/${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    });
+  }
+};
+
+export const adminAnalyticsApi = {
+  async summary() {
+    return request<{ analytics: AdminAnalytics; launchPriceEstimate: number }>('/api/admin/analytics');
   }
 };

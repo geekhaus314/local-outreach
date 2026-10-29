@@ -16,7 +16,7 @@
 </svelte:head>
 
 {#if data.tenant}
-  {#await loadVerticalComponent(vertical)}
+  {#await loadVerticalComponent(data.tenant.vertical)}
     <div class="shell loadState">
       <p>Loading the {vertical} experience…</p>
     </div>

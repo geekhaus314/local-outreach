@@ -1,15 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { PageData } from './$types';
-  import { adminApi, type AdminProspectSummary } from '$lib/admin/api.ts';
+  import { adminApi, type AdminAudit, type AdminMockup, type AdminPitch, type AdminProspectSummary } from '$lib/admin/api.ts';
   import { createAdminCollection } from '$lib/admin/collection.svelte.ts';
   import { formatDate } from '$lib/admin/collection.svelte.ts';
   import ProspectForm from '$lib/components/admin/ProspectForm.svelte';
   import ProspectDetail from '$lib/components/admin/ProspectDetail.svelte';
-  import Dialog from '$lib/components/admin/Dialog.svelte';
   import Notice from '$lib/components/admin/Notice.svelte';
   import StateBlock from '$lib/components/admin/StateBlock.svelte';
   import StatusBadge from '$lib/components/admin/StatusBadge.svelte';
+  import styles from '$lib/components/admin/admin.module.css';
 
   let { data }: { data: PageData } = $props();
 
@@ -20,6 +20,8 @@
   let search = $state('');
   let formOpen = $state(false);
   let editing = $state<AdminProspectSummary | null>(null);
+  let editingDetail = $state<{ prospect: import('$lib/admin/api.ts').AdminProspectDetail } | null>(null);
+  let formBusy = $state(false);
   let detailSlug = $state<string | null>(null);
   let notice = $state<{ kind: 'success' | 'error'; message: string } | null>(null);
   let importing = $state(false);
@@ -28,15 +30,9 @@
   const prospects = createAdminCollection<AdminProspectSummary>('prospects', () =>
     adminApi.listProspects({ q: search || undefined })
   );
-  const audits = createAdminCollection<{ id: string; business_id: string; summary: string; findings: string; site_health: number | null; created_at: string }>('audits', () =>
-    adminApi.listAudits()
-  );
-  const pitches = createAdminCollection<{ id: string; business_id: string; channel: string; body: string; status: string; created_at: string }>('pitches', () =>
-    adminApi.listPitches()
-  );
-  const mockups = createAdminCollection<{ id: string; business_id: string; template: string; theme: string; content_version: number; preview_host: string; is_indexable: number; created_at: string }>('mockups', () =>
-    adminApi.listMockups()
-  );
+  const audits = createAdminCollection<AdminAudit>('audits', () => adminApi.listAudits());
+  const pitches = createAdminCollection<AdminPitch>('pitches', () => adminApi.listPitches());
+  const mockups = createAdminCollection<AdminMockup>('mockups', () => adminApi.listMockups());
   const bookings = createAdminCollection<{ id: string; business_id: string | null; business_slug: string; name: string; email: string; phone: string; service: string; message: string; consent: number; status: string; idempotency_key: string; created_at: string }>('bookings', () =>
     adminApi.listBookings()
   );
@@ -64,12 +60,21 @@
 
   async function createProspect(): Promise<void> {
     editing = null;
+    editingDetail = null;
     formOpen = true;
   }
 
   async function editProspect(prospect: AdminProspectSummary): Promise<void> {
-    editing = prospect;
-    formOpen = true;
+    formBusy = true;
+    try {
+      editingDetail = await adminApi.getProspect(prospect.slug);
+      editing = prospect;
+      formOpen = true;
+    } catch (cause) {
+      showNotice('error', cause instanceof Error ? cause.message : 'Could not load the prospect.');
+    } finally {
+      formBusy = false;
+    }
   }
 
   async function deleteProspect(prospect: AdminProspectSummary): Promise<void> {
@@ -100,7 +105,7 @@
     importResult = null;
     try {
       const response = await fetch('/api/admin/import-leads', { method: 'POST' });
-      const result = await response.json();
+      const result = await response.json() as { error?: string; imported: number; skipped: number; total: number; errors: string[] };
       if (!response.ok) {
         showNotice('error', result.error || 'Import failed.');
       } else {
@@ -147,513 +152,415 @@
   const tabs = ['pipeline', 'prospects', 'audits', 'pitches', 'mockups', 'bookings', 'job-runs'] as const;
 </script>
 
-<svelte:head>
-  <title>Pipeline admin</title>
-  <meta name="robots" content="noindex, nofollow" />
-</svelte:head>
+{#if !data.configured}
+  <div class={styles.panel}>
+    <h2>Database not bound</h2>
+    <p>
+      The admin console needs the D1 binding. Run
+      <code>npm run db:migrate:local</code>
+      to create the local database, then restart <code>npm run dev</code>.
+    </p>
+  </div>
+{:else}
+  <section class={styles.stats} aria-label="Pipeline summary">
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{prospects.items.length}</p>
+      <p class={styles.statLabel}>Prospects</p>
+    </div>
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{audits.items.length}</p>
+      <p class={styles.statLabel}>Audits</p>
+    </div>
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{pitches.items.length}</p>
+      <p class={styles.statLabel}>Pitches</p>
+    </div>
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{mockups.items.length}</p>
+      <p class={styles.statLabel}>Previews</p>
+    </div>
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{bookings.items.length}</p>
+      <p class={styles.statLabel}>Bookings</p>
+    </div>
+    <div class={styles.stat}>
+      <p class={styles.statValue}>{jobRuns.items.length}</p>
+      <p class={styles.statLabel}>Job runs</p>
+    </div>
+  </section>
 
-<link rel="stylesheet" href="/styles/admin-tailwind.css" />
+  <div class={styles.tabs} role="tablist" aria-label="Pipeline tables">
+    {#each tabs as tab (tab)}
+      <button
+        class={`${styles.tab}${activeTab === tab ? ` ${styles.tabActive}` : ''}`}
+        type="button"
+        role="tab"
+        aria-selected={activeTab === tab}
+        onclick={() => selectTab(tab)}
+      >
+        {tabLabel(tab)}
+        <span class={styles.tabCount}>{countFor(tab)}</span>
+      </button>
+    {/each}
+  </div>
 
-<div class="min-h-screen bg-adm-bg text-adm-text font-body">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-      <div>
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Internal · Pipeline admin</p>
-        <h1 class="font-display text-2xl tracking-tight">Freelance machine</h1>
-      </div>
-      <div class="flex items-center gap-3 text-sm text-adm-muted">
-        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-adm-accent-soft text-adm-accent font-mono text-xs">
-          {data.adminEmail?.slice(0, 2).toUpperCase() ?? '??'}
+  {#if activeTab === 'pipeline'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <div>
+          <h2 class={styles.panelTitle}>Quick actions</h2>
+          <p class={styles.panelMeta}>Start here. Import leads, generate pitches and previews, or create a prospect by hand.</p>
         </div>
-        <span>Signed in as {data.adminEmail}</span>
+        <div class={styles.actions}>
+          <button class={styles.button} type="button" onclick={createProspect}>New prospect</button>
+          <button class={styles.button} type="button" disabled={importing} onclick={importLeads}>
+            {importing ? 'Importing…' : 'Import leads from CSV'}
+          </button>
+          <button class={styles.button} type="button" onclick={() => regenerateAll('all')}>Regenerate all</button>
+        </div>
       </div>
-    </div>
 
-    {/* Pipeline summary cards */}
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Prospects</p>
-        <p class="font-display text-xl tracking-tight">{prospects.items.length}</p>
-      </div>
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Audits</p>
-        <p class="font-display text-xl tracking-tight">{audits.items.length}</p>
-      </div>
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Pitches</p>
-        <p class="font-display text-xl tracking-tight">{pitches.items.length}</p>
-      </div>
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Previews</p>
-        <p class="font-display text-xl tracking-tight">{mockups.items.length}</p>
-      </div>
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Bookings</p>
-        <p class="font-display text-xl tracking-tight">{bookings.items.length}</p>
-      </div>
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-4">
-        <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">Job runs</p>
-        <p class="font-display text-xl tracking-tight">{jobRuns.items.length}</p>
-      </div>
-    </div>
-
-    {/* Tabs */}
-    <div class="flex flex-wrap gap-1 border-b border-adm-border mb-6">
-      {#each tabs as tab}
-        <button
-          class="inline-flex items-center gap-2 px-3 py-2 border-b-2 border-transparent mb-[-1px] bg-transparent text-adm-muted font-semibold text-sm hover:text-adm-text transition-colors"
-          class:active={activeTab === tab}
-          class:text-adm-accent={activeTab === tab}
-          class:border-adm-accent={activeTab === tab}
-          class:bg-adm-accent-soft={activeTab === tab}
-          onclick={() => selectTab(tab)}
-        >
-          {tabLabel(tab)}
-          <span class="inline-grid place-items-center min-w-[1.5rem] h-[1.35rem] px-1 rounded-full bg-adm-surface-2 text-adm-muted font-mono text-[0.68rem]">
-            {countFor(tab)}
-          </span>
+      <div class={`${styles.sectionDivider} ${styles.actions}`}>
+        <button class={styles.button} type="button" disabled={prospects.items.length === 0} onclick={() => regenerateAll('audit')}>
+          Audit all prospects
         </button>
-      {/each}
-    </div>
-
-    {/* Pipeline */}
-    {#if activeTab === 'pipeline'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5 mb-6">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Quick actions</h2>
-            <p class="text-sm text-adm-muted">Start here. Import leads, generate pitches and previews, or create a prospect by hand.</p>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button" onclick={createProspect}>
-              New prospect
-            </button>
-            <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed transition-colors" type="button" disabled={importing} onclick={importLeads}>
-              {importing ? 'Importing…' : 'Import leads from CSV'}
-            </button>
-            <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button" onclick={() => regenerateAll('all')}>
-              Regenerate all
-            </button>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap gap-2 pt-4">
-          <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed transition-colors" disabled={prospects.items.length === 0} onclick={() => regenerateAll('audit')}>
-            Audit all prospects
-          </button>
-          <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed transition-colors" disabled={prospects.items.length === 0} onclick={() => regenerateAll('pitch')}>
-            Generate pitches
-          </button>
-          <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed transition-colors" disabled={prospects.items.length === 0} onclick={() => regenerateAll('mockup')}>
-            Generate previews
-          </button>
-        </div>
-
-        {#if prospects.items.length === 0}
-          <div class="mt-6 rounded-adm border border-adm-border bg-adm-surface p-6 text-center">
-            <p class="text-adm-muted">No prospects yet</p>
-            <p class="text-sm text-adm-muted">Import leads from leads.csv, run the scraper, or create a prospect by hand to start the pipeline.</p>
-          </div>
-        {:else}
-          <div class="mt-6">
-            <div class="flex items-center justify-between gap-3 mb-3">
-              <h3 class="font-display text-lg">Top prospects</h3>
-              <p class="text-xs font-mono tracking-widest uppercase text-adm-muted">{prospects.items.length} total · sorted by opportunity score</p>
-            </div>
-            <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-              <table class="w-full text-left text-sm border-collapse">
-                <thead>
-                  <tr class="bg-adm-surface-2 border-b border-adm-border">
-                    {#each ['Business', 'Industry', 'Vertical', 'Opportunity', 'Classification', 'Status', ''] as col}
-                      <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">{col}</th>
-                    {/each}
-                  </tr>
-                </thead>
-                <tbody>
-                  {#each prospects.items.slice(0, 10) as prospect (prospect.slug)}
-                    <tr class="border-b border-adm-border hover:bg-color-mix(in srgb, var(--color-accent) 5%, transparent) transition-colors">
-                      <td class="px-3 py-3 font-semibold">{prospect.name}</td>
-                      <td class="px-3 py-3 text-adm-muted">{prospect.industry || '—'}</td>
-                      <td class="px-3 py-3"><StatusBadge label={prospect.vertical} tone="accent" /></td>
-                      <td class="px-3 py-3 font-semibold">{prospect.opportunity}</td>
-                      <td class="px-3 py-3"><StatusBadge label={prospect.classification} /></td>
-                      <td class="px-3 py-3"><StatusBadge label={prospect.status} /></td>
-                      <td class="px-3 py-3">
-                        <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button" onclick={() => (detailSlug = prospect.slug)}>
-                          View
-                        </button>
-                        <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors ml-1" type="button" onclick={() => editProspect(prospect)}>
-                          Edit
-                        </button>
-                      </td>
-                    </tr>
-                  {/each}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        {/if}
+        <button class={styles.button} type="button" disabled={prospects.items.length === 0} onclick={() => regenerateAll('pitch')}>
+          Generate pitches
+        </button>
+        <button class={styles.button} type="button" disabled={prospects.items.length === 0} onclick={() => regenerateAll('mockup')}>
+          Generate previews
+        </button>
       </div>
 
-    {/* Prospects */}
-    {:else if activeTab === 'prospects'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Prospects</h2>
-            <p class="text-sm text-adm-muted">{prospects.items.length} records</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <input
-              id="prospect-search"
-              class="rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm text-adm-text focus:outline-none focus:ring-1 focus:ring-adm-accent transition-colors"
-              type="search"
-              placeholder="Search business, industry, slug…"
-              bind:value={search}
-            />
-            <button class="inline-flex items-center gap-2 rounded-adm-sm border border-adm-border bg-adm-surface px-3 py-1.5 text-sm font-semibold text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button" onclick={createProspect}>
-              New prospect
-            </button>
-          </div>
+      {#if prospects.items.length === 0}
+        <StateBlock empty title="No prospects yet" message="Import leads from leads.csv, run the scraper, or create a prospect by hand to start the pipeline." />
+      {:else}
+        <div class={`${styles.sectionDivider} ${styles.panelHead}`}>
+          <h3 class={styles.panelTitle}>Top prospects</h3>
+          <p class={styles.panelMeta}>{prospects.items.length} total · sorted by opportunity score</p>
         </div>
-
-        {#if prospects.loading}
-          <StateBlock {loading} />
-        {:else if prospects.error}
-          <StateBlock error={prospects.error} title="Could not load prospects" onRetry={refreshAll} />
-        {:else if prospects.items.length === 0}
-          <StateBlock empty title="No prospects yet" message="Create a prospect or import leads from leads.csv." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  {#each ['Business', 'Industry', 'Vertical', 'Opportunity', 'Classification', 'Rating', 'Status', ''] as col}
-                    <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">{col}</th>
-                  {/each}
-                </tr>
-              </thead>
-              <tbody>
-                {#each prospects.items as prospect (prospect.slug)}
-                  <tr class="border-b border-adm-border hover:bg-color-mix(in srgb, var(--color-accent) 5%, transparent) transition-colors">
-                    <td class="px-3 py-3 font-semibold">{prospect.name}</td>
-                    <td class="px-3 py-3 text-adm-muted">{prospect.industry || '—'}</td>
-                    <td class="px-3 py-3"><StatusBadge label={prospect.vertical} tone="accent" /></td>
-                    <td class="px-3 py-3 font-semibold">{prospect.opportunity}</td>
-                    <td class="px-3 py-3"><StatusBadge label={prospect.classification} /></td>
-                    <td class="px-3 py-3">
-                      {prospect.rating === null ? '—' : `${prospect.rating.toFixed(1)} (${prospect.reviewCount ?? 0})`}
-                    </td>
-                    <td class="px-3 py-3"><StatusBadge label={prospect.status} /></td>
-                    <td class="px-3 py-3">
-                      <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button" onclick={() => (detailSlug = prospect.slug)}>
-                        View
-                      </button>
-                      <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors ml-1" type="button" onclick={() => editProspect(prospect)}>
-                        Edit
-                      </button>
-                      <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-danger cursor-pointer hover:border-adm-danger hover:text-adm-danger transition-colors ml-1" type="button" onclick={() => deleteProspect(prospect)}>
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-
-    {/* Audits */}
-    {:else if activeTab === 'audits'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Audits</h2>
-            <p class="text-sm text-adm-muted">{audits.items.length} recorded</p>
-          </div>
-        </div>
-
-        {#if audits.loading}
-          <StateBlock {loading} />
-        {:else if audits.error}
-          <StateBlock error={audits.error} title="Could not load audits" onRetry={refreshAll} />
-        {:else if audits.items.length === 0}
-          <StateBlock empty title="No audits yet" message="Run an audit on a prospect to record its site health and findings." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Date</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Business</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Summary</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Findings</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Health</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each audits.items as audit (audit.id)}
-                  <tr class="border-b border-adm-border">
-                    <td class="px-3 py-3 text-adm-muted">{formatDate(audit.created_at)}</td>
-                    <td class="px-3 py-3">{audit.business_id}</td>
-                    <td class="px-3 py-3">{audit.summary}</td>
-                    <td class="px-3 py-3 font-mono">{JSON.parse(audit.findings || '[]').length}</td>
-                    <td class="px-3 py-3"><StatusBadge label={audit.site_health === null ? 'unknown' : String(audit.site_health)} /></td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-
-    {/* Pitches */}
-    {:else if activeTab === 'pitches'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Pitches</h2>
-            <p class="text-sm text-adm-muted">{pitches.items.length} generated</p>
-          </div>
-        </div>
-
-        {#if pitches.loading}
-          <StateBlock {loading} />
-        {:else if pitches.error}
-          <StateBlock error={pitches.error} title="Could not load pitches" onRetry={refreshAll} />
-        {:else if pitches.items.length === 0}
-          <StateBlock empty title="No pitches yet" message="Generate a pitch from a prospect detail view or in bulk from the Pipeline tab." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Business</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Channel</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Status</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Date</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Preview</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each pitches.items as pitch (pitch.id)}
-                  <tr class="border-b border-adm-border">
-                    <td class="px-3 py-3">{pitch.business_id}</td>
-                    <td class="px-3 py-3">{pitch.channel}</td>
-                    <td class="px-3 py-3"><StatusBadge label={pitch.status} /></td>
-                    <td class="px-3 py-3 text-adm-muted">{formatDate(pitch.created_at)}</td>
-                    <td class="px-3 py-3">
-                      <button class="inline-flex items-center gap-1 rounded-adm-sm border border-adm-border bg-adm-surface px-2.5 py-1 text-xs font-medium text-adm-text cursor-pointer hover:border-adm-accent hover:text-adm-accent transition-colors" type="button">
-                        {pitch.body.slice(0, 80)}…
-                      </button>
-                    </td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-
-    {/* Mockups */}
-    {:else if activeTab === 'mockups'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Previews (mockups)</h2>
-            <p class="text-sm text-adm-muted">{mockups.items.length} generated</p>
-          </div>
-        </div>
-
-        {#if mockups.loading}
-          <StateBlock {loading} />
-        {:else if mockups.error}
-          <StateBlock error={mockups.error} title="Could not load previews" onRetry={refreshAll} />
-        {:else if mockups.items.length === 0}
-          <StateBlock empty title="No previews yet" message="Generate a preview from a prospect detail view or in bulk from the Pipeline tab." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Business</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Version</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Template</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Theme</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Preview</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Indexed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each mockups.items as mockup (mockup.id)}
-                  <tr class="border-b border-adm-border">
-                    <td class="px-3 py-3">{mockup.business_id}</td>
-                    <td class="px-3 py-3">{mockup.content_version}</td>
-                    <td class="px-3 py-3">{mockup.template}</td>
-                    <td class="px-3 py-3">{mockup.theme}</td>
-                    <td class="px-3 py-3"><a href={mockup.preview_host} target="_blank" rel="noreferrer" class="text-adm-accent hover:underline">Open</a></td>
-                    <td class="px-3 py-3"><StatusBadge label={mockup.is_indexable ? 'indexed' : 'noindex'} /></td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-
-    {/* Bookings */}
-    {:else if activeTab === 'bookings'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Booking requests</h2>
-            <p class="text-sm text-adm-muted">{bookings.items.length} received</p>
-          </div>
-        </div>
-
-        {#if bookings.loading}
-          <StateBlock {loading} />
-        {:else if bookings.error}
-          <StateBlock error={bookings.error} title="Could not load bookings" onRetry={refreshAll} />
-        {:else if bookings.items.length === 0}
-          <StateBlock empty title="No bookings yet" message="Booking requests come in through the preview site booking form." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Received</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Business</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Name</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Service</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Contact</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each bookings.items as booking (booking.id)}
-                  <tr class="border-b border-adm-border">
-                    <td class="px-3 py-3 text-adm-muted">{formatDate(booking.created_at)}</td>
-                    <td class="px-3 py-3">{booking.business_slug}</td>
-                    <td class="px-3 py-3">{booking.name}</td>
-                    <td class="px-3 py-3">{booking.service || '—'}</td>
-                    <td class="px-3 py-3">{booking.email}</td>
-                    <td class="px-3 py-3"><StatusBadge label={booking.status} /></td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-
-    {/* Job runs */}
-    {:else if activeTab === 'job-runs'}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Job runs</h2>
-            <p class="text-sm text-adm-muted">{jobRuns.items.length} logged</p>
-          </div>
-        </div>
-
-        {#if jobRuns.loading}
-          <StateBlock {loading} />
-        {:else if jobRuns.error}
-          <StateBlock error={jobRuns.error} title="Could not load job runs" onRetry={refreshAll} />
-        {:else if jobRuns.items.length === 0}
-          <StateBlock empty title="No job runs yet" message="Background jobs (cron, queue) appear here." />
-        {:else}
-          <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-            <table class="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr class="bg-adm-surface-2 border-b border-adm-border">
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Started</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Kind</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Status</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Attempts</th>
-                  <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Error</th>
-                </tr>
-              </thead>
-              <tbody>
-                {#each jobRuns.items as run (run.id)}
-                  <tr class="border-b border-adm-border">
-                    <td class="px-3 py-3 text-adm-muted">{formatDate(run.created_at)}</td>
-                    <td class="px-3 py-3">{run.kind}</td>
-                    <td class="px-3 py-3"><StatusBadge label={run.status} /></td>
-                    <td class="px-3 py-3">{run.attempts}</td>
-                    <td class="px-3 py-3 text-adm-muted">{run.error || '—'}</td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
-      </div>
-    {/if}
-
-    {#if formOpen}
-      <ProspectForm
-        mode={editing ? 'edit' : 'create'}
-        prospect={editing as any}
-        onClose={() => (formOpen = false)}
-        onSaved={() => {
-          formOpen = false;
-          showNotice('success', editing ? 'Prospect updated.' : 'Prospect created.');
-          refreshAll();
-        }}
-      />
-    {/if}
-
-    {#if detailSlug}
-      <ProspectDetail
-        slug={detailSlug}
-        onClose={() => (detailSlug = null)}
-        onEdit={editProspect}
-        onChanged={refreshAll}
-      />
-    {/if}
-
-    {#if notice}
-      <Notice kind={notice.kind} message={notice.message} onDismiss={() => (notice = null)} />
-    {/if}
-
-    {#if importResult}
-      <div class="rounded-adm border border-adm-border bg-adm-surface p-5 mt-6">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <h2 class="font-display text-lg">Import results</h2>
-            <p class="text-sm text-adm-muted">{importResult.imported} of {importResult.total} leads imported</p>
-          </div>
-        </div>
-        <div class="overflow-x-auto rounded-adm-sm border border-adm-border">
-          <table class="w-full text-left text-sm border-collapse">
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
             <thead>
-              <tr class="bg-adm-surface-2 border-b border-adm-border">
-                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Imported</th>
-                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Skipped</th>
-                <th class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-adm-muted">Total</th>
+              <tr>
+                {#each ['Business', 'Industry', 'Vertical', 'Opportunity', 'Classification', 'Status', ''] as col (col)}
+                  <th>{col}</th>
+                {/each}
               </tr>
             </thead>
             <tbody>
-              <tr class="border-b border-adm-border">
-                <td class="px-3 py-3">{importResult.imported}</td>
-                <td class="px-3 py-3">{importResult.skipped}</td>
-                <td class="px-3 py-3">{importResult.total}</td>
-              </tr>
+              {#each prospects.items.slice(0, 10) as prospect (prospect.slug)}
+                <tr>
+                  <td class={styles.cellStrong}>{prospect.name}</td>
+                  <td class={styles.cellMuted}>{prospect.industry || '—'}</td>
+                  <td><StatusBadge label={prospect.vertical} tone="accent" /></td>
+                  <td class={styles.cellStrong}>{prospect.opportunity}</td>
+                  <td><StatusBadge label={prospect.classification} /></td>
+                  <td><StatusBadge label={prospect.status} /></td>
+                  <td>
+                    <div class={styles.actions}>
+                      <button class={styles.button} type="button" onclick={() => (detailSlug = prospect.slug)}>View</button>
+                      <button class={styles.button} type="button" disabled={formBusy} onclick={() => editProspect(prospect)}>Edit</button>
+                    </div>
+                  </td>
+                </tr>
+              {/each}
             </tbody>
           </table>
         </div>
-        {#if importResult.errors.length > 0}
-          <h3 class="font-display text-lg mt-4">Errors</h3>
-          <ul class="list-disc pl-5 text-sm text-adm-muted">
-            {#each importResult.errors as error (error)}
-              <li>{error}</li>
-            {/each}
-          </ul>
-        {/if}
+      {/if}
+    </div>
+
+  {:else if activeTab === 'prospects'}
+    <div class={styles.panel}>
+      <div class={styles.toolbar}>
+        <h2 class={styles.panelTitle}>Prospects <span class={styles.panelMeta}>{prospects.items.length} records</span></h2>
+        <div class={styles.toolbarSpacer}></div>
+        <input class={styles.input} type="search" placeholder="Search business, industry, slug…" bind:value={search} aria-label="Search prospects" />
+        <button class={styles.button} type="button" onclick={createProspect}>New prospect</button>
       </div>
-    {/if}
-  </div>
-</div>
+
+      {#if prospects.loading}
+        <StateBlock loading={prospects.loading} />
+      {:else if prospects.error}
+        <StateBlock error={prospects.error} title="Could not load prospects" onRetry={refreshAll} />
+      {:else if prospects.items.length === 0}
+        <StateBlock empty title="No prospects yet" message="Create a prospect or import leads from leads.csv." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                {#each ['Business', 'Industry', 'Vertical', 'Opportunity', 'Classification', 'Rating', 'Status', ''] as col (col)}
+                  <th>{col}</th>
+                {/each}
+              </tr>
+            </thead>
+            <tbody>
+              {#each prospects.items as prospect (prospect.slug)}
+                <tr>
+                  <td class={styles.cellStrong}>{prospect.name}</td>
+                  <td class={styles.cellMuted}>{prospect.industry || '—'}</td>
+                  <td><StatusBadge label={prospect.vertical} tone="accent" /></td>
+                  <td class={styles.cellStrong}>{prospect.opportunity}</td>
+                  <td><StatusBadge label={prospect.classification} /></td>
+                  <td>
+                    {prospect.rating === null ? '—' : `${prospect.rating.toFixed(1)} (${prospect.reviewCount ?? 0})`}
+                  </td>
+                  <td><StatusBadge label={prospect.status} /></td>
+                  <td>
+                    <div class={styles.actions}>
+                      <button class={styles.button} type="button" onclick={() => (detailSlug = prospect.slug)}>View</button>
+                      <button class={styles.button} type="button" disabled={formBusy} onclick={() => editProspect(prospect)}>Edit</button>
+                      <button class={styles.buttonDanger} type="button" onclick={() => deleteProspect(prospect)}>Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+
+  {:else if activeTab === 'audits'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <h2 class={styles.panelTitle}>Audits <span class={styles.panelMeta}>{audits.items.length} recorded</span></h2>
+      </div>
+
+      {#if audits.loading}
+        <StateBlock loading={audits.loading} />
+      {:else if audits.error}
+        <StateBlock error={audits.error} title="Could not load audits" onRetry={refreshAll} />
+      {:else if audits.items.length === 0}
+        <StateBlock empty title="No audits yet" message="Run an audit on a prospect to record its site health and findings." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Business</th>
+                <th>Summary</th>
+                <th>Findings</th>
+                <th>Health</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each audits.items as audit (audit.id)}
+                <tr>
+                  <td class={styles.cellMuted}>{formatDate(audit.created_at)}</td>
+                  <td>{audit.business_name ?? audit.business_id}</td>
+                  <td>{audit.summary}</td>
+                  <td class={styles.cellMuted}>{JSON.parse(audit.findings || '[]').length}</td>
+                  <td><StatusBadge label={audit.site_health === null ? 'unknown' : String(audit.site_health)} /></td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+
+  {:else if activeTab === 'pitches'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <h2 class={styles.panelTitle}>Pitches <span class={styles.panelMeta}>{pitches.items.length} generated</span></h2>
+      </div>
+
+      {#if pitches.loading}
+        <StateBlock loading={pitches.loading} />
+      {:else if pitches.error}
+        <StateBlock error={pitches.error} title="Could not load pitches" onRetry={refreshAll} />
+      {:else if pitches.items.length === 0}
+        <StateBlock empty title="No pitches yet" message="Generate a pitch from a prospect detail view or in bulk from the Pipeline tab." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Channel</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each pitches.items as pitch (pitch.id)}
+                <tr>
+                  <td>{pitch.business_name ?? pitch.business_id}</td>
+                  <td>{pitch.channel}</td>
+                  <td><StatusBadge label={pitch.status} /></td>
+                  <td class={styles.cellMuted}>{formatDate(pitch.created_at)}</td>
+                  <td><span class={styles.pitchBody}>{pitch.body.slice(0, 80)}…</span></td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+
+  {:else if activeTab === 'mockups'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <h2 class={styles.panelTitle}>Previews (mockups) <span class={styles.panelMeta}>{mockups.items.length} generated</span></h2>
+      </div>
+
+      {#if mockups.loading}
+        <StateBlock loading={mockups.loading} />
+      {:else if mockups.error}
+        <StateBlock error={mockups.error} title="Could not load previews" onRetry={refreshAll} />
+      {:else if mockups.items.length === 0}
+        <StateBlock empty title="No previews yet" message="Generate a preview from a prospect detail view or in bulk from the Pipeline tab." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Version</th>
+                <th>Template</th>
+                <th>Theme</th>
+                <th>Preview</th>
+                <th>Indexed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each mockups.items as mockup (mockup.id)}
+                <tr>
+                  <td>{mockup.business_name ?? mockup.business_id}</td>
+                  <td>{mockup.content_version}</td>
+                  <td>{mockup.template}</td>
+                  <td>{mockup.theme}</td>
+                  <td>
+                    {#if mockup.preview_host}
+                      <a href={mockup.preview_host} target="_blank" rel="noreferrer" class={styles.detailLink}>Open</a>
+                    {:else}
+                      <span class={styles.cellMuted}>—</span>
+                    {/if}
+                  </td>
+                  <td><StatusBadge label={mockup.is_indexable ? 'indexed' : 'noindex'} /></td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+
+  {:else if activeTab === 'bookings'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <h2 class={styles.panelTitle}>Booking requests <span class={styles.panelMeta}>{bookings.items.length} received</span></h2>
+      </div>
+
+      {#if bookings.loading}
+        <StateBlock loading={bookings.loading} />
+      {:else if bookings.error}
+        <StateBlock error={bookings.error} title="Could not load bookings" onRetry={refreshAll} />
+      {:else if bookings.items.length === 0}
+        <StateBlock empty title="No bookings yet" message="Booking requests come in through the preview site booking form." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                <th>Received</th>
+                <th>Business</th>
+                <th>Name</th>
+                <th>Service</th>
+                <th>Contact</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each bookings.items as booking (booking.id)}
+                <tr>
+                  <td class={styles.cellMuted}>{formatDate(booking.created_at)}</td>
+                  <td>{booking.business_slug}</td>
+                  <td class={styles.cellStrong}>{booking.name}</td>
+                  <td>{booking.service || '—'}</td>
+                  <td>{booking.email}</td>
+                  <td><StatusBadge label={booking.status} /></td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+
+  {:else if activeTab === 'job-runs'}
+    <div class={styles.panel}>
+      <div class={styles.panelHead}>
+        <h2 class={styles.panelTitle}>Job runs <span class={styles.panelMeta}>{jobRuns.items.length} logged</span></h2>
+      </div>
+
+      {#if jobRuns.loading}
+        <StateBlock loading={jobRuns.loading} />
+      {:else if jobRuns.error}
+        <StateBlock error={jobRuns.error} title="Could not load job runs" onRetry={refreshAll} />
+      {:else if jobRuns.items.length === 0}
+        <StateBlock empty title="No job runs yet" message="Background jobs (cron, queue) appear here." />
+      {:else}
+        <div class={styles.tableWrap}>
+          <table class={styles.table}>
+            <thead>
+              <tr>
+                <th>Started</th>
+                <th>Kind</th>
+                <th>Status</th>
+                <th>Attempts</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each jobRuns.items as run (run.id)}
+                <tr>
+                  <td class={styles.cellMuted}>{formatDate(run.created_at)}</td>
+                  <td>{run.kind}</td>
+                  <td><StatusBadge label={run.status} /></td>
+                  <td>{run.attempts}</td>
+                  <td class={styles.cellMuted}>{run.error || '—'}</td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
+  {/if}
+
+  {#if formOpen}
+    <ProspectForm
+      mode={editing ? 'edit' : 'create'}
+      prospect={editingDetail?.prospect ?? null}
+      onClose={() => (formOpen = false)}
+      onSaved={() => {
+        formOpen = false;
+        showNotice('success', editing ? 'Prospect updated.' : 'Prospect created.');
+        refreshAll();
+      }}
+    />
+  {/if}
+
+  {#if detailSlug}
+    <ProspectDetail
+      slug={detailSlug}
+      onClose={() => (detailSlug = null)}
+      onEdit={(detail) => {
+        editingDetail = { prospect: detail };
+        editing = detail;
+        formOpen = true;
+      }}
+      onChanged={refreshAll}
+    />
+  {/if}
+{/if}
+
+{#if notice}
+  <Notice kind={notice.kind} message={notice.message} onDismiss={() => (notice = null)} />
+{/if}

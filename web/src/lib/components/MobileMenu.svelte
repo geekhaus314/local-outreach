@@ -36,7 +36,7 @@
   </button>
 
   <nav id="mobile-menu" class={open ? '' : 'hidden'} aria-label="Primary navigation">
-    <a class="closeButton" type="button" onclick={close} aria-hidden="true">✕</a>
+    <button class="closeButton" type="button" onclick={close} aria-label="Close menu">✕</button>
     <p class="menuKicker">{tenant?.name ?? 'Business'}</p>
     {#each tenant?.nav ?? [] as item}
       <a class="menuLink" href={item.href} onclick={close}>{item.label}</a>

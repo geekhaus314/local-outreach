@@ -1,0 +1,40 @@
+{
+  "hostnames": [
+    "smpplumbingcompany.com",
+    "smp-plumbing-company.preview.localhost",
+    "smp-plumbing-company.localhost"
+  ],
+  "previewBaseDomain": "preview.localhost",
+  "indexable": false,
+  "template": "service",
+  "theme": "clinical-trust",
+  "prospect": {
+    "name": "SMP Plumbing Company",
+    "industry": "Plumbing",
+    "phone": "+1-314-677-4763",
+    "address": "3275 Lake Avenue Bridgeton 63044",
+    "website": "https://smpplumbingcompany.com/",
+    "email": "",
+    "traffic_tier": "Dead",
+    "decision_maker": "Owner/Operator",
+    "classification": "DEAD_SITE",
+    "opportunity": 82,
+    "need_score": 97,
+    "value_score": 58,
+    "site_health": 0,
+    "rating": null,
+    "review_count": null,
+    "audit_summary": "redirects to noraswarriors.com, no mobile layout",
+    "pitch_facts": [
+      "smpplumbingcompany.com redirects to noraswarriors.com, which is not their business."
+    ],
+    "sources": [
+      "overpass"
+    ],
+    "source_ids": "node/11397613341",
+    "low_confidence": true,
+    "maps_url": "",
+    "last_audited": "",
+    "persona": "Broken in a way they probably do not know about | Lead with the specific evidence -- the redirect, the parked page, the other business's blog on their address. This is the only case where you open with the defect, because the defect is the whole reason to call and they cannot have already been told. | Do not soften it into 'could be improved'. A domain serving another company is not a preference, and vagueness reads as a sales call. | vocabulary: unclear | evidence: low-confidence source record; verify before sending; site health 0/100; listed site is dead, parked, or serving another business | confidence: thin"
+  }
+}

@@ -34,6 +34,7 @@ export interface BusinessRow {
   hostnames: string;
   indexable: number;
   status: string;
+  lifecycle_status: string;
   created_at: string;
   updated_at: string;
 }
@@ -160,6 +161,7 @@ export interface AdminProspect extends BusinessSummary {
   theme: string;
   hostnames: string[];
   indexable: boolean;
+  lifecycle_status: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -190,6 +192,7 @@ export function rowToAdminProspect(row: BusinessRow): AdminProspect {
     theme: row.theme,
     hostnames: parseArray(row.hostnames),
     indexable: row.indexable === 1,
+    lifecycle_status: row.lifecycle_status,
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
@@ -493,8 +496,565 @@ const BUSINESS_COLUMNS = new Set([
   'vertical',
   'hostnames',
   'indexable',
-  'status'
+  'status',
+  'lifecycle_status'
 ]);
+
+export const LEAD_LIFECYCLE_STATUSES = ['cold', 'contacted', 'audited', 'proposal_sent', 'converted', 'rejected'] as const;
+export type LeadLifecycleStatus = (typeof LEAD_LIFECYCLE_STATUSES)[number];
+
+export function lifecycleStatusIsValid(value: string): value is LeadLifecycleStatus {
+  return (LEAD_LIFECYCLE_STATUSES as readonly string[]).includes(value);
+}
+
+export interface LeadRow {
+  id: string;
+  slug: string;
+  name: string;
+  industry: string;
+  industry_kind: string;
+  phone: string;
+  address: string;
+  website: string;
+  email: string;
+  rating: number | null;
+  review_count: number | null;
+  opportunity: number;
+  need_score: number;
+  value_score: number;
+  site_health: number | null;
+  classification: string;
+  lifecycle_status: string;
+  status: string;
+  last_audited: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LeadFilter {
+  q?: string;
+  vertical?: string;
+  kind?: string;
+  lifecycle?: string;
+  status?: string;
+}
+
+export async function listLeads(db: D1Database, filter: LeadFilter = {}): Promise<LeadRow[]> {
+  const clauses: string[] = [];
+  const values: unknown[] = [];
+
+  if (filter.q && filter.q.trim()) {
+    clauses.push('(name LIKE ? OR industry LIKE ? OR phone LIKE ?)');
+    const needle = `%${filter.q.trim()}%`;
+    values.push(needle, needle, needle);
+  }
+  if (filter.vertical && filter.vertical !== 'all') {
+    clauses.push('vertical = ?');
+    values.push(filter.vertical);
+  }
+  if (filter.kind && filter.kind !== 'all') {
+    clauses.push('industry_kind = ?');
+    values.push(filter.kind);
+  }
+  if (filter.lifecycle && filter.lifecycle !== 'all') {
+    if (!lifecycleStatusIsValid(filter.lifecycle)) {
+      throw new Error(`Unknown lifecycle status: ${filter.lifecycle}`);
+    }
+    clauses.push('lifecycle_status = ?');
+    values.push(filter.lifecycle);
+  }
+  if (filter.status) {
+    clauses.push('status = ?');
+    values.push(filter.status);
+  }
+
+  const where = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
+  const { results } = await db
+    .prepare(
+      `SELECT ${LEAD_COLUMNS} FROM businesses ${where}
+       ORDER BY opportunity DESC, name ASC`
+    )
+    .bind(...values)
+    .all<LeadRow>();
+  return results ?? [];
+}
+
+const LEAD_COLUMNS = [
+  'id',
+  'slug',
+  'name',
+  'industry',
+  'industry_kind',
+  'phone',
+  'address',
+  'website',
+  'email',
+  'rating',
+  'review_count',
+  'opportunity',
+  'need_score',
+  'value_score',
+  'site_health',
+  'classification',
+  'lifecycle_status',
+  'status',
+  'last_audited',
+  'created_at',
+  'updated_at'
+].join(', ');
+
+export async function getLeadBySlug(db: D1Database, slug: string): Promise<LeadRow | null> {
+  return db
+    .prepare(`SELECT ${LEAD_COLUMNS} FROM businesses WHERE slug = ?`)
+    .bind(slug)
+    .first<LeadRow>();
+}
+
+export interface LifecycleTransitionInput {
+  db: D1Database;
+  businessId: string;
+  toStatus: LeadLifecycleStatus;
+  actorId: string | null;
+  note: string;
+}
+
+export async function recordLifecycleTransition(
+  db: D1Database,
+  input: LifecycleTransitionInput
+): Promise<LeadLifecycleStatus> {
+  const current = await db
+    .prepare('SELECT lifecycle_status FROM businesses WHERE id = ?')
+    .bind(input.businessId)
+    .first<{ lifecycle_status: string }>();
+  const from = current?.lifecycle_status ?? 'cold';
+
+  await db
+    .prepare(
+      `UPDATE businesses SET lifecycle_status = ?, updated_at = datetime('now') WHERE id = ?`
+    )
+    .bind(input.toStatus, input.businessId)
+    .run();
+
+  await db
+    .prepare(
+      `INSERT INTO lifecycle_events (id, business_id, from_status, to_status, actor_id, note)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+    .bind(
+      `life-${crypto.randomUUID()}`,
+      input.businessId,
+      from,
+      input.toStatus,
+      input.actorId,
+      input.note ?? ''
+    )
+    .run();
+
+  return from as LeadLifecycleStatus;
+}
+
+export interface LifecycleEventRow {
+  id: string;
+  business_id: string;
+  from_status: string;
+  to_status: string;
+  actor_id: string | null;
+  note: string;
+  created_at: string;
+}
+
+export async function listLifecycleEvents(db: D1Database, businessId?: string): Promise<LifecycleEventRow[]> {
+  const query = businessId
+    ? 'SELECT * FROM lifecycle_events WHERE business_id = ? ORDER BY created_at DESC'
+    : 'SELECT * FROM lifecycle_events ORDER BY created_at DESC';
+  const { results } = businessId
+    ? await db.prepare(query).bind(businessId).all<LifecycleEventRow>()
+    : await db.prepare(query).all<LifecycleEventRow>();
+  return results ?? [];
+}
+
+export interface CommunicationRow {
+  id: string;
+  business_id: string;
+  business_name: string | null;
+  business_slug: string | null;
+  direction: 'outbound' | 'inbound';
+  channel: string;
+  subject: string;
+  body: string;
+  occurred_at: string | null;
+  response_to: string | null;
+  outcome: string;
+  actor_id: string | null;
+  created_at: string;
+}
+
+export interface CommunicationFilter {
+  businessId?: string;
+  direction?: 'outbound' | 'inbound';
+  responseNeeded?: boolean;
+  limit?: number;
+}
+
+const COMMUNICATION_COLUMNS = [
+  'c.id',
+  'c.business_id',
+  'b.name AS business_name',
+  'b.slug AS business_slug',
+  'c.direction',
+  'c.channel',
+  'c.subject',
+  'c.body',
+  'c.occurred_at',
+  'c.response_to',
+  'c.outcome',
+  'c.actor_id',
+  'c.created_at'
+].join(', ');
+
+function directionIsValid(value: string): value is 'outbound' | 'inbound' {
+  return value === 'outbound' || value === 'inbound';
+}
+
+export function parseDirection(value: string): 'outbound' | 'inbound' | null {
+  return directionIsValid(value) ? value : null;
+}
+
+export async function listCommunications(db: D1Database, filter: CommunicationFilter = {}): Promise<CommunicationRow[]> {
+  const clauses: string[] = [];
+  const values: unknown[] = [];
+
+  if (filter.businessId) {
+    clauses.push('c.business_id = ?');
+    values.push(filter.businessId);
+  }
+  if (filter.direction) {
+    clauses.push('c.direction = ?');
+    values.push(filter.direction);
+  }
+  // Responses still awaited on an outbound message.
+  if (filter.responseNeeded) {
+    clauses.push('c.direction = ?');
+    values.push('outbound');
+    clauses.push('c.outcome = ?');
+    values.push('');
+    clauses.push("NOT EXISTS (SELECT 1 FROM communications r WHERE r.response_to = c.id)");
+  }
+
+  const where = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
+  const limit = Math.min(Math.max(filter.limit ?? 100, 1), 500);
+  const { results } = await db
+    .prepare(
+      `SELECT ${COMMUNICATION_COLUMNS}
+       FROM communications c LEFT JOIN businesses b ON b.id = c.business_id
+       ${where}
+       ORDER BY COALESCE(c.occurred_at, c.created_at) DESC, c.created_at DESC
+       LIMIT ?`
+    )
+    .bind(...values, limit)
+    .all<CommunicationRow>();
+  return results ?? [];
+}
+
+export async function getCommunication(db: D1Database, id: string): Promise<CommunicationRow | null> {
+  return db
+    .prepare(
+      `SELECT ${COMMUNICATION_COLUMNS}
+       FROM communications c LEFT JOIN businesses b ON b.id = c.business_id
+       WHERE c.id = ?`
+    )
+    .bind(id)
+    .first<CommunicationRow>();
+}
+
+export function outcomeIsValid(value: string): boolean {
+  return ['', 'replied', 'meeting_booked', 'declined', 'gatekeeper', 'wrong_number'].includes(value);
+}
+
+export interface CreateCommunicationInput {
+  db: D1Database;
+  businessId: string;
+  direction: 'outbound' | 'inbound';
+  channel: string;
+  subject: string;
+  body: string;
+  occurredAt: string | null;
+  responseTo: string | null;
+  outcome: string;
+  actorId: string | null;
+}
+
+const COMMUNICATION_CHANNELS = ['email', 'sms', 'call', 'voicemail', 'form', 'in_person', 'letter'] as const;
+export function channelIsValid(value: string): value is typeof COMMUNICATION_CHANNELS[number] {
+  return (COMMUNICATION_CHANNELS as readonly string[]).includes(value);
+}
+
+export async function insertCommunication(input: CreateCommunicationInput): Promise<CommunicationRow> {
+  const db = input.db;
+  const id = `comm-${crypto.randomUUID()}`;
+  await db
+    .prepare(
+      `INSERT INTO communications (id, business_id, direction, channel, subject, body, occurred_at, response_to, outcome, actor_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .bind(
+      id,
+      input.businessId,
+      input.direction,
+      input.channel,
+      input.subject,
+      input.body,
+      input.occurredAt,
+      input.responseTo,
+      input.outcome,
+      input.actorId
+    )
+    .run();
+  const row = await getCommunication(input.db, id);
+  if (!row) throw new Error('Communication row vanished after insert.');
+  return row;
+}
+
+export async function updateCommunication(
+  db: D1Database,
+  id: string,
+  patch: { channel?: string; subject?: string; body?: string; occurredAt?: string | null; outcome?: string }
+): Promise<void> {
+  const sets: string[] = [];
+  const values: unknown[] = [];
+  if (patch.channel !== undefined) {
+    sets.push('channel = ?');
+    values.push(patch.channel);
+  }
+  if (patch.subject !== undefined) {
+    sets.push('subject = ?');
+    values.push(patch.subject);
+  }
+  if (patch.body !== undefined) {
+    sets.push('body = ?');
+    values.push(patch.body);
+  }
+  if (patch.occurredAt !== undefined) {
+    sets.push('occurred_at = ?');
+    values.push(patch.occurredAt);
+  }
+  if (patch.outcome !== undefined) {
+    sets.push('outcome = ?');
+    values.push(patch.outcome);
+  }
+  if (sets.length === 0) return;
+  await db.prepare(`UPDATE communications SET ${sets.join(', ')} WHERE id = ?`).bind(...values, id).run();
+}
+
+export async function deleteCommunication(db: D1Database, id: string): Promise<void> {
+  await db.prepare('DELETE FROM communications WHERE id = ?').bind(id).run();
+}
+
+export interface UserRow {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  disabled: number;
+  created_at: string;
+  last_seen_at: string | null;
+}
+
+export const USER_ROLES = ['owner', 'admin', 'viewer'] as const;
+
+export function userRoleIsValid(value: string): value is (typeof USER_ROLES)[number] {
+  return (USER_ROLES as readonly string[]).includes(value);
+}
+
+export async function listUsers(db: D1Database): Promise<UserRow[]> {
+  const { results } = await db
+    .prepare('SELECT id, email, name, role, disabled, created_at, last_seen_at FROM users ORDER BY created_at ASC')
+    .all<UserRow>();
+  return results ?? [];
+}
+
+export async function getUser(db: D1Database, id: string): Promise<UserRow | null> {
+  return db
+    .prepare('SELECT id, email, name, role, disabled, created_at, last_seen_at FROM users WHERE id = ?')
+    .bind(id)
+    .first<UserRow>();
+}
+
+export async function updateUser(
+  db: D1Database,
+  id: string,
+  patch: { role?: string; name?: string; disabled?: boolean; passwordHash?: string }
+): Promise<void> {
+  const sets: string[] = [];
+  const values: unknown[] = [];
+  if (patch.role !== undefined) {
+    sets.push('role = ?');
+    values.push(patch.role);
+  }
+  if (patch.name !== undefined) {
+    sets.push('name = ?');
+    values.push(patch.name);
+  }
+  if (patch.disabled !== undefined) {
+    sets.push('disabled = ?');
+    values.push(patch.disabled ? 1 : 0);
+  }
+  if (patch.passwordHash !== undefined) {
+    sets.push('password_hash = ?');
+    values.push(patch.passwordHash);
+  }
+  if (sets.length === 0) return;
+  await db.prepare(`UPDATE users SET ${sets.join(', ')} WHERE id = ?`).bind(...values, id).run();
+}
+
+export async function deleteUser(db: D1Database, id: string): Promise<void> {
+  await db.batch([
+    db.prepare('DELETE FROM sessions WHERE user_id = ?').bind(id),
+    db.prepare('DELETE FROM users WHERE id = ?').bind(id)
+  ]);
+}
+
+export async function countEnabledOwners(db: D1Database, excludingId?: string): Promise<number> {
+  const row = excludingId
+    ? await db
+        .prepare("SELECT COUNT(*) AS n FROM users WHERE role = 'owner' AND disabled = 0 AND id <> ?")
+        .bind(excludingId)
+        .first<{ n: number }>()
+    : await db
+        .prepare("SELECT COUNT(*) AS n FROM users WHERE role = 'owner' AND disabled = 0")
+        .first<{ n: number }>();
+  return row?.n ?? 0;
+}
+
+export interface AnalyticsSummary {
+  leads: number;
+  funnel: Array<{ lifecycle: string; count: number; estimatedValue: number }>;
+  conversionRate: number;
+  convertedCount: number;
+  proposalsSent: number;
+  contactSubmissionCount: number;
+  outboundMessages: number;
+  inboundResponses: number;
+  responseRate: number;
+  monthlyOutreach: Array<{ month: string; outbound: number; inbound: number; events: number }>;
+  monthlyBookings: Array<{ month: string; count: number }>;
+  deadSiteCount: number;
+  noPresenceCount: number;
+  averageSiteHealth: number | null;
+  topOpportunities: Array<{ slug: string; name: string; industry: string; opportunity: number; lifecycle_status: string; website: string }>;
+  staleContacts: number;
+}
+
+// Fixed, published launch price for the studio; the estimated pipeline value is
+// honest arithmetic labelled as an estimate, not revenue.
+export const LAUNCH_PRICE_ESTIMATE = 1200;
+
+export async function getAnalyticsSummary(db: D1Database): Promise<AnalyticsSummary> {
+  const [leadCount, funnelRows, commsCount, eventRows, bookingRows, healthRow, deadRow, topRows, staleRow, bookingCount, noPresenceRow] =
+    await Promise.all([
+      db.prepare('SELECT COUNT(*) AS n FROM businesses').first<{ n: number }>(),
+      db
+        .prepare(
+          `SELECT lifecycle_status AS lifecycle, COUNT(*) AS n
+           FROM businesses GROUP BY lifecycle_status`
+        )
+        .all<{ lifecycle: string; n: number }>(),
+      db
+        .prepare(
+          `SELECT SUM(CASE WHEN direction = 'outbound' THEN 1 ELSE 0 END) AS outbound,
+                  SUM(CASE WHEN direction = 'inbound' THEN 1 ELSE 0 END) AS inbound
+           FROM communications`
+        )
+        .first<{ outbound: number | null; inbound: number | null }>(),
+      db
+        .prepare(
+          `SELECT substr(created_at, 1, 7) AS month, from_status, to_status, COUNT(*) AS events
+           FROM lifecycle_events GROUP BY month, from_status, to_status`
+        )
+        .all<{ month: string; from_status: string; to_status: string; events: number }>(),
+      db
+        .prepare(
+          `SELECT substr(created_at, 1, 7) AS month, COUNT(*) AS count
+           FROM bookings GROUP BY month ORDER BY month ASC`
+        )
+        .all<{ month: string; count: number }>(),
+      db.prepare('SELECT AVG(site_health) AS health FROM businesses WHERE site_health IS NOT NULL').first<{ health: number | null }>(),
+      db.prepare("SELECT COUNT(*) AS n FROM businesses WHERE classification = 'DEAD_SITE'").first<{ n: number }>(),
+      db
+        .prepare(
+          `SELECT slug, name, industry, opportunity, lifecycle_status, website
+           FROM businesses ORDER BY opportunity DESC LIMIT 10`
+        )
+        .all<{ slug: string; name: string; industry: string; opportunity: number; lifecycle_status: string; website: string }>(),
+      db
+        .prepare(
+          `SELECT COUNT(*) AS n FROM businesses b
+           WHERE b.lifecycle_status = 'contacted'
+             AND b.updated_at < datetime('now', '-14 days')`
+        )
+        .first<{ n: number }>(),
+      db.prepare('SELECT COUNT(*) AS n FROM bookings').first<{ n: number }>(),
+      db.prepare("SELECT COUNT(*) AS n FROM businesses WHERE classification = 'NO_PRESENCE'").first<{ n: number }>()
+    ]);
+
+  const funnel = LEAD_LIFECYCLE_STATUSES.map((status) => {
+    const count = funnelRows.results?.find((r) => r.lifecycle === status)?.n ?? 0;
+    // Weighted estimate: proposal-sent and converted leads are the ones worth
+    // launch price; contacted/audited leads carry the same list weight.
+    const weight = status === 'proposal_sent' || status === 'converted' ? LAUNCH_PRICE_ESTIMATE : 0;
+    return { lifecycle: status, count, estimatedValue: count * weight };
+  });
+
+  const convertedCount = funnel.find((f) => f.lifecycle === 'converted')?.count ?? 0;
+  const proposalsSent = funnel.find((f) => f.lifecycle === 'proposal_sent')?.count ?? 0;
+  const lifecycleTotal = funnel.reduce((sum, f) => sum + f.count, 0);
+  const conversionRate = lifecycleTotal > 0 ? convertedCount / lifecycleTotal : 0;
+
+  const outboundMessages = commsCount?.outbound ?? 0;
+  const inboundResponses = commsCount?.inbound ?? 0;
+  const responseRate = outboundMessages > 0 ? inboundResponses / outboundMessages : 0;
+
+  const monthlyOutreachMap = new Map<string, { month: string; outbound: number; inbound: number; events: number }>();
+  // Monthly outreach performance: communication volume per month plus how many
+  // leads advanced stages that month.
+  for (const row of eventRows.results ?? []) {
+    if (!row.month) continue;
+    const entry = monthlyOutreachMap.get(row.month) ?? { month: row.month, outbound: 0, inbound: 0, events: 0 };
+    if (row.to_status !== row.from_status) {
+      if (row.to_status === 'contacted') {
+        entry.outbound += row.events;
+      } else {
+        entry.events += row.events;
+      }
+    }
+    monthlyOutreachMap.set(row.month, entry);
+  }
+  const bookingMonths = new Set((bookingRows.results ?? []).map((b) => b.month));
+  for (const month of bookingMonths) {
+    const entry = monthlyOutreachMap.get(month) ?? { month, outbound: 0, inbound: 0, events: 0 };
+    monthlyOutreachMap.set(month, entry);
+  }
+  const monthlyOutreach = Array.from(monthlyOutreachMap.values()).sort((a, b) => a.month.localeCompare(b.month));
+
+  return {
+    leads: leadCount?.n ?? 0,
+    funnel,
+    conversionRate,
+    convertedCount,
+    proposalsSent,
+    contactSubmissionCount: bookingCount?.n ?? 0,
+    outboundMessages,
+    inboundResponses,
+    responseRate,
+    monthlyOutreach,
+    monthlyBookings: (bookingRows.results ?? []).map((row) => ({ month: row.month, count: row.count })),
+    deadSiteCount: deadRow?.n ?? 0,
+    noPresenceCount: noPresenceRow?.n ?? 0,
+    averageSiteHealth: healthRow?.health !== null && healthRow?.health !== undefined ? Math.round(healthRow.health) : null,
+    topOpportunities: topRows.results ?? [],
+    staleContacts: staleRow?.n ?? 0
+  };
+}
 
 function businessValue(column: string, value: unknown): unknown {
   if ((column === 'pitch_facts' || column === 'sources' || column === 'hostnames') && Array.isArray(value)) {
@@ -533,6 +1093,8 @@ export async function deleteBusiness(db: D1Database, id: string): Promise<void> 
       db.prepare('DELETE FROM audits WHERE business_id = ?').bind(id),
       db.prepare('DELETE FROM pitches WHERE business_id = ?').bind(id),
       db.prepare('DELETE FROM mockups WHERE business_id = ?').bind(id),
+      db.prepare('DELETE FROM lifecycle_events WHERE business_id = ?').bind(id),
+      db.prepare('DELETE FROM communications WHERE business_id = ?').bind(id),
       db.prepare('DELETE FROM businesses WHERE id = ?').bind(id)
     ]);
 }
@@ -829,3 +1391,10 @@ export async function deleteBooking(db: D1Database, id: string): Promise<void> {
   await db.prepare('DELETE FROM bookings WHERE id = ?').bind(id).run();
 }
 
+
+export async function countBusinessesByVertical(db: D1Database): Promise<Array<{ vertical: string; count: number }>> {
+  const { results } = await db
+    .prepare('SELECT vertical, COUNT(*) AS count FROM businesses GROUP BY vertical ORDER BY count DESC, vertical ASC')
+    .all<{ vertical: string; count: number }>();
+  return results ?? [];
+}

@@ -1,6 +1,6 @@
 import { badRequest, guardAdmin, notFound } from '$lib/server/admin';
 import { getBusiness, getPitch, updatePitch } from '$lib/server/db';
-import { ollamaChat } from '$lib/server/ollama';
+import { aiChat, resolveAiConfig } from '$lib/server/ai';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -14,6 +14,9 @@ export const POST: RequestHandler = async ({ params, request, locals, platform }
 
   const business = await getBusiness(guard.db, pitch.business_id);
   if (!business) return notFound('That prospect does not exist.');
+
+  const env = platform?.env ?? {};
+  const config = resolveAiConfig(env);
 
   let body: { instruction?: string };
   try {
@@ -40,17 +43,14 @@ Existing pitch body:
 ${pitch.body}`;
 
   try {
-    const polished = await ollamaChat({
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `${userInstruction}\n\n${prospectContext}` }
-      ],
-      temperature: 0.4
-    });
+    const polished = await aiChat(config, [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: `${userInstruction}\n\n${prospectContext}` }
+    ], 0.4);
 
     await updatePitch(guard.db, params.id, { body: polished });
     const updated = await getPitch(guard.db, params.id);
-    return Response.json({ pitch: updated });
+    return Response.json({ pitch: updated, provider: config.provider });
   } catch (error) {
     if (error instanceof Error) {
       return Response.json({ error: error.message }, { status: 502 });
