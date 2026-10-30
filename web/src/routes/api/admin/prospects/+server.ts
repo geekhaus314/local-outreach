@@ -21,7 +21,8 @@ export const GET: RequestHandler = async ({ url, locals, platform }) => {
     q: url.searchParams.get('q') ?? undefined,
     vertical: url.searchParams.get('vertical') ?? undefined,
     kind: url.searchParams.get('kind') ?? undefined,
-    status: url.searchParams.get('status') ?? undefined
+    status: url.searchParams.get('status') ?? undefined,
+    lifecycle: url.searchParams.get('lifecycle') ?? undefined
   });
   return Response.json({ prospects });
 };
