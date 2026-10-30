@@ -9,11 +9,11 @@ export interface AdminProspectSummary {
   rating: number | null;
   reviewCount: number | null;
   status: string;
+  lifecycle_status: string;
 }
 
 export interface AdminProspectDetail extends AdminProspectSummary {
   id: string;
-  lifecycle_status: string;
   website: string;
   email: string;
   phone: string;
@@ -159,7 +159,7 @@ function query(params: Record<string, string | undefined>): string {
 }
 
 export const adminApi = {
-  async listProspects(filter: { q?: string; vertical?: string; kind?: string; status?: string } = {}) {
+  async listProspects(filter: { q?: string; vertical?: string; kind?: string; status?: string; lifecycle?: string } = {}) {
     return request<{ prospects: AdminProspectSummary[] }>(`/api/admin/prospects${query(filter)}`);
   },
   async getProspect(slug: string) {
@@ -412,8 +412,9 @@ export const adminCommsApi = {
   async update(id: string, patch: Record<string, unknown>) {
     return request<{ communication: AdminCommunication }>(
       `/api/admin/communications/${encodeURIComponent(id)}`,
-      { method: 'PATCH', body: JSON.stringify(patch) }
-    );
+      { method: 'PATCH',
+      body: JSON.stringify(patch)
+    });
   },
   async remove(id: string) {
     return request<{ ok: boolean; deleted: string }>(`/api/admin/communications/${encodeURIComponent(id)}`, {
