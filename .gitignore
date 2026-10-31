@@ -1,6 +1,7 @@
 # Generated harvest output. Contains real business names, phone numbers and
 # site audit findings, and is fully reproducible with run_scraper.py.
-data/
+# Anchored to the repo root so web/src/lib/data does NOT match.
+/data/
 *.csv
 leads_dashboard.md
 !.env.example
