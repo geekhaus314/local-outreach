@@ -16,7 +16,7 @@
     {
       "id": "scope.core",
       "question": "List the core user actions that must work end-to-end. Each one needs a real path through UI, server and storage.",
-      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy. Added 2026-10-30: serve an agency landing page on webrehabstl.com and www.webrehabstl.com (not other hosts) with a free-checkup lead form that persists to D1 and emails hello@webrehabstl.com through Resend.",
+      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy. Added 2026-10-30: serve an agency landing page on webrehabstl.com and www.webrehabstl.com (not other hosts) with a free-checkup lead form that persists to D1 and emails hello@webrehabstl.com through Resend. Added 2026-10-31 (roadmap Jake approved): (1) agency landing visual overhaul - motion system, ticker of real audit checks, interactive audit demo widget, count-up stats, process stepper, problem gallery cards, split CTA with hardened checkup form, all respecting prefers-reduced-motion; (2) /work page: production work/paid client results (content: Jake's client URL list, pending); (3) /designs page: template catalog of real generated vertical mockups with budget package tiers (pricing payment flow: pending Jake - Stripe vs form-request); (4) /preview/* public routes serving real generated mockups, noindex + demo guard; (5) SEO & trust layer: per-page metadata/keywords, canonical, OG images, JSON-LD, ads.txt, humans.txt, /.well-known/security.txt, agency robots.txt + sitemap fix; (6) in-app pitch engine port of parse_leads.py evidence-driven message() + urgency sorter + send logging to communications.",
       "status": "confirmed",
       "source": "user answer 2026-10-20; landing scope/capture/contact confirmed 2026-10-30",
       "required": true,
@@ -96,7 +96,7 @@
     {
       "id": "integrations",
       "question": "Which third-party services are required, and which credentials do they need? Use \"none\" if none.",
-      "value": "Cloudflare D1, R2, Queues, Cron Triggers, and Access. Booking webhook via server-only BOOKING_WEBHOOK_URL, BOOKING_API_KEY, and BOOKING_FROM_EMAIL. Added 2026-10-30: Resend sends landing checkup requests as email to hello@webrehabstl.com using RESEND_API_KEY and BOOKING_FROM_EMAIL (verified sender domain). Domain webrehabstl.com is registered at IONOS; nameservers must be changed to Cloudflare, then the hostname is attached to the stlouiswebmaster Pages project.",
+      "value": "Cloudflare D1, R2, Queues, Cron Triggers, and Access. Booking webhook via server-only BOOKING_WEBHOOK_URL, BOOKING_API_KEY, and BOOKING_FROM_EMAIL. Added 2026-10-30: Resend sends landing checkup requests as email to hello@webrehabstl.com using RESEND_API_KEY and BOOKING_FROM_EMAIL (verified sender domain). Domain webrehabstl.com is registered at IONOS; nameservers must be changed to Cloudflare, then the hostname is attached to the stlouiswebmaster Pages project. Confirmed 2026-10-31: outbound sender is hello@webrehabstl.com (checkup reports and outreach).",
       "status": "confirmed",
       "source": "user answer 2026-10-20",
       "required": false,
@@ -142,7 +142,7 @@
     {
       "id": "design.direction",
       "question": "What brand, references, real copy and real assets should be used? Or has the user explicitly delegated visual direction?",
-      "value": "A rolodex of distinct, industry-specific templates that look and run like production-ready local-business sites, not one themed page reused everywhere and not AI-slop mockups. Use real scraped business data and honest proof; do not imply a business offers services it does not.",
+      "value": "A rolodex of distinct, industry-specific templates that look and run like production-ready local-business sites, not one themed page reused everywhere and not AI-slop mockups. Use real scraped business data and honest proof; do not imply a business offers services it does not. Agency landing language 2026-10-31: motion-first but dependency-free (existing revealUp pattern), evidence-based demo (real check names from lib/server/audit.ts, simulated runs labeled as such), measured stats only, no stock photography, prefers-reduced-motion honored.",
       "status": "confirmed",
       "source": "user answer 2026-10-20",
       "required": false,
@@ -172,7 +172,7 @@
     {
       "id": "admin.console.ux",
       "question": "What visual quality bar applies to the admin console?",
-      "value": "The admin console must look as sophisticated as the engineering under it: designed product surface in vanilla CSS modules (no Tailwind utilities — error-level ban), high-contrast structural layouts, typography-driven components, monochrome CSS/SVG icons, no stock photography, no AI-slop 3D/gradient art, no watermarked or placeholder assets. Imagery breaks, if any, are pure-CSS wireframe-style mocks or programmatic elements.",
+      "value": "The admin console must look as sophisticated as the engineering under it: designed product surface in vanilla CSS modules (no Tailwind utilities \u2014 error-level ban), high-contrast structural layouts, typography-driven components, monochrome CSS/SVG icons, no stock photography, no AI-slop 3D/gradient art, no watermarked or placeholder assets. Imagery breaks, if any, are pure-CSS wireframe-style mocks or programmatic elements.",
       "status": "confirmed",
       "source": "user answer 2026-10-27",
       "required": true,
@@ -188,6 +188,14 @@
       "required": true,
       "evidence": [],
       "notes": "No separate headless app. The CLI calls the same server routes the console uses."
+    },
+    {
+      "id": "delivery.workflow_checkup",
+      "value": "Checkup requests are reviewed and answered manually by Jake first; automated audit->report->preview pipeline rides later once deliverability and volume are proven (confirmed 2026-10-31).",
+      "status": "confirmed",
+      "source": "user answer 2026-10-31",
+      "evidence": [],
+      "required": false
     }
   ]
 }

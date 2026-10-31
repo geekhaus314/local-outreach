@@ -12,7 +12,27 @@ const CHECKUP_MESSAGE_MAX = 2000;
 
 const CHECKUP_TO = 'hello@webrehabstl.com';
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+const RATE_WINDOW_MS = 60 * 60 * 1000;
+const RATE_LIMIT = 5;
+const SUBMISSION_TIMES = new Map<string, number[]>();
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const hits = (SUBMISSION_TIMES.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (hits.length >= RATE_LIMIT) {
+    return true;
+  }
+  hits.push(now);
+  SUBMISSION_TIMES.set(ip, hits);
+  if (SUBMISSION_TIMES.size > 500) {
+    for (const [key, times] of SUBMISSION_TIMES) {
+      if (times.every((t) => now - t >= RATE_WINDOW_MS)) SUBMISSION_TIMES.delete(key);
+    }
+  }
+  return false;
+}
+
+export const POST: RequestHandler = async ({ request, platform, getClientAddress }) => {
   let body: unknown;
   try {
     body = await request.json();
@@ -33,6 +53,14 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   const website = text(input.website, CHECKUP_WEBSITE_MAX);
   const message = text(input.message, CHECKUP_MESSAGE_MAX);
   const consent = input.consent === true;
+  const honeypot = text(input.company, 120);
+
+  if (rateLimited(getClientAddress())) {
+    return json(
+      { error: 'Too many checkup requests from this address. Email hello@webrehabstl.com instead.' },
+      { status: 429 }
+    );
+  }
 
   if (!name || !email || !website) {
     return json(
@@ -50,6 +78,10 @@ export const POST: RequestHandler = async ({ request, platform }) => {
       { error: 'Please confirm that we may email the checkup report to you.' },
       { status: 400 }
     );
+  }
+
+  if (honeypot) {
+    return json({ message: 'Your checkup request is in. We will email the report when it is ready.' });
   }
 
   const requestId = crypto.randomUUID();

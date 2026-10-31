@@ -1,20 +1,41 @@
 <script lang="ts">
   import styles from './Landing.module.css';
   import CheckupForm from './CheckupForm.svelte';
+  import Ticker from './Ticker.svelte';
+  import AuditDemo from './AuditDemo.svelte';
+  import { reveal } from './reveal';
 
-  const checkupCovers = [
-    'Whether your domain still works — or is parked, broken, or pointing somewhere else',
-    'Whether your pages actually work on a phone',
-    'HTTPS: whether customers get the secure warning screen',
-    'How findable your contact information is: phone, email, working forms',
-    'Whether anyone can actually book or request an appointment online',
-    'Whether your titles and search descriptions describe the right business',
-    'Whether your site still advertises a dead, for-sale, or stale page',
-    'How long your pages take to appear',
-    'Whether leftover placeholder or under-construction pages are still online',
-    'Whether anyone can count how well your site performs (analytics)',
-    'Whether your platform is abandoned and needs an update',
-    'Whether your copyright year stopped being honest years ago'
+  const problems = [
+    {
+      id: 'lost',
+      title: 'Domain sold out from under you',
+      body: 'Someone else runs the page your customers type in. We find it; you get it back.'
+    },
+    {
+      id: 'phone',
+      title: 'Unusable on phones',
+      body: 'Most local searches happen on one. A desktop-only page refuses every one of them.'
+    },
+    {
+      id: 'gate',
+      title: 'No door in',
+      body: 'No phone link, no form, no booking. A visitor who wants to hire you just leaves.'
+    },
+    {
+      id: 'clock',
+      title: 'Frozen in time',
+      body: 'The copyright says 2018 and the stack says older. Customers notice.'
+    },
+    {
+      id: 'blind',
+      title: 'Flying blind',
+      body: 'No analytics means you cannot answer the one question that matters: did anyone visit?'
+    },
+    {
+      id: 'search',
+      title: 'Invisible to search',
+      body: 'No title that names you, no description, no proof. Google has nothing to show.'
+    }
   ];
 </script>
 
@@ -28,107 +49,144 @@
           <span class={styles.brandName}>Web Rehab STL</span>
         </span>
       </span>
-      <a class={styles.headerCta} href="#checkup">Get the free checkup</a>
+      <a class={styles.headerCta} href="#checkup">Free checkup</a>
     </div>
   </header>
 
   <section class={styles.hero}>
-    <div class={styles.shell}>
-      <p class={styles.eyebrow}>For St. Louis small businesses</p>
-      <h1 class={styles.headline}>
-        Your website should bring you work — not quietly cost you jobs.
+    <div class={styles.heroGrid} aria-hidden="true"></div>
+    <div class={styles.shell} class:heroShell={true}>
+      <p class={styles.eyebrow} use:reveal>A 38-point website audit</p>
+      <h1 class={styles.headline} use:reveal={{ delay: 70 }}>
+        Fix the site that is quietly costing you jobs.
       </h1>
-      <p class={styles.lede}>
-        We audit St. Louis small-business websites and show you exactly what we
-        find, listing every specific issue by name: parked domains, pages that
-        do not work on a phone, sites still advertising a copyright from five
-        years ago. You get the full report first. No sales call to hear it.
+      <p class={styles.subhead} use:reveal={{ delay: 140 }}>
+        Free, measured, exact. You see the findings before any talk of money.
       </p>
-      <div class={styles.heroActions}>
-        <a class={styles.cta} href="#checkup">Request a free checkup</a>
-        <a class={styles.ctaGhost} href="#process">How it works</a>
+      <div class={styles.heroActions} use:reveal={{ delay: 200 }}>
+        <a class={styles.cta} href="#checkup">Get the free checkup</a>
       </div>
-      <dl class={styles.heroFacts}>
-        <div>
-          <dt>20-point audit</dt>
-          <dd>Every finding is a checked fact about your pages, not an opinion.</dd>
+    </div>
+  </section>
+
+  <Ticker />
+
+  <section class={styles.demoSection}>
+    <div class={styles.shell}>
+      <h2 class={styles.sectionTitle} use:reveal>Sixty seconds, then you decide</h2>
+      <p class={styles.sectionNote} use:reveal>
+        This is the report, not our word for it.
+      </p>
+      <div class={styles.demoMount} use:reveal={{ delay: 90 }}>
+        <AuditDemo />
+      </div>
+    </div>
+  </section>
+
+  <section class={styles.stats}>
+    <div class={styles.shell}>
+      <dl class={styles.statsGrid}>
+        <div class={styles.stat} use:reveal>
+          <dt>Checks per site</dt>
+          <dd><span class={styles.statNumber}>38</span></dd>
         </div>
-        <div>
-          <dt>Report first</dt>
-          <dd>You see the findings before any conversation about work.</dd>
+        <div class={styles.stat} use:reveal={{ delay: 80 }}>
+          <dt>Local sites measured</dt>
+          <dd><span class={styles.statNumber}>458</span></dd>
         </div>
-        <div>
-          <dt>No pressure</dt>
-          <dd>The report is yours either way, whether you hire us or not.</dd>
+        <div class={styles.stat} use:reveal={{ delay: 160 }}>
+          <dt>Seconds of your time to start</dt>
+          <dd><span class={styles.statNumber}>30</span></dd>
         </div>
       </dl>
     </div>
   </section>
 
-  <section class={styles.covers}>
+  <section class={styles.process}>
     <div class={styles.shell}>
-      <h2 class={styles.sectionTitle} id="process">How it works</h2>
+      <h2 class={styles.sectionTitle} use:reveal>How it works</h2>
       <ol class={styles.processList}>
-        <li>
-          <h3>1. Tell us your address</h3>
-          <p>Send us your website address and business name. It takes a minute.</p>
+        <li use:reveal>
+          <span class={styles.stepChip}>1</span>
+          <div>
+            <h3>Send the address</h3>
+            <p>Your site, your name, done.</p>
+          </div>
         </li>
-        <li>
-          <h3>2. We audit the site</h3>
-          <p>We run the same checkup we would run for any client — the results are recorded facts, not impressions.</p>
+        <li use:reveal={{ delay: 90 }}>
+          <span class={styles.stepChip}>2</span>
+          <div>
+            <h3>We measure it</h3>
+            <p>The same engine, every client, no opinions.</p>
+          </div>
         </li>
-        <li>
-          <h3>3. You get the report</h3>
-          <p>We email what we found, in plain language, with the exact facts pulled from your pages. If you want it fixed, we'll rehab it. If you don't, the report is yours to keep.</p>
+        <li use:reveal={{ delay: 180 }}>
+          <span class={styles.stepChip}>3</span>
+          <div>
+            <h3>You get the report</h3>
+            <p>Plain language. Yours to keep either way.</p>
+          </div>
         </li>
       </ol>
     </div>
   </section>
 
-  <section class={styles.covers}>
+  <section class={styles.gallery}>
     <div class={styles.shell}>
-      <h2 class={styles.sectionTitle}>What the checkup covers</h2>
-      <ul class={styles.coversList}>
-        {#each checkupCovers as item}
-          <li>{item}</li>
+      <h2 class={styles.sectionTitle} use:reveal>What kills a small-business site</h2>
+      <div class={styles.galleryGrid}>
+        {#each problems as problem, i}
+          <article class={styles.card} use:reveal={{ delay: (i % 3) * 80 }}>
+            <h3>{problem.title}</h3>
+            <p>{problem.body}</p>
+          </article>
         {/each}
-      </ul>
+      </div>
     </div>
   </section>
 
   <section class={styles.checkupSection} id="checkup">
     <div class={styles.shell}>
-      <h2 class={styles.sectionTitle}>Request your free checkup</h2>
-      <p class={styles.sectionNote}>
-        One checkup per business. We answer with the report itself, not a pitch.
-      </p>
-      <CheckupForm />
+      <div class={styles.checkupSplit}>
+        <div class={styles.checkupIntro}>
+          <h2 class={styles.sectionTitle}>Request your free checkup</h2>
+          <ul class={styles.timeline}>
+            <li use:reveal>
+              <span class={styles.timelineDot} aria-hidden="true"></span>
+              <div>
+                <strong>Right away</strong>
+                <span>Your site goes through the full audit.</span>
+              </div>
+            </li>
+            <li use:reveal={{ delay: 90 }}>
+              <span class={styles.timelineDot} aria-hidden="true"></span>
+              <div>
+                <strong>Within a day</strong>
+                <span>The findings land in your inbox, in plain language.</span>
+              </div>
+            </li>
+            <li use:reveal={{ delay: 180 }}>
+              <span class={styles.timelineDot} aria-hidden="true"></span>
+              <div>
+                <strong>Your call</strong>
+                <span>Hire us to fix it, or keep the report and go. Both are fine.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class={styles.checkupFormMount}>
+          <CheckupForm />
+        </div>
+      </div>
     </div>
   </section>
 
   <footer class={styles.footer}>
     <div class={styles.shell}>
-      <div class={styles.footerGrid}>
-        <div>
-          <p class={styles.footerName}>Web Rehab STL</p>
-          <p class={styles.footerNote}>
-            Website audit and rehab for small businesses in St. Louis County.
-            Every claim we make about your site is checked, in writing, against
-            your pages.
-          </p>
-        </div>
-        <div>
-          <h2 class={styles.footerHeading}>Contact</h2>
-          <a class={styles.footerLink} href="mailto:hello@webrehabstl.com">hello@webrehabstl.com</a>
-        </div>
-        <div>
-          <h2 class={styles.footerHeading}>Legal</h2>
-          <a class={styles.footerLink} href="/privacy">Privacy notice</a>
-        </div>
-      </div>
-      <div class={styles.footerBase}>
-        <p>© {new Date().getFullYear()} Web Rehab STL, St. Louis, Missouri</p>
-      </div>
+      <span class={styles.footerBrand}>Web Rehab STL</span>
+      <a class={styles.footerLink} href="mailto:hello@webrehabstl.com">hello@webrehabstl.com</a>
+      <a class={styles.footerLink} href="/privacy">Privacy</a>
+      <span class={styles.footerBase}>© {new Date().getFullYear()} · St. Louis, Missouri</span>
     </div>
   </footer>
 </div>

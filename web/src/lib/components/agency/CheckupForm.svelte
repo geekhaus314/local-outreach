@@ -10,6 +10,7 @@
   let email = $state('');
   let website = $state('');
   let notes = $state('');
+  let company = $state('');
 
   const isSubmitting = $derived(status === 'submitting');
 
@@ -45,6 +46,7 @@
           email,
           website,
           message: notes,
+          company,
           consent
         })
       });
@@ -114,6 +116,11 @@
         placeholder="What the site is for, what has gone wrong, deadlines…"
         bind:value={notes}
       ></textarea>
+    </div>
+
+    <div class={styles.honeypot} aria-hidden="true">
+      <label for="checkup-company">Company</label>
+      <input id="checkup-company" name="company" type="text" tabindex="-1" autocomplete="off" bind:value={company} />
     </div>
 
     <label class={styles.consent}>

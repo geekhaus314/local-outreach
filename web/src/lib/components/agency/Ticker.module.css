@@ -1,0 +1,77 @@
+.band {
+  overflow: hidden;
+  position: relative;
+  border-block: 1px solid var(--color-border);
+  background: var(--color-bg);
+  padding-block: 0.65rem;
+}
+
+.band::before,
+.band::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: 5rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.band::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--color-bg), transparent);
+}
+
+.band::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--color-bg), transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee 46s linear infinite;
+}
+
+.band:hover .track {
+  animation-play-state: paused;
+}
+
+.set {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.item {
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sep {
+  margin: 0 1.1rem;
+  color: var(--color-accent);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    overflow: hidden;
+  }
+
+  .set[aria-hidden='true'] {
+    display: none;
+  }
+}

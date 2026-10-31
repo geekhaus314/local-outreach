@@ -61,6 +61,14 @@
   accent-color: var(--color-accent);
 }
 
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .error {
   display: grid;
   gap: 0.35rem;
