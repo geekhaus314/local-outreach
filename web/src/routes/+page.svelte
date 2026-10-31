@@ -26,6 +26,23 @@
     <meta property="og:title" content="Web Rehab STL" />
     <meta property="og:description" content="A free, fact-based website checkup for St. Louis small businesses." />
     <meta property="og:url" content="https://webrehabstl.com/" />
+    <script type="application/ld+json">
+      {JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ProfessionalService',
+        name: 'Web Rehab STL',
+        url: 'https://webrehabstl.com/',
+        email: 'hello@webrehabstl.com',
+        description:
+          'Website audits and rebuilds for St. Louis small businesses: edge-hosted pages, measured performance checks, and a free 38-point checkup.',
+        areaServed: {
+          '@type': 'City',
+          name: 'St. Louis',
+          containedInPlace: { '@type': 'State', name: 'Missouri' }
+        },
+        knowsAbout: ['website audit', 'web performance', 'small business websites', 'search visibility']
+      })}
+    </script>
   {/if}
 </svelte:head>
 

@@ -1,10 +1,27 @@
 import { error } from '@sveltejs/kit';
+import { isAgencyHost } from '$lib/data/agency';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export const GET: RequestHandler = ({ locals }) => {
+export const GET: RequestHandler = ({ locals, url }) => {
   if (!locals.tenant) {
+    if (isAgencyHost(url.hostname)) {
+      const lines = [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin',
+        'Disallow: /api/',
+        '',
+        'Sitemap: https://webrehabstl.com/sitemap.xml'
+      ];
+      return new Response(`${lines.join('\n')}\n`, {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600'
+        }
+      });
+    }
     error(404, 'No prospect mockup is configured for this host.');
   }
 

@@ -145,6 +145,58 @@
     </div>
   </section>
 
+  <section class={styles.compare}>
+    <div class={styles.shell}>
+      <h2 class={styles.sectionTitle} use:reveal>What gets replaced</h2>
+      <p class={styles.sectionNote} use:reveal>
+        Same business, different machinery underneath.
+      </p>
+      <div class={styles.compareTableWrap} use:reveal={{ delay: 80 }}>
+        <table class={styles.compareTable}>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">A template build</th>
+              <th scope="col">What we ship</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Architecture</th>
+              <td>Page builder plus a stack of plugins</td>
+              <td>Static pages with edge functions where needed</td>
+            </tr>
+            <tr>
+              <th scope="row">What loads</th>
+              <td>Every plugin bundle, on every page</td>
+              <td>Only the assets that page actually uses</td>
+            </tr>
+            <tr>
+              <th scope="row">Maintenance</th>
+              <td>Recurring plugin and theme patching</td>
+              <td>Rebuild and deploy; no patch queue</td>
+            </tr>
+            <tr>
+              <th scope="row">Phones</th>
+              <td>Desktop layout squeezed to fit</td>
+              <td>Built mobile-first, then widened</td>
+            </tr>
+            <tr>
+              <th scope="row">Proof</th>
+              <td>Whatever the sales call claims</td>
+              <td>The 38 checks this site publishes</td>
+            </tr>
+            <tr>
+              <th scope="row">Ownership</th>
+              <td>The builder account owns the page</td>
+              <td>Your domain, your content, exportable</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <section class={styles.checkupSection} id="checkup">
     <div class={styles.shell}>
       <div class={styles.checkupSplit}>

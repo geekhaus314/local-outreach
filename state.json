@@ -1,0 +1,44 @@
+{
+  "updated": "2026-10-31",
+  "product": "webrehabstl.com",
+  "audience": "St. Louis small businesses that need a working website",
+  "live": {
+    "site": "https://webrehabstl.com",
+    "hosting": "Cloudflare Pages project stlouiswebmaster",
+    "database": "D1 local-outreach",
+    "checkupEndpoint": "POST /api/checkup",
+    "lastDeployedCommit": "82eddd9"
+  },
+  "inProgress": [
+    "Phase 1 landing rebuild (motion, audit demo, ticker, stat band)",
+    "Agency dark OKLCH palette + comparison table",
+    "Agency-host robots.txt, sitemap.xml, security.txt, JSON-LD",
+    "Checkup honeypot + 5/hour IP rate limit"
+  ],
+  "agentOwns": [
+    "Site design, copy, and components",
+    "Checkup funnel wiring, persistence, notification email",
+    "Agency SEO surfaces (robots, sitemap, security.txt, structured data)",
+    "Admin outreach tooling (import, scoring, pitch generation)",
+    "Build, tests, slag verify + gate, git commits and pushes"
+  ],
+  "ownerMustDo": [
+    "Publish the 4 Resend DNS records in Cloudflare (DKIM TXT, send MX, send SPF TXT, rsend CNAME)",
+    "Enable Email Routing for hello@ and info@ to Geekhaus314@proton.me",
+    "Rotate the Resend API key that was pasted in chat",
+    "Send the /work client URL list",
+    "Send /designs package tiers, prices, and buy flow (Stripe or request form)",
+    "Decide whether to keep the dark edge palette or the lighter current look"
+  ],
+  "blocked": [
+    "/work page: needs real client URLs and permission to name them",
+    "/designs page: needs real package names and prices",
+    "Pricing UI: no prices may be invented"
+  ],
+  "next": [
+    "Finish and push Phase 1 landing",
+    "Smoke-test live checkup endpoint after DNS/domain setup",
+    "Build /work and /designs once facts arrive",
+    "Port Python pitch/urgency logic into the admin portal"
+  ]
+}
