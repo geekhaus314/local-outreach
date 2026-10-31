@@ -1,33 +1,49 @@
 <script lang="ts">
   import { loadVerticalComponent } from '$lib/verticals/registry';
+  import Landing from '$lib/components/agency/Landing.svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
 
-  // Redirect to /admin is handled by +page.server.ts when no tenant matches;
-  // this guard exists only to satisfy TypeScript's null check on data.tenant.
+  // Redirect to /admin is handled by +page.server.ts when no tenant and not the
+  // agency host; the guards here satisfy TypeScript's null checks.
   const vertical = $derived(data.tenant?.vertical);
+  const showLanding = $derived(!data.tenant && data.isAgency);
 </script>
 
 <svelte:head>
   {#if data.tenant}
     <title>{data.tenant.seo.title}</title>
+  {:else if showLanding}
+    <title>Web Rehab STL — Free website checkup for St. Louis small businesses</title>
+    <meta
+      name="description"
+      content="Web Rehab STL audits St. Louis small-business websites — dead domains, broken mobile layouts, stale pages — and rebuilds what costs you customers. Start with a free, fact-based checkup."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://webrehabstl.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Web Rehab STL" />
+    <meta property="og:description" content="A free, fact-based website checkup for St. Louis small businesses." />
+    <meta property="og:url" content="https://webrehabstl.com/" />
   {/if}
 </svelte:head>
 
 {#if data.tenant}
   {#await loadVerticalComponent(data.tenant.vertical)}
-    <div class="shell loadState">
+    <div class="loadState">
       <p>Loading the {vertical} experience…</p>
     </div>
   {:then Vertical}
     <Vertical content={data.tenant} />
   {:catch}
-    <div class="shell loadState">
+    <div class="loadState">
       <h1>This preview could not be rendered.</h1>
       <p>The vertical component for {vertical} failed to load. Check the server logs for details.</p>
     </div>
   {/await}
+{:else if showLanding}
+  <Landing />
 {/if}
 
 <style>

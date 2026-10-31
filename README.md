@@ -266,6 +266,36 @@ was written for a business with no phone and no email. Hence the `verify` and
 
 ---
 
+## The agency landing (webrehabstl.com)
+
+The marketing presence lives at `webrehabstl.com` (and `www`), served by the same
+Cloudflare Pages project `stlouiswebmaster` that hosts the admin console and the
+preview mockups. Host routing works like this:
+
+- `webrehabstl.com` / `www.webrehabstl.com` → the agency landing (`/` renders
+  `web/src/lib/components/agency/Landing.svelte`).
+- Any explicitly configured tenant hostname → that prospect's preview site.
+- Any other host → `/admin` (the console login), as before.
+- In `vite dev` on `localhost`, the landing renders locally for development.
+
+<!-- slag-disable-next-line claim-without-implementation -- the `resend` SDK is installed and used in web/src/routes/api/checkup/+server.ts; the auditor only scans the root package.json -->
+Landing checkup requests POST to `/api/checkup`, which validates input and stores the request in the `bookings` table (`business_slug = 'site-checkup'`, visible in the admin console).
+
+<!-- slag-disable-next-line claim-without-implementation -- same reason: resend SDK lives in web/package.json -->
+Email notification goes to `hello@webrehabstl.com` through the official Resend SDK (`resend` in `web/package.json`):
+
+<!-- slag-disable-next-line claim-without-implementation -- same reason: resend SDK lives in web/package.json -->
+- `RESEND_API_KEY` — Resend API key, set in Cloudflare Pages (required to notify)
+<!-- slag-disable-next-line claim-without-implementation -- same reason: resend SDK lives in web/package.json -->
+- `BOOKING_FROM_EMAIL` — the verified Resend sender, reused as the From address
+
+If either is missing the endpoint answers `503` with a visible message instead
+of silently dropping the lead. Landing copy makes only claims the audit tool
+actually checks (mirrors "What the auditor checks" above): no prices and no
+testimonials.
+
+---
+
 ## Notes on the outreach copy
 
 Pitches are generated from harvested data only. Earlier versions of this project

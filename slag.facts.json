@@ -16,9 +16,9 @@
     {
       "id": "scope.core",
       "question": "List the core user actions that must work end-to-end. Each one needs a real path through UI, server and storage.",
-      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy.",
+      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy. Added 2026-10-30: serve an agency landing page on webrehabstl.com and www.webrehabstl.com (not other hosts) with a free-checkup lead form that persists to D1 and emails hello@webrehabstl.com through Resend.",
       "status": "confirmed",
-      "source": "user answer 2026-10-20",
+      "source": "user answer 2026-10-20; landing scope/capture/contact confirmed 2026-10-30",
       "required": true,
       "evidence": [],
       "notes": "Example: \"user signs up, creates a project, invites a teammate, and sees it after reload\"."
@@ -96,7 +96,7 @@
     {
       "id": "integrations",
       "question": "Which third-party services are required, and which credentials do they need? Use \"none\" if none.",
-      "value": "Cloudflare D1, R2, Queues, Cron Triggers, and Access. Booking webhook via server-only BOOKING_WEBHOOK_URL, BOOKING_API_KEY, and BOOKING_FROM_EMAIL.",
+      "value": "Cloudflare D1, R2, Queues, Cron Triggers, and Access. Booking webhook via server-only BOOKING_WEBHOOK_URL, BOOKING_API_KEY, and BOOKING_FROM_EMAIL. Added 2026-10-30: Resend sends landing checkup requests as email to hello@webrehabstl.com using RESEND_API_KEY and BOOKING_FROM_EMAIL (verified sender domain). Domain webrehabstl.com is registered at IONOS; nameservers must be changed to Cloudflare, then the hostname is attached to the stlouiswebmaster Pages project.",
       "status": "confirmed",
       "source": "user answer 2026-10-20",
       "required": false,

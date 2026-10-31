@@ -43,7 +43,6 @@ export const POST: RequestHandler = async ({ params, request, locals, platform }
   }
 
   const fromStatus = await recordLifecycleTransition(guard.db, {
-    db: guard.db,
     businessId: row.id,
     toStatus,
     actorId: guard.user.id,

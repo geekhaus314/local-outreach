@@ -9,6 +9,7 @@ import {
   parseDirection
 } from '$lib/server/db';
 import type { RequestHandler } from './$types';
+import type { CommunicationOutcome } from '$lib/server/db';
 
 export const prerender = false;
 
@@ -121,7 +122,7 @@ export const POST: RequestHandler = async ({ request, locals, platform }) => {
     body: input.body,
     occurredAt,
     responseTo,
-    outcome,
+    outcome: outcome as CommunicationOutcome,
     actorId: guard.user.id
   });
 

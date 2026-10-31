@@ -8,6 +8,7 @@ import {
 } from '$lib/server/db';
 import { hashPassword } from '$lib/server/auth';
 import type { RequestHandler } from './$types';
+import type { UserRole } from '$lib/server/db';
 
 export const prerender = false;
 
@@ -63,7 +64,7 @@ export const PATCH: RequestHandler = async ({ params, request, locals, platform 
   }
 
   await updateUser(guard.db, existing.id, {
-    role: input.role as string | undefined,
+    role: input.role as UserRole | undefined,
     name: input.name as string | undefined,
     disabled: input.disabled as boolean | undefined,
     passwordHash:

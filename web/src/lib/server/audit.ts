@@ -684,9 +684,10 @@ export async function auditWebsite(
         'Domain is parked or a placeholder',
         90,
         `${result.domain} serves a parked or placeholder page (title=${title.slice(0, 60)})`,
+        // slag-disable-next-line placeholder-copy -- detection phrase for prospect sites, not our placeholder copy
         `${result.domain} is sitting on a parked placeholder page -- anyone who types your web address sees a "coming soon" screen instead of your business.`
       )
-    );
+    )
   }
 
   const originalDomain = registrableDomain(new URL(url).hostname);

@@ -45,15 +45,15 @@ export async function ollamaChat(options: OllamaChatOptions): Promise<string> {
   return content.trim();
 }
 
-export function resolveAiConfig(env: Record<string, string | undefined>): AiProviderConfig {
-  const provider = (env.AI_PROVIDER ?? 'ollama') as 'ollama' | 'cloudflare';
+export function resolveAiConfig(env: Record<string, unknown> | undefined): AiProviderConfig {
+  const provider = ((env?.AI_PROVIDER as string) ?? 'ollama') as 'ollama' | 'cloudflare';
   return {
     provider,
-    ollamaUrl: env.OLLAMA_URL ?? OLLAMA_URL,
-    ollamaModel: env.OLLAMA_MODEL ?? OLLAMA_MODEL,
-    cloudflareAccountId: env.CLOUDFLARE_AI_ACCOUNT_ID,
-    cloudflareApiToken: env.CLOUDFLARE_AI_API_TOKEN,
-    cloudflareModel: env.CLOUDFLARE_AI_MODEL ?? '@cf/meta/llama-3.1-8b-instruct'
+    ollamaUrl: (env?.OLLAMA_URL as string) ?? OLLAMA_URL,
+    ollamaModel: (env?.OLLAMA_MODEL as string) ?? OLLAMA_MODEL,
+    cloudflareAccountId: env?.CLOUDFLARE_AI_ACCOUNT_ID as string | undefined,
+    cloudflareApiToken: env?.CLOUDFLARE_AI_API_TOKEN as string | undefined,
+    cloudflareModel: (env?.CLOUDFLARE_AI_MODEL as string) ?? '@cf/meta/llama-3.1-8b-instruct'
   };
 }
 

@@ -7,6 +7,7 @@ import {
   updateCommunication
 } from '$lib/server/db';
 import type { RequestHandler } from './$types';
+import type { CommunicationOutcome } from '$lib/server/db';
 
 export const prerender = false;
 
@@ -78,7 +79,7 @@ export const PATCH: RequestHandler = async ({ params, request, locals, platform 
     subject: input.subject as string | undefined,
     body: input.body as string | undefined,
     occurredAt: input.occurred_at === undefined ? undefined : (input.occurred_at as string | null),
-    outcome: input.outcome as string | undefined
+    outcome: input.outcome as CommunicationOutcome | undefined
   });
 
   const communication = await getCommunication(guard.db, existing.id);
