@@ -15,7 +15,8 @@ export const GET: RequestHandler = ({ locals, url }) => {
     'Contact: mailto:hello@webrehabstl.com',
     `Expires: ${EXPIRES}`,
     'Preferred-Languages: en',
-    'Canonical: https://webrehabstl.com/.well-known/security.txt'
+    'Canonical: https://webrehabstl.com/.well-known/security.txt',
+    'Policy: https://webrehabstl.com/privacy'
   ];
 
   return new Response(`${lines.join('\n')}\n`, {
