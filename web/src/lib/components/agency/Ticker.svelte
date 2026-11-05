@@ -1,33 +1,37 @@
 <script lang="ts">
   import styles from './Ticker.module.css';
 
-  const checks = [
-    'cross-domain redirect',
-    'parked domain',
-    'HTTPS downgrade',
-    'no mobile viewport',
-    'missing meta description',
-    'no contact path',
-    'no online booking',
-    'EOL WordPress',
-    'slow first byte',
-    // slag-disable-next-line placeholder-copy -- real finding label emitted by web/src/lib/server/audit.ts, not unfinished copy
-    'placeholder text left in',
-    'mixed content',
-    'insecure form action',
-    'no analytics',
-    'stale copyright year',
-    'no trust signals',
-    'thin content',
-    'no canonical URL',
-    'no social preview',
-    'no structured data',
-    'missing robots.txt',
-    'no sitemap.xml'
+  /** Plain-language findings — one typed label each, no bunched jargon blob. */
+  const checkParkedDomain: string = 'domain sold or parked';
+  const checkBrokenSecure: string = 'secure page drops to insecure';
+  const checkNoPhone: string = 'no click-to-call';
+  const checkNoForm: string = 'no contact form';
+  const checkNotMobile: string = 'breaks on phones';
+  const checkNoBooking: string = 'nowhere to book online';
+  const checkSlow: string = 'loads too slow';
+  const checkOldYear: string = 'copyright stuck in the past';
+  const checkNoTracking: string = 'no visitor tracking';
+  const checkThin: string = 'almost no real content';
+  const checkBadTitle: string = 'title does not name the business';
+  const checkNoSitemap: string = 'search engines get no sitemap';
+
+  const checks: string[] = [
+    checkParkedDomain,
+    checkBrokenSecure,
+    checkNoPhone,
+    checkNoForm,
+    checkNotMobile,
+    checkNoBooking,
+    checkSlow,
+    checkOldYear,
+    checkNoTracking,
+    checkThin,
+    checkBadTitle,
+    checkNoSitemap
   ];
 </script>
 
-<div class={styles.band} aria-label="What the audit checks">
+<div class={styles.band} aria-label="Problems we look for">
   <div class={styles.track}>
     <span class={styles.set}>
       {#each checks as item}

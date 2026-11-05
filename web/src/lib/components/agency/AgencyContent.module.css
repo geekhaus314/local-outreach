@@ -7,7 +7,7 @@
 
 .section {
   border-bottom: 1px solid var(--color-border);
-  padding-block: clamp(2.8rem, 7vw, 4.8rem);
+  padding-block: clamp(1.8rem, 4.5vw, 3rem);
 }
 
 .sectionAlt {

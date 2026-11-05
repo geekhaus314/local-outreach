@@ -16,19 +16,19 @@
   {#if data.tenant}
     <title>{data.tenant.seo.title}</title>
   {:else if showLanding}
-    <title>Website design and repair in St. Louis | Web Rehab STL</title>
+    <title>Website checkup and repair in St. Louis | Web Rehab STL</title>
     <meta
       name="description"
-      content="Website audits, repairs, and rebuilds for St. Louis small businesses. Free 38-point checkup, fixed quotes, local-search setup, and a phone number that reaches a person."
+      content="Free website checkup for St. Louis contractors and small businesses. Plain report, fixed quotes, and a phone number that reaches a person."
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={`${AGENCY_CONTACT.url}/`} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Web Rehab STL" />
-    <meta property="og:title" content="Website design and repair in St. Louis | Web Rehab STL" />
+    <meta property="og:title" content="Website checkup and repair in St. Louis | Web Rehab STL" />
     <meta
       property="og:description"
-      content="Free 38-point website checkup for St. Louis small businesses. Fixed quotes, local-search setup, and a phone number that reaches a person."
+      content="Send your site. Get a plain report. Fix it with us or keep the findings. Built for owners, not tech recruiters."
     />
     <meta property="og:url" content={`${AGENCY_CONTACT.url}/`} />
     <meta property="og:image" content={`${AGENCY_CONTACT.url}/og.png`} />
@@ -36,10 +36,10 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Website design and repair in St. Louis | Web Rehab STL" />
+    <meta name="twitter:title" content="Website checkup and repair in St. Louis | Web Rehab STL" />
     <meta
       name="twitter:description"
-      content="Free 38-point website checkup for St. Louis small businesses."
+      content="Free website checkup for St. Louis contractors and small businesses."
     />
     <meta name="twitter:image" content={`${AGENCY_CONTACT.url}/og.png`} />
     <meta name="geo.region" content="US-MO" />

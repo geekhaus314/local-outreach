@@ -137,55 +137,62 @@ export interface AgencyWork {
 	imageAlt: string;
 }
 
+export const workBrianIvie: AgencyWork = {
+	slug: 'brian-ivie-hair',
+	name: 'Brian Ivie Hair',
+	url: 'https://www.myhairloss.com',
+	sector: 'Hair restoration clinic',
+	summary:
+		'A St. Louis clinic site on its own domain — service pages, a shop, and a way for staff to update copy without calling a developer every time.',
+	detail: [
+		'Service pages and a shop section built around the clinic’s real offerings.',
+		'Admin tooling so the site can be maintained without a developer for every copy change.',
+		'Custom domains and a GitHub-connected deploy pipeline on Cloudflare Pages.'
+	],
+	stack: ['Next.js', 'MDX', 'Cloudflare Pages'],
+	image: '/work/myhairloss.webp',
+	imageAlt: 'Screenshot of the Brian Ivie Hair website home page'
+};
+
+export const workAngieViefhaus: AgencyWork = {
+	slug: 'angie-viefhaus',
+	name: 'Angie Viefhaus',
+	url: 'https://angie-viefhaus.pages.dev',
+	sector: 'Wildlife photography',
+	summary:
+		'A photography portfolio built around the pictures — gallery, lightbox, and a clean layout that stays out of the way.',
+	detail: [
+		'Gallery and lightbox built for large wildlife photographs.',
+		'Editorial type and a dark, gallery-grade presentation.',
+		'Deployed to Cloudflare Pages with a static-first build.'
+	],
+	stack: ['React', 'TypeScript', 'Tailwind', 'Cloudflare Pages'],
+	image: '/work/angie.webp',
+	imageAlt: 'Screenshot of the Angie Viefhaus wildlife photography portfolio'
+};
+
+export const workUnitedDistribution: AgencyWork = {
+	slug: 'united-distribution',
+	name: 'Kanan Enterprises / United Distribution',
+	url: 'https://kanan-e.vercel.app',
+	sector: 'Wholesale distribution',
+	summary:
+		'A wholesale storefront with catalogs, branded shops, and checkout — built for a distribution business, not a brochure.',
+	detail: [
+		'Multi-tenant Next.js architecture serving more than one branded storefront.',
+		'Product catalogs, brand pages, and browse routes for a wholesale distributor.',
+		'Production deployment on Vercel with a working checkout flow.'
+	],
+	stack: ['Next.js', 'TypeScript', 'Vercel'],
+	image: '/work/kanan.webp',
+	imageAlt: 'Screenshot of the United Distribution wholesale storefront'
+};
+
+/** Ordered list for the /work page only — each project stays its own typed export above. */
 export const agencyWork: AgencyWork[] = [
-	{
-		slug: 'brian-ivie-hair',
-		name: 'Brian Ivie Hair',
-		url: 'https://www.myhairloss.com',
-		sector: 'Hair restoration clinic',
-		summary:
-			'Production Next.js site for a St. Louis clinic, live on a custom domain with service pages, a shop, and admin tooling.',
-		detail: [
-			'Service pages and a shop section built around the clinic’s real offerings.',
-			'Admin tooling so the site can be maintained without a developer for every copy change.',
-			'Custom domains and a GitHub-connected deploy pipeline on Cloudflare Pages.'
-		],
-		stack: ['Next.js', 'MDX', 'Cloudflare Pages'],
-		image: '/work/myhairloss.webp',
-		imageAlt: 'Screenshot of the Brian Ivie Hair website home page'
-	},
-	{
-		slug: 'angie-viefhaus',
-		name: 'Angie Viefhaus',
-		url: 'https://angie-viefhaus.pages.dev',
-		sector: 'Wildlife photography',
-		summary:
-			'Editorial photography portfolio with a gallery, lightbox, and a serif-forward design that keeps the images in charge.',
-		detail: [
-			'Gallery and lightbox built for large wildlife photographs.',
-			'Editorial type and a dark, gallery-grade presentation.',
-			'Deployed to Cloudflare Pages with a static-first build.'
-		],
-		stack: ['React', 'TypeScript', 'Tailwind', 'Cloudflare Pages'],
-		image: '/work/angie.webp',
-		imageAlt: 'Screenshot of the Angie Viefhaus wildlife photography portfolio'
-	},
-	{
-		slug: 'united-distribution',
-		name: 'Kanan Enterprises / United Distribution',
-		url: 'https://kanan-e.vercel.app',
-		sector: 'Wholesale distribution',
-		summary:
-			'Multi-tenant B2B e-commerce platform with branded storefronts, product catalogs, and a checkout flow.',
-		detail: [
-			'Multi-tenant Next.js architecture serving more than one branded storefront.',
-			'Product catalogs, brand pages, and browse routes for a wholesale distributor.',
-			'Production deployment on Vercel with a working checkout flow.'
-		],
-		stack: ['Next.js', 'TypeScript', 'Vercel'],
-		image: '/work/kanan.webp',
-		imageAlt: 'Screenshot of the United Distribution wholesale storefront'
-	}
+	workBrianIvie,
+	workAngieViefhaus,
+	workUnitedDistribution
 ];
 
 export interface AgencyDesign {
@@ -300,7 +307,7 @@ export const agencyFaqs: AgencyFaq[] = [
 	{
 		question: 'Do I need to understand the technical side?',
 		answer:
-			'No. The report is written for the person running the business. If a finding needs a decision, it comes with the practical trade-off, not a stack trace.'
+			'No. The report is written for the person running the business. If something needs a decision, it comes with the practical trade-off in plain English.'
 	},
 	{
 		question: 'What does a repair or rebuild cost?',

@@ -9,12 +9,11 @@ Machine-readable copy: `state.json`
 - Checkup: `POST /api/checkup` persists to D1; email secrets are set, but sending is blocked until `webrehabstl.com` is verified in Resend
 - Last deployed commit: `82eddd9`
 
-## Built locally (not deployed yet)
-- Landing overhaul: agency chrome, dark + light palettes, proof strip, sample 38 checks, about, FAQ, phone CTA
-- `/work` with three approved clients, `/designs` request-a-quote catalog, `/services` + six service pages, agency `/privacy`
-- `/api/quote`, shared `leadEmail` + `rateLimit`; `/api/checkup` now persists first and returns 202 when email is unavailable
+## Built / shipping
+- Agency overhaul on master (`8a3725e`): `/work`, `/designs`, `/services`, chrome + palettes, quote + persist-first checkup
+- Densify pass (pending push): form-in-hero, cut sparse sections, contractor-plain copy, named typed work exports
 - SEO: title/meta/OG/Twitter/geo, ProfessionalService + FAQ + Service JSON-LD, expanded sitemap, robots, security.txt
-- Tests for agency content consistency and rate-limiter behavior
+- Tests for agency content consistency and rate-limiter behavior; `slag verify` + `slag gate` green
 
 ## Pages secrets (production)
 - `RESEND_API_KEY` — set 2026-11-05
@@ -40,6 +39,5 @@ Machine-readable copy: `state.json`
 
 ## Next
 1. Add Resend DNS records and verify the domain
-2. Review the local site in both palettes, then commit and push
-3. Deploy and smoke-test checkup + quote
-4. Port the Python pitch and urgency logic into the admin portal
+2. Smoke-test checkup + quote after densify deploy
+3. Port the Python pitch and urgency logic into the admin portal
