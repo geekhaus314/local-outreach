@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
-import { Resend } from 'resend';
 import { getDatabase, recordBooking } from '$lib/server/db';
+import { readLeadEmailConfig, sendLeadEmail } from '$lib/server/leadEmail';
+import { createRateLimiter } from '$lib/server/rateLimit';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -9,28 +10,9 @@ export const prerender = false;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CHECKUP_WEBSITE_MAX = 200;
 const CHECKUP_MESSAGE_MAX = 2000;
-
 const CHECKUP_TO = 'hello@webrehabstl.com';
 
-const RATE_WINDOW_MS = 60 * 60 * 1000;
-const RATE_LIMIT = 5;
-const SUBMISSION_TIMES = new Map<string, number[]>();
-
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const hits = (SUBMISSION_TIMES.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (hits.length >= RATE_LIMIT) {
-    return true;
-  }
-  hits.push(now);
-  SUBMISSION_TIMES.set(ip, hits);
-  if (SUBMISSION_TIMES.size > 500) {
-    for (const [key, times] of SUBMISSION_TIMES) {
-      if (times.every((t) => now - t >= RATE_WINDOW_MS)) SUBMISSION_TIMES.delete(key);
-    }
-  }
-  return false;
-}
+const rateLimited = createRateLimiter({ windowMs: 60 * 60 * 1000, limit: 5 });
 
 export const POST: RequestHandler = async ({ request, platform, getClientAddress }) => {
   let body: unknown;
@@ -52,6 +34,8 @@ export const POST: RequestHandler = async ({ request, platform, getClientAddress
   const email = text(input.email, 200);
   const website = text(input.website, CHECKUP_WEBSITE_MAX);
   const message = text(input.message, CHECKUP_MESSAGE_MAX);
+  const source = text(input.source, 80);
+  const page = text(input.page, 300);
   const consent = input.consent === true;
   const honeypot = text(input.company, 120);
 
@@ -86,6 +70,14 @@ export const POST: RequestHandler = async ({ request, platform, getClientAddress
 
   const requestId = crypto.randomUUID();
   const db = getDatabase(platform);
+  const notes = [
+    website ? `Website: ${website}` : '',
+    message ? `Notes: ${message}` : '',
+    source ? `Source: ${source}` : '',
+    page ? `Page: ${page}` : ''
+  ]
+    .filter(Boolean)
+    .join('\n');
 
   if (db) {
     try {
@@ -97,7 +89,7 @@ export const POST: RequestHandler = async ({ request, platform, getClientAddress
         email,
         phone: '',
         service: 'free-website-checkup',
-        message: `Website: ${website}${message ? `\n\nNotes: ${message}` : ''}`,
+        message: notes,
         consent,
         idempotencyKey: requestId
       });
@@ -107,66 +99,58 @@ export const POST: RequestHandler = async ({ request, platform, getClientAddress
     }
   }
 
-  const privateEnv = env as Record<string, string | undefined>;
-  const apiKey = privateEnv.RESEND_API_KEY;
-  const fromEmail = privateEnv.BOOKING_FROM_EMAIL;
+  const config = readLeadEmailConfig(env as Record<string, string | undefined>);
+  const recipient =
+    (env as Record<string, string | undefined>).LEAD_NOTIFY_EMAIL || CHECKUP_TO;
+  const saved = Boolean(db);
 
-  if (!apiKey || !fromEmail) {
-    console.error('Resend is not configured for checkup requests', {
-      hasApiKey: Boolean(apiKey),
-      hasFromEmail: Boolean(fromEmail)
-    });
+  if (!config) {
+    console.error('Resend is not configured for checkup requests', { requestId, saved });
     return json(
       {
-        error:
-          'Your request was received, but email delivery is temporarily unavailable. Please email hello@webrehabstl.com directly.'
+        saved,
+        emailSent: false,
+        requestId,
+        message: saved
+          ? 'Your request is saved. Email delivery is being configured, so please also call or text (636) 448-3574 if you need a reply quickly.'
+          : 'Email delivery is temporarily unavailable. Please call or text (636) 448-3574 directly.'
       },
-      { status: 503 }
+      { status: saved ? 202 : 503 }
     );
   }
 
-  const subject = `New site checkup request — ${website}`;
-  const lines = [
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Website: ${website}`,
-    '',
-    message ? `Notes: ${message}` : 'No notes provided.',
-    '',
-    `Request id: ${requestId}`
-  ];
+  const emailLines = [`Name: ${name}`, `Email: ${email}`, `Website: ${website}`];
+  if (message) emailLines.push('', `Notes: ${message}`);
+  if (source) emailLines.push(`Source: ${source}`);
+  if (page) emailLines.push(`Page: ${page}`);
+  emailLines.push('', `Request id: ${requestId}`);
 
-  try {
-    const resend = new Resend(apiKey);
-    const { error: sendError } = await resend.emails.send({
-      from: fromEmail,
-      to: CHECKUP_TO,
-      subject,
-      text: lines.join('\n')
-    });
+  const result = await sendLeadEmail(config, {
+    to: recipient,
+    subject: `New site checkup request — ${website}`,
+    replyTo: email,
+    lines: emailLines
+  });
 
-    if (sendError) {
-      console.error('Resend rejected the checkup notification', { message: sendError.message });
-      return json(
-        {
-          error:
-            'Your request was recorded, but the email to us failed. Please email hello@webrehabstl.com directly so nothing is lost.'
-        },
-        { status: 502 }
-      );
-    }
-  } catch (error) {
-    console.error('Resend request failed', { requestId, error });
+  if (!result.sent) {
+    console.error('Resend rejected the checkup notification', { requestId, error: result.error });
     return json(
       {
-        error:
-          'Your request was recorded, but the email to us failed. Please email hello@webrehabstl.com directly so nothing is lost.'
+        saved,
+        emailSent: false,
+        requestId,
+        message: saved
+          ? 'Your request is saved, but the notification email failed. Please call or text (636) 448-3574 directly so nothing is lost.'
+          : 'The notification email failed. Please call or text (636) 448-3574 directly.'
       },
-      { status: 502 }
+      { status: saved ? 202 : 502 }
     );
   }
 
   return json({
+    saved,
+    emailSent: true,
+    requestId,
     message:
       'Checkup request received. We will email the report to your address — usually within two business days.'
   });

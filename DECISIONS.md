@@ -91,3 +91,18 @@ then run check/test/build.
 **What:** Landing gets its own dark OKLCH token block scoped to `.page` (tenant previews keep vertical themes). Added a "What gets replaced" table with qualitative-only rows. Agency host now serves real robots.txt, sitemap.xml, /.well-known/security.txt and ProfessionalService JSON-LD instead of 404ing. Added STATE.md + state.json.
 **Why:** Dark palette comes from Jake's edge-first brief but stays inside SvelteKit/D1; scoping tokens avoids touching the vertical theme registry and its tests. Comparison table is qualitative because no competitor timings were measured. Robots/sitemap were a live 404 on webrehabstl.com, which blocks indexing outright.
 **Watch:** Palette choice is visual taste, not verified; revert by deleting the `.page` token block. security.txt Expires is hardcoded to 2027-10-31 and must be bumped.
+
+## 2026-11-03 — Remove stale wrangler.toml and align Pages project name
+**What:** Deleted `web/wrangler.toml` (empty `database_id`, conflicting `local-outreach-engine` name) so the adapter reads the canonical `web/wrangler.jsonc`. Renamed that config and the `deploy` script from `clinic-engine` to `stlouiswebmaster`, the actual Pages project.
+**Why:** Two wrangler configs with different names/DB ids made local builds and deploys disagree with production; `wrangler pages deploy --project-name clinic-engine` targeted a project that does not exist. One config with the real project name removes that ambiguity.
+**Watch:** Deploy now targets `stlouiswebmaster` directly; the GitHub integration remains the normal path. Checkout/`npm run deploy` no longer creates a stray `clinic-engine` project.
+
+## 2026-11-04 — Agency proof surfaces + lead hardening shipped locally
+**What:** Rebuilt the agency site around approved proof: `/work` (myhairloss.com, Angie Viefhaus, Kanan E), `/designs` with a request-a-quote form and no prices, `/services` plus six service pages, agency `/privacy`, dark/light palette toggle, and a landing with proof strip, sample 38 checks, about, FAQ, and phone CTA. Added `/api/quote`, shared `leadEmail`/`rateLimit`, and changed `/api/checkup` to persist first and return 202 when email is unavailable.
+**Why:** Jake confirmed the open facts: all lead goals, those three clients, quote-only designs, both palettes, and the public phone. Quote-only avoids inventing prices; persist-first keeps leads in D1 when Resend is down or unconfigured.
+**Watch:** Production still has no `RESEND_API_KEY`/`BOOKING_FROM_EMAIL`, so checkup and quote email show as not sent until Jake sets them. Work screenshots are real but localized; outbound client links must stay https. No commit or push yet — review first.
+
+## 2026-11-05 — Resend key installed as a Pages secret; domain still unverified
+**What:** Set `RESEND_API_KEY` and `BOOKING_FROM_EMAIL` (`Web Rehab STL <hello@webrehabstl.com>`) as production secrets on the `stlouiswebmaster` Pages project. Verified the key against the Resend API: `webrehabstl.com` exists but is `failed`; the DKIM TXT, `send` MX, `send` SPF TXT, and `rsend` CNAME records are absent from DNS.
+**Why:** Jake supplied a fresh key, and these were the last app-side blockers for lead email. The Wrangler token lacks DNS write, so the records must be added from a token or dashboard with DNS access.
+**Watch:** No deploy happened (per the local-only instruction), so live code is unchanged. Email stays unsent until the four DNS records are published and the domain verifies. The key was pasted in chat — rotate it after setup and update the secret.

@@ -1,9 +1,17 @@
 <script lang="ts">
   import styles from './Landing.module.css';
+  import contentStyles from './AgencyContent.module.css';
+  import AgencyChrome from './AgencyChrome.svelte';
   import CheckupForm from './CheckupForm.svelte';
   import Ticker from './Ticker.svelte';
   import AuditDemo from './AuditDemo.svelte';
   import { reveal } from './reveal';
+  import {
+    AGENCY_CONTACT,
+    AUDIT_HIGHLIGHTS,
+    agencyFaqs,
+    agencyWork
+  } from '$lib/data/agency-content';
 
   const problems = [
     {
@@ -39,20 +47,7 @@
   ];
 </script>
 
-<div class={styles.page}>
-  <header class={styles.header}>
-    <div class={styles.shell}>
-      <span class={styles.brand}>
-        <span class={styles.brandMark} aria-hidden="true">WR</span>
-        <span class={styles.brandText}>
-          <span class={styles.brandDescriptor}>St. Louis, Missouri</span>
-          <span class={styles.brandName}>Web Rehab STL</span>
-        </span>
-      </span>
-      <a class={styles.headerCta} href="#checkup">Free checkup</a>
-    </div>
-  </header>
-
+<AgencyChrome current="/">
   <section class={styles.hero}>
     <div class={styles.heroGrid} aria-hidden="true"></div>
     <div class={styles.shell} class:heroShell={true}>
@@ -65,6 +60,7 @@
       </p>
       <div class={styles.heroActions} use:reveal={{ delay: 200 }}>
         <a class={styles.cta} href="#checkup">Get the free checkup</a>
+        <a class={styles.ctaGhost} href="/work">See recent work</a>
       </div>
     </div>
   </section>
@@ -99,6 +95,48 @@
           <dd><span class={styles.statNumber}>30</span></dd>
         </div>
       </dl>
+    </div>
+  </section>
+
+  <section class={`${contentStyles.section} ${contentStyles.sectionAlt}`}>
+    <div class={contentStyles.shell}>
+      <div class={contentStyles.head}>
+        <h2 class={contentStyles.sectionTitle} use:reveal>Recent work</h2>
+        <p class={contentStyles.sectionNote} use:reveal>
+          Live client projects, not demos. Different industries, same rule: the
+          site has to explain the business, load on a phone, and give the
+          customer a way to act.
+        </p>
+      </div>
+      <div class={styles.proofGrid}>
+        {#each agencyWork as project, index (project.slug)}
+          <a
+            class={styles.proofCard}
+            href="/work"
+            use:reveal={{ delay: (index % 3) * 70 }}
+            aria-label={`See the ${project.name} project`}
+          >
+            <img
+              class={styles.proofImage}
+              src={project.image}
+              alt={project.imageAlt}
+              width="480"
+              height="300"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class={styles.proofBody}>
+              <p class={styles.proofSector}>{project.sector}</p>
+              <h3 class={styles.proofName}>{project.name}</h3>
+              <p class={styles.proofText}>{project.summary}</p>
+              <p class={styles.proofMore}>Read the project →</p>
+            </div>
+          </a>
+        {/each}
+      </div>
+      <div class={contentStyles.actions}>
+        <a class={contentStyles.buttonGhost} href="/work">See all recent work</a>
+      </div>
     </div>
   </section>
 
@@ -141,6 +179,33 @@
             <p>{problem.body}</p>
           </article>
         {/each}
+      </div>
+    </div>
+  </section>
+
+  <section class={contentStyles.section}>
+    <div class={contentStyles.shell}>
+      <div class={contentStyles.head}>
+        <h2 class={contentStyles.sectionTitle} use:reveal>What the 38 checks look for</h2>
+        <p class={contentStyles.sectionNote} use:reveal>
+          A sample of the failures the engine flags. The full report covers all
+          38 checks, in priority order, with the fix written out.
+        </p>
+      </div>
+      <ul class={contentStyles.checkGrid}>
+        {#each AUDIT_HIGHLIGHTS as item, index (item.label)}
+          <li class={contentStyles.checkItem} use:reveal={{ delay: (index % 4) * 50 }}>
+            <span class={contentStyles.checkMark} aria-hidden="true">×</span>
+            <div>
+              <strong>{item.label}</strong>
+              <span>{item.note}</span>
+            </div>
+          </li>
+        {/each}
+      </ul>
+      <div class={contentStyles.actions}>
+        <a class={contentStyles.button} href="#checkup">Run the free checkup</a>
+        <a class={contentStyles.buttonGhost} href="/services">See the services</a>
       </div>
     </div>
   </section>
@@ -197,6 +262,62 @@
     </div>
   </section>
 
+  <section class={`${contentStyles.section} ${contentStyles.sectionAlt}`}>
+    <div class={contentStyles.shell}>
+      <div class={contentStyles.split}>
+        <div>
+          <p class={contentStyles.eyebrow}>About</p>
+          <h2 class={contentStyles.sectionTitle} use:reveal>
+            Built in St. Louis, run by the person doing the work.
+          </h2>
+          <p class={contentStyles.prose} use:reveal>
+            Web Rehab STL is a one-person studio. You talk to the person who
+            audits the site, writes the pages, and ships the build. No account
+            manager, no handoff, no mystery about who is responsible when
+            something breaks.
+          </p>
+          <p class={contentStyles.prose} use:reveal>
+            The work is deliberately narrow: small-business websites, the
+            repairs they need, and the local-search setup that helps nearby
+            customers find them.
+          </p>
+          <div class={contentStyles.actions}>
+            <a class={contentStyles.buttonGhost} href="/work">See the work</a>
+            <a class={contentStyles.buttonGhost} href="/services">See the services</a>
+          </div>
+        </div>
+        <aside class={contentStyles.sideCard} use:reveal={{ delay: 110 }}>
+          <h2>Talk to a person</h2>
+          <ul>
+            <li><a href={`tel:${AGENCY_CONTACT.phone}`}>{AGENCY_CONTACT.phoneDisplay}</a></li>
+            <li><a href={`mailto:${AGENCY_CONTACT.email}`}>{AGENCY_CONTACT.email}</a></li>
+            <li>{AGENCY_CONTACT.city}, {AGENCY_CONTACT.region} — working across the metro.</li>
+            <li>If the site is not the problem, I will say so.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class={contentStyles.section}>
+    <div class={contentStyles.shell}>
+      <div class={contentStyles.head}>
+        <h2 class={contentStyles.sectionTitle} use:reveal>Questions before you send the site</h2>
+        <p class={contentStyles.sectionNote} use:reveal>
+          The honest answers, before you fill in a form.
+        </p>
+      </div>
+      <div class={contentStyles.faq}>
+        {#each agencyFaqs as faq, index (faq.question)}
+          <details class={contentStyles.faqItem} open={index === 0}>
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        {/each}
+      </div>
+    </div>
+  </section>
+
   <section class={styles.checkupSection} id="checkup">
     <div class={styles.shell}>
       <div class={styles.checkupSplit}>
@@ -225,6 +346,11 @@
               </div>
             </li>
           </ul>
+          <p class={styles.checkupContact}>
+            Prefer to talk? Call
+            <a href={`tel:${AGENCY_CONTACT.phone}`}>{AGENCY_CONTACT.phoneDisplay}</a>
+            or email <a href={`mailto:${AGENCY_CONTACT.email}`}>{AGENCY_CONTACT.email}</a>.
+          </p>
         </div>
         <div class={styles.checkupFormMount}>
           <CheckupForm />
@@ -232,13 +358,4 @@
       </div>
     </div>
   </section>
-
-  <footer class={styles.footer}>
-    <div class={styles.shell}>
-      <span class={styles.footerBrand}>Web Rehab STL</span>
-      <a class={styles.footerLink} href="mailto:hello@webrehabstl.com">hello@webrehabstl.com</a>
-      <a class={styles.footerLink} href="/privacy">Privacy</a>
-      <span class={styles.footerBase}>© {new Date().getFullYear()} · St. Louis, Missouri</span>
-    </div>
-  </footer>
-</div>
+</AgencyChrome>

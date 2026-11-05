@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-31",
+  "updated": "2026-11-05",
   "product": "webrehabstl.com",
   "audience": "St. Louis small businesses that need a working website",
   "live": {
@@ -7,38 +7,36 @@
     "hosting": "Cloudflare Pages project stlouiswebmaster",
     "database": "D1 local-outreach",
     "checkupEndpoint": "POST /api/checkup",
-    "lastDeployedCommit": "82eddd9"
+    "lastDeployedCommit": "82eddd9",
+    "pagesSecrets": ["BOOKING_FROM_EMAIL", "RESEND_API_KEY"],
+    "emailStatus": "Secrets set; sending blocked until webrehabstl.com is verified in Resend"
   },
   "inProgress": [
-    "Phase 1 landing rebuild (motion, audit demo, ticker, stat band)",
-    "Agency dark OKLCH palette + comparison table",
-    "Agency-host robots.txt, sitemap.xml, security.txt, JSON-LD",
-    "Checkup honeypot + 5/hour IP rate limit"
+    "Agency site overhaul: /work, /designs, /services, agency /privacy, dark + light palettes, proof-driven landing",
+    "Lead hardening: persist-first checkup, /api/quote, shared email + rate-limit helpers",
+    "SEO: localized title/meta/OG, ProfessionalService + FAQ + Service JSON-LD, expanded sitemap, robots, security.txt"
   ],
   "agentOwns": [
     "Site design, copy, and components",
-    "Checkup funnel wiring, persistence, notification email",
+    "Checkup and quote funnels: validation, persistence, notification email",
     "Agency SEO surfaces (robots, sitemap, security.txt, structured data)",
     "Admin outreach tooling (import, scoring, pitch generation)",
     "Build, tests, slag verify + gate, git commits and pushes"
   ],
   "ownerMustDo": [
-    "Publish the 4 Resend DNS records in Cloudflare (DKIM TXT, send MX, send SPF TXT, rsend CNAME)",
+    "Add the Resend DNS records for webrehabstl.com in Cloudflare (Resend domain status is failed)",
     "Enable Email Routing for hello@ and info@ to Geekhaus314@proton.me",
-    "Rotate the Resend API key that was pasted in chat",
-    "Send the /work client URL list",
-    "Send /designs package tiers, prices, and buy flow (Stripe or request form)",
-    "Decide whether to keep the dark edge palette or the lighter current look"
+    "Rotate the Resend API key after verification (it was pasted in chat)",
+    "Review the local build and approve commit/push"
   ],
   "blocked": [
-    "/work page: needs real client URLs and permission to name them",
-    "/designs page: needs real package names and prices",
-    "Pricing UI: no prices may be invented"
+    "Production email delivery: webrehabstl.com is not verified in Resend (missing DNS records)",
+    "Deployment: waiting for Jake's review and go-ahead"
   ],
   "next": [
-    "Finish and push Phase 1 landing",
-    "Smoke-test live checkup endpoint after DNS/domain setup",
-    "Build /work and /designs once facts arrive",
+    "Add Resend DNS records and verify the domain",
+    "Review the local site in both palettes, then commit and push",
+    "Deploy and smoke-test checkup + quote",
     "Port Python pitch/urgency logic into the admin portal"
   ]
 }

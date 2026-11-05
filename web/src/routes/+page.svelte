@@ -1,6 +1,7 @@
 <script lang="ts">
   import { loadVerticalComponent } from '$lib/verticals/registry';
   import Landing from '$lib/components/agency/Landing.svelte';
+  import { AGENCY_CONTACT, FAQ_JSON_LD, agencyJsonLd } from '$lib/data/agency-content';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -15,33 +16,39 @@
   {#if data.tenant}
     <title>{data.tenant.seo.title}</title>
   {:else if showLanding}
-    <title>Web Rehab STL — Free website checkup for St. Louis small businesses</title>
+    <title>Website design and repair in St. Louis | Web Rehab STL</title>
     <meta
       name="description"
-      content="Web Rehab STL audits St. Louis small-business websites — dead domains, broken mobile layouts, stale pages — and rebuilds what costs you customers. Start with a free, fact-based checkup."
+      content="Website audits, repairs, and rebuilds for St. Louis small businesses. Free 38-point checkup, fixed quotes, local-search setup, and a phone number that reaches a person."
     />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://webrehabstl.com/" />
+    <link rel="canonical" href={`${AGENCY_CONTACT.url}/`} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Web Rehab STL" />
-    <meta property="og:description" content="A free, fact-based website checkup for St. Louis small businesses." />
-    <meta property="og:url" content="https://webrehabstl.com/" />
+    <meta property="og:site_name" content="Web Rehab STL" />
+    <meta property="og:title" content="Website design and repair in St. Louis | Web Rehab STL" />
+    <meta
+      property="og:description"
+      content="Free 38-point website checkup for St. Louis small businesses. Fixed quotes, local-search setup, and a phone number that reaches a person."
+    />
+    <meta property="og:url" content={`${AGENCY_CONTACT.url}/`} />
+    <meta property="og:image" content={`${AGENCY_CONTACT.url}/og.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Website design and repair in St. Louis | Web Rehab STL" />
+    <meta
+      name="twitter:description"
+      content="Free 38-point website checkup for St. Louis small businesses."
+    />
+    <meta name="twitter:image" content={`${AGENCY_CONTACT.url}/og.png`} />
+    <meta name="geo.region" content="US-MO" />
+    <meta name="geo.placename" content="St. Louis" />
     <script type="application/ld+json">
-      {JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'ProfessionalService',
-        name: 'Web Rehab STL',
-        url: 'https://webrehabstl.com/',
-        email: 'hello@webrehabstl.com',
-        description:
-          'Website audits and rebuilds for St. Louis small businesses: edge-hosted pages, measured performance checks, and a free 38-point checkup.',
-        areaServed: {
-          '@type': 'City',
-          name: 'St. Louis',
-          containedInPlace: { '@type': 'State', name: 'Missouri' }
-        },
-        knowsAbout: ['website audit', 'web performance', 'small business websites', 'search visibility']
-      })}
+      {JSON.stringify(agencyJsonLd())}
+    </script>
+    <script type="application/ld+json">
+      {JSON.stringify(FAQ_JSON_LD)}
     </script>
   {/if}
 </svelte:head>

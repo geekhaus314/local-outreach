@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "deploy": "npm run build && wrangler pages deploy .svelte-kit/cloudflare --project-name clinic-engine",
+    "deploy": "npm run build && wrangler pages deploy .svelte-kit/cloudflare --project-name stlouiswebmaster",
     "db:migrate:local": "wrangler d1 migrations apply local-outreach --local",
     "db:migrate:remote": "wrangler d1 migrations apply local-outreach --remote"
   },

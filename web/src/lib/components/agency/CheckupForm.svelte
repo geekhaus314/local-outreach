@@ -37,6 +37,8 @@
     status = 'submitting';
     message = '';
 
+    const params = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search);
+
     try {
       const response = await fetch('/api/checkup', {
         method: 'POST',
@@ -47,7 +49,9 @@
           website,
           message: notes,
           company,
-          consent
+          consent,
+          source: params?.get('utm_source') ?? '',
+          page: typeof window === 'undefined' ? '' : window.location.href
         })
       });
 
@@ -80,6 +84,11 @@
     <p class={styles.stateEyebrow}>Request received</p>
     <h3>Checkup requested for {website ?? 'your site'}.</h3>
     <p>{message}</p>
+    <p>
+      Need a reply quickly? Email
+      <a href="mailto:hello@webrehabstl.com">hello@webrehabstl.com</a> or call
+      <a href="tel:+16364483574">(636) 448-3574</a>.
+    </p>
     <button type="button" class={styles.stateButton} onclick={reset}>Request another checkup</button>
   </div>
 {:else}

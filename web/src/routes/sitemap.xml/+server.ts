@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { isAgencyHost } from '$lib/data/agency';
+import { agencyServices } from '$lib/data/agency-content';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -9,7 +10,14 @@ export const GET: RequestHandler = ({ locals, url }) => {
     if (!isAgencyHost(url.hostname)) {
       error(404, 'No prospect mockup is configured for this host.');
     }
-    const agencyPaths = ['', '/privacy'];
+    const agencyPaths = [
+      '',
+      '/services',
+      ...agencyServices.map((service) => `/services/${service.slug}`),
+      '/work',
+      '/designs',
+      '/privacy'
+    ];
     const agencyUrls = agencyPaths.map(
       (path) => `  <url><loc>${escapeXml(`https://webrehabstl.com${path}`)}</loc></url>`
     );

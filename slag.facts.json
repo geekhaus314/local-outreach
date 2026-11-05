@@ -16,9 +16,9 @@
     {
       "id": "scope.core",
       "question": "List the core user actions that must work end-to-end. Each one needs a real path through UI, server and storage.",
-      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy. Added 2026-10-30: serve an agency landing page on webrehabstl.com and www.webrehabstl.com (not other hosts) with a free-checkup lead form that persists to D1 and emails hello@webrehabstl.com through Resend. Added 2026-10-31 (roadmap Jake approved): (1) agency landing visual overhaul - motion system, ticker of real audit checks, interactive audit demo widget, count-up stats, process stepper, problem gallery cards, split CTA with hardened checkup form, all respecting prefers-reduced-motion; (2) /work page: production work/paid client results (content: Jake's client URL list, pending); (3) /designs page: template catalog of real generated vertical mockups with budget package tiers (pricing payment flow: pending Jake - Stripe vs form-request); (4) /preview/* public routes serving real generated mockups, noindex + demo guard; (5) SEO & trust layer: per-page metadata/keywords, canonical, OG images, JSON-LD, ads.txt, humans.txt, /.well-known/security.txt, agency robots.txt + sitemap fix; (6) in-app pitch engine port of parse_leads.py evidence-driven message() + urgency sorter + send logging to communications.",
+      "value": "Run the full local-outreach pipeline: ingest scraped local-business prospects; audit and score likely targets; generate a typed pitch; generate a production-ready preview site from typed content; route previews by hostname or slug; show services, honest proof, and a booking request; persist leads, audits, pitches, mockups, and bookings in D1; submit bookings through a server-side proxy. Added 2026-10-30: serve an agency landing page on webrehabstl.com and www.webrehabstl.com (not other hosts) with a free-checkup lead form that persists to D1 and emails hello@webrehabstl.com through Resend. Added 2026-10-31 (roadmap Jake approved): (1) agency landing visual overhaul - motion system, ticker of real audit checks, interactive audit demo widget, count-up stats, process stepper, problem gallery cards, split CTA with hardened checkup form, all respecting prefers-reduced-motion; (2) /work page: production work/paid client results (confirmed 2026-11-04: myhairloss.com, angie-viefhaus.pages.dev, kanan-e.vercel.app); (3) /designs page: design directions and package tiers with a request-a-quote form (confirmed 2026-11-04: quote form, no payment provider); (4) /preview/* public routes serving real generated mockups, noindex + demo guard; (5) SEO & trust layer: per-page metadata/keywords, canonical, OG images, JSON-LD, ads.txt, humans.txt, /.well-known/security.txt, agency robots.txt + sitemap fix; (6) in-app pitch engine port of parse_leads.py evidence-driven message() + urgency sorter + send logging to communications.",
       "status": "confirmed",
-      "source": "user answer 2026-10-20; landing scope/capture/contact confirmed 2026-10-30",
+      "source": "user answer 2026-10-20; landing scope/capture/contact confirmed 2026-10-30; /work + /designs answers 2026-11-04",
       "required": true,
       "evidence": [],
       "notes": "Example: \"user signs up, creates a project, invites a teammate, and sees it after reload\"."
@@ -86,12 +86,12 @@
     {
       "id": "payments",
       "question": "Which payment or billing provider is required? Use \"none\" if not needed.",
-      "value": null,
-      "status": "unknown",
-      "source": null,
+      "value": "none \u2014 /designs packages use a request-a-quote form; no payment provider or checkout in this build.",
+      "status": "confirmed",
+      "source": "user answer 2026-11-04",
       "required": false,
       "evidence": [],
-      "notes": "Name the provider and the flow (checkout, subscription, webhook)."
+      "notes": "Jake chose the request-a-quote flow over Stripe so no price or payment method is invented."
     },
     {
       "id": "integrations",
@@ -142,9 +142,9 @@
     {
       "id": "design.direction",
       "question": "What brand, references, real copy and real assets should be used? Or has the user explicitly delegated visual direction?",
-      "value": "A rolodex of distinct, industry-specific templates that look and run like production-ready local-business sites, not one themed page reused everywhere and not AI-slop mockups. Use real scraped business data and honest proof; do not imply a business offers services it does not. Agency landing language 2026-10-31: motion-first but dependency-free (existing revealUp pattern), evidence-based demo (real check names from lib/server/audit.ts, simulated runs labeled as such), measured stats only, no stock photography, prefers-reduced-motion honored.",
+      "value": "A rolodex of distinct, industry-specific templates that look and run like production-ready local-business sites, not one themed page reused everywhere and not AI-slop mockups. Use real scraped business data and honest proof; do not imply a business offers services it does not. Agency landing language 2026-10-31: motion-first but dependency-free (existing revealUp pattern), evidence-based demo (real check names from lib/server/audit.ts, simulated runs labeled as such), measured stats only, no stock photography, prefers-reduced-motion honored. Confirmed 2026-11-04: build both dark and light agency palettes for comparison; public phone (636) 448-3574 may be published; /work may name and link myhairloss.com, angie-viefhaus.pages.dev, and kanan-e.vercel.app.",
       "status": "confirmed",
-      "source": "user answer 2026-10-20",
+      "source": "user answer 2026-10-20; visual/phone/work answers 2026-11-04",
       "required": false,
       "evidence": [],
       "notes": "Delegated design still needs real content and functional behavior."
